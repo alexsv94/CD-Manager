@@ -1,0 +1,82 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>main_128x128.ico</ApplicationIcon>
+    <AssemblyName>Менеджер КД</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Icons\FileExtensions\cdr.png" />
+    <None Remove="Icons\FileExtensions\cdw.png" />
+    <None Remove="Icons\FileExtensions\dch.png" />
+    <None Remove="Icons\FileExtensions\doc.png" />
+    <None Remove="Icons\FileExtensions\dwg.png" />
+    <None Remove="Icons\FileExtensions\pdf.png" />
+    <None Remove="Icons\FileExtensions\txt.png" />
+    <None Remove="Icons\FileExtensions\unknown.png" />
+    <None Remove="Icons\FileExtensions\xls.png" />
+    <None Remove="Icons\FileExtensions\zip.png" />
+    <None Remove="Icons\Windows\main_128x128.png" />
+    <None Remove="Icons\Windows\main_32x32.png" />
+    <None Remove="Icons\Windows\rename.png" />
+    <None Remove="Icons\Windows\version.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="main_128x128.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\FileExtensions\cdr.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\FileExtensions\cdw.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\FileExtensions\dch.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\FileExtensions\doc.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\FileExtensions\dwg.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\FileExtensions\pdf.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\FileExtensions\txt.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\FileExtensions\unknown.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\FileExtensions\xls.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\FileExtensions\zip.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\Windows\main_128x128.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\Windows\main_32x32.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\Windows\rename.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\Windows\version.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>
