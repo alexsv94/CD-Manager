@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace OrganizerWpf.Windows.SettingsWindow
+namespace OrganizerWpf.Windows.Settings
 {
     /// <summary>
     /// Логика взаимодействия для SettingsWindow.xaml
@@ -23,6 +23,8 @@ namespace OrganizerWpf.Windows.SettingsWindow
         public SettingsWindow()
         {
             InitializeComponent();
+
+            workDirTextBox.Text = ApplicationSettings.WorkingDirectoryPath;
         }
 
         private void workDirBrowseBtn_Click(object sender, RoutedEventArgs e)
@@ -31,7 +33,7 @@ namespace OrganizerWpf.Windows.SettingsWindow
             {
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    Settings.WorkingDirectoryPath = dialog.SelectedPath;
+                    ApplicationSettings.WorkingDirectoryPath = dialog.SelectedPath;
                     workDirTextBox.Text = dialog.SelectedPath;
                 }
             }
