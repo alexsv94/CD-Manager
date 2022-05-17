@@ -1,5 +1,6 @@
 ﻿using OrganizerWpf.Dialogs.RenameDialog;
 using OrganizerWpf.Models;
+using OrganizerWpf.Windows.SettingsWindow;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -75,7 +76,7 @@ namespace OrganizerWpf
 
         private void ChangeCurrentProduct()
         {
-            string selectedProductDirectoryPath = ((ProductInfo)productList.SelectedItem).ProductDirectoryPath;
+            string selectedProductDirectoryPath = ((ProductInfo)productList.SelectedItem).ProductDirectoryPath!;
             Settings.CurrentProductDirectoryPath = selectedProductDirectoryPath;
 
             KDDirectory = Path.Combine(selectedProductDirectoryPath, "КД");
@@ -107,6 +108,12 @@ namespace OrganizerWpf
                 };
                 productList.Items.Add(product);
             }
+        }
+
+        private void MenuItem_Settings_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow settingsWindow = new SettingsWindow();
+            settingsWindow.Show();
         }
     }
 }

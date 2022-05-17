@@ -8,10 +8,10 @@ namespace OrganizerWpf.Models
 {
     public class ProductInfo
     {
-        public string ProductName { get; set; }
-        public string ProductDirectoryPath { get; set; }
+        public string? ProductName { get; set; }
+        public string? ProductDirectoryPath { get; set; }
 
-        public override string ToString()
+        public override string? ToString()
         {
             return ProductName;
         }

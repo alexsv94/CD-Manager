@@ -44,7 +44,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
         #endregion
 
         private bool _initCompleted;
-        private FilesystemHelper _fsHelper;
+        private FilesystemHelper? _fsHelper;
 
         public DocumentsExplorer()
         {
@@ -57,7 +57,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             if (!_initCompleted)
                 Initialize();            
 
-            Documents = _fsHelper.GetDocuments(DirectoryPath);
+            Documents = _fsHelper!.GetDocuments(DirectoryPath);
         }
 
         private void Initialize()
@@ -95,7 +95,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             if (Documents != null && Documents.Any(x => droppedFiles[0] == x.FilePath))
                 return;
 
-            var filePaths = _fsHelper.GetDroppedFiles(droppedFiles);
+            var filePaths = _fsHelper!.GetDroppedFiles(droppedFiles);
             _fsHelper.CopyFiles(DirectoryPath, filePaths);
 
             UpdateFileList();
@@ -142,7 +142,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             if ((bool)result!)
             {
                 selectedFile.DocName = renameDialog.NewFileName;
-                selectedFile.FilePath = _fsHelper.RenameFile(selectedFile.FilePath!, selectedFile.DocName);
+                selectedFile.FilePath = _fsHelper!.RenameFile(selectedFile.FilePath!, selectedFile.DocName);
 
                 UpdateFileList();
             }
@@ -162,7 +162,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             if ((bool)result!)
             {
                 selectedFile.Version = versionDialog.NewVersion;
-                _fsHelper.SetFileMetadata(selectedFile);
+                _fsHelper!.SetFileMetadata(selectedFile);
 
                 UpdateFileList();
             }
@@ -172,7 +172,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
         {
             if (dataGrid.SelectedItem != null)
             {
-                _fsHelper.OpenFile(((DocumentInfo)dataGrid.SelectedItem).FilePath!);
+                _fsHelper!.OpenFile(((DocumentInfo)dataGrid.SelectedItem).FilePath!);
             }
         }
 

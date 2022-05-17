@@ -92,7 +92,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             FileInfo file = new FileInfo(filePath);
             DirectoryInfo? dir = file.Directory;
 
-            FileInfo[] files = dir.GetFiles("*.json");
+            FileInfo[] files = dir!.GetFiles("*.json");
 
             FileInfo? metaData = null;
 

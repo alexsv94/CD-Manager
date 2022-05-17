@@ -11,18 +11,18 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 {
     public class IconTemplateSelector : DataTemplateSelector
     {              
-        public DataTemplate DOCTemplate { get; set; }
-        public DataTemplate CDRTemplate { get; set; }
-        public DataTemplate CDWTemplate { get; set; }
-        public DataTemplate DCHTemplate { get; set; }
-        public DataTemplate DWGTemplate { get; set; }
-        public DataTemplate PDFTemplate { get; set; }
-        public DataTemplate XLSTemplate { get; set; }
-        public DataTemplate ZIPTemplate { get; set; }
-        public DataTemplate TXTTemplate { get; set; }
-        public DataTemplate DefaultTemplate { get; set; }
+        public DataTemplate? DOCTemplate { get; set; }
+        public DataTemplate? CDRTemplate { get; set; }
+        public DataTemplate? CDWTemplate { get; set; }
+        public DataTemplate? DCHTemplate { get; set; }
+        public DataTemplate? DWGTemplate { get; set; }
+        public DataTemplate? PDFTemplate { get; set; }
+        public DataTemplate? XLSTemplate { get; set; }
+        public DataTemplate? ZIPTemplate { get; set; }
+        public DataTemplate? TXTTemplate { get; set; }
+        public DataTemplate? DefaultTemplate { get; set; }
 
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
             var doc = item as IFileInfo;
 

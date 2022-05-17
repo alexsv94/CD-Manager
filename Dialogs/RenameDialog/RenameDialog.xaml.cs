@@ -19,7 +19,7 @@ namespace OrganizerWpf.Dialogs.RenameDialog
     /// </summary>
     public partial class RenameDialog : Window
     {
-        public string OldFileName { get; set; }
+        public string? OldFileName { get; set; }
 
         public string NewFileName
         {

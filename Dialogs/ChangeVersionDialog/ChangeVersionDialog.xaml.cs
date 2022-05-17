@@ -19,7 +19,7 @@ namespace OrganizerWpf.Dialogs.ChangeVersionDialog
     /// </summary>
     public partial class ChangeVersionDialog : Window
     {
-        public string OldVersion { get; set; }
+        public string? OldVersion { get; set; }
 
         public string NewVersion
         {
