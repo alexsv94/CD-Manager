@@ -33,7 +33,7 @@ namespace OrganizerWpf.Utilities
                     DocName = file.Name,
                     CreationDate = file.CreationTime.ToString("dd.MM.yyyy HH:mm:ss"),
                     UpdateDate = file.LastWriteTime.ToString("dd.MM.yyyy HH:mm:ss"),
-                    Version = "<Не указано>"
+                    Version = "<Не указано>",
                 };
 
                 DocumentInfo? docMetaData = GetFileMetadata<DocumentInfo>(file.FullName);
@@ -41,6 +41,7 @@ namespace OrganizerWpf.Utilities
                 if (docMetaData != null)
                 {
                     fileInfo.Version = docMetaData.Version;
+                    fileInfo.VersionHistory = docMetaData.VersionHistory;
                 }
 
                 filesList.Add(fileInfo);
