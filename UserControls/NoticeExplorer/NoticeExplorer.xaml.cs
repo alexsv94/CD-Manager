@@ -58,15 +58,12 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
                 Initialize();
 
             Notices = _fsHelper!.GetNotices(DirectoryPath);
-            var columns = dataGrid.Columns;
         }
 
         private void Initialize()
         {
             _fsHelper = new FilesystemHelper();
             _initCompleted = true;
-
-            UpdateFileList();
         }
 
         private void Border_DragEnter(object sender, DragEventArgs e)

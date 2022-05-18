@@ -14,13 +14,12 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
     {
         public List<DocumentInfo> GetDocuments(string workDirectory)
         {
-            if (string.IsNullOrEmpty(workDirectory))
-                throw new ArgumentNullException("workDirectory can not be empty");
+            List<DocumentInfo> filesList = new();
 
-            DirectoryInfo currentDirectory = new DirectoryInfo(workDirectory);
-            var files = currentDirectory.GetFiles();
+            if (!CheckDirectory(workDirectory, out DirectoryInfo? currentDir))
+                return filesList;
 
-            List<DocumentInfo> filesList = new List<DocumentInfo>();
+            var files = currentDir!.GetFiles();            
 
             foreach (var file in files)
             {
@@ -48,17 +47,16 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             }
 
             return filesList;
-        }
+        }       
 
         public List<NoticeInfo> GetNotices(string workDirectory)
         {
-            if (string.IsNullOrEmpty(workDirectory))
-                throw new ArgumentNullException("workDirectory can not be empty");
+            List<NoticeInfo> filesList = new();
 
-            DirectoryInfo currentDirectory = new DirectoryInfo(workDirectory);
-            var files = currentDirectory.GetFiles();
+            if (!CheckDirectory(workDirectory, out DirectoryInfo? currentDir))
+                return filesList;
 
-            List<NoticeInfo> filesList = new List<NoticeInfo>();
+            var files = currentDir!.GetFiles();
 
             foreach (var file in files)
             {
@@ -85,6 +83,34 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             }
 
             return filesList;
+        }
+
+        private bool CheckDirectory(string path, out DirectoryInfo? checkedDir)
+        {
+            var dirToCheck = new DirectoryInfo(path);
+
+            if (!dirToCheck.Exists)
+            {
+                if(MessageBox.Show($"Каталога {path} \nне существует.\nСоздать?", 
+                    "Каталог не найден",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question,
+                    MessageBoxResult.No) == MessageBoxResult.Yes)
+                {
+                    checkedDir = Directory.CreateDirectory(path);
+                    return true;
+                }
+                else
+                {
+                    checkedDir = null;
+                    return false;
+                }
+            }
+            else
+            {
+                checkedDir = dirToCheck;
+                return true;
+            }
         }
 
         private T? GetFileMetadata<T>(string filePath) where T : SerializableModel<T>

@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Data;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.IO;
 using OrganizerWpf.Models;
 using OrganizerWpf.Dialogs.RenameDialog;
@@ -28,8 +20,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
         {
             get { return (string)GetValue(DirectoryPathProperty); }
             set { SetValue(DirectoryPathProperty, value); }
-        }
-        // Using a DependencyProperty as the backing store for DirectoryPath.  This enables animation, styling, binding, etc...
+        }        
         public static readonly DependencyProperty DirectoryPathProperty =
             DependencyProperty.Register("DirectoryPath", typeof(string), typeof(DocumentsExplorer), new PropertyMetadata(null));
 
@@ -37,8 +28,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
         {
             get { return (List<DocumentInfo>)GetValue(DocumentsProperty); }
             set { SetValue(DocumentsProperty, value); }
-        }
-        // Using a DependencyProperty as the backing store for Documents.  This enables animation, styling, binding, etc...
+        }        
         public static readonly DependencyProperty DocumentsProperty =
             DependencyProperty.Register("Documents", typeof(List<DocumentInfo>), typeof(DocumentsExplorer), new PropertyMetadata(null));
         #endregion
@@ -63,9 +53,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
         private void Initialize()
         {
             _fsHelper = new FilesystemHelper();
-            _initCompleted = true;
-
-            UpdateFileList();            
+            _initCompleted = true;          
         }
 
         private void Border_DragEnter(object sender, DragEventArgs e)
@@ -176,11 +164,5 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             }
         }
 
-    }
-
-    public enum ExplorerTypes
-    {
-        Documents,
-        Notice
     }
 }
