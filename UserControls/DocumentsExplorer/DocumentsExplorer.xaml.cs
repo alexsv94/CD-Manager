@@ -7,6 +7,8 @@ using System.IO;
 using OrganizerWpf.Models;
 using OrganizerWpf.Dialogs.RenameDialog;
 using OrganizerWpf.Dialogs.ChangeVersionDialog;
+using System;
+using OrganizerWpf.Utilities;
 
 namespace OrganizerWpf.UserControls.DocumentsExplorer
 {
@@ -15,15 +17,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
     /// </summary>
     public partial class DocumentsExplorer : UserControl
     {  
-        #region Dependency Props
-        public string DirectoryPath
-        {
-            get { return (string)GetValue(DirectoryPathProperty); }
-            set { SetValue(DirectoryPathProperty, value); }
-        }        
-        public static readonly DependencyProperty DirectoryPathProperty =
-            DependencyProperty.Register("DirectoryPath", typeof(string), typeof(DocumentsExplorer), new PropertyMetadata(null));
-
+        #region Dependency Props       
         public List<DocumentInfo> Documents
         {
             get { return (List<DocumentInfo>)GetValue(DocumentsProperty); }
@@ -31,29 +25,48 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
         }        
         public static readonly DependencyProperty DocumentsProperty =
             DependencyProperty.Register("Documents", typeof(List<DocumentInfo>), typeof(DocumentsExplorer), new PropertyMetadata(null));
+
+        public string TargetDirectory
+        {
+            get { return (string)GetValue(TargetDirectoryProperty); }
+            set { SetValue(TargetDirectoryProperty, value); }
+        }
+        public static readonly DependencyProperty TargetDirectoryProperty =
+            DependencyProperty.Register("TargetDirectory", typeof(string), typeof(DocumentsExplorer), new PropertyMetadata(""));
         #endregion
 
+        //public List<DocumentInfo> Documents { get; set; } = new();
+
+        private string _directoryPath = string.Empty;
         private bool _initCompleted;
         private FilesystemHelper? _fsHelper;
 
         public DocumentsExplorer()
         {
             InitializeComponent();
-            dataGrid.DataContext = this;            
-        }        
+            dataGrid.DataContext = this;
 
-        public void UpdateFileList()
+            Settings.CurrentProductDirectoryChanged += OnDirectoryChanged;
+        }
+
+        private void OnDirectoryChanged(string newDir)
+        {
+            _directoryPath = Path.Combine(newDir, TargetDirectory);
+            UpdateFileList();
+        }
+
+        private void UpdateFileList()
         {
             if (!_initCompleted)
-                Initialize();            
+                Initialize();
 
-            Documents = _fsHelper!.GetDocuments(DirectoryPath);
+            Documents = _fsHelper!.GetDocuments(_directoryPath);
         }
 
         private void Initialize()
         {
             _fsHelper = new FilesystemHelper();
-            _initCompleted = true;          
+            _initCompleted = true;           
         }
 
         private void Border_DragEnter(object sender, DragEventArgs e)
@@ -84,7 +97,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
                 return;
 
             var filePaths = _fsHelper!.GetDroppedFiles(droppedFiles);
-            _fsHelper.CopyFiles(DirectoryPath, filePaths);
+            _fsHelper.CopyFiles(_directoryPath, filePaths);
 
             UpdateFileList();
         }

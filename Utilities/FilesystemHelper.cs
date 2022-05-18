@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace OrganizerWpf.UserControls.DocumentsExplorer
+namespace OrganizerWpf.Utilities
 {
     public class FilesystemHelper
     {

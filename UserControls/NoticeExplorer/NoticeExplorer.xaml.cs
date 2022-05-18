@@ -1,5 +1,6 @@
 ﻿using OrganizerWpf.Models;
 using OrganizerWpf.UserControls.DocumentsExplorer;
+using OrganizerWpf.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +15,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace OrganizerWpf.UserControls.NoticeExplorer
 {
@@ -24,14 +24,15 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
     public partial class NoticeExplorer : UserControl
     {
         #region Dependency Props
-        public string DirectoryPath
+        public string TargetDirectory
         {
-            get { return (string)GetValue(DirectoryPathProperty); }
-            set { SetValue(DirectoryPathProperty, value); }
+            get { return (string)GetValue(TargetDirectoryProperty); }
+            set { SetValue(TargetDirectoryProperty, value); }
         }
-        // Using a DependencyProperty as the backing store for DirectoryPath.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty DirectoryPathProperty =
-            DependencyProperty.Register("DirectoryPath", typeof(string), typeof(NoticeExplorer), new PropertyMetadata(null));
+
+        // Using a DependencyProperty as the backing store for TargetDirectory.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TargetDirectoryProperty =
+            DependencyProperty.Register("TargetDirectory", typeof(string), typeof(NoticeExplorer), new PropertyMetadata(""));
 
         public List<NoticeInfo> Notices
         {
@@ -43,21 +44,31 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
             DependencyProperty.Register("Notices", typeof(List<NoticeInfo>), typeof(NoticeExplorer), new PropertyMetadata(null));
         #endregion
 
+        
         private bool _initCompleted;
         private FilesystemHelper? _fsHelper;
+        private string _directoryPath = string.Empty;
 
         public NoticeExplorer()
         {
             InitializeComponent();
             dataGrid.DataContext = this;
+
+            Settings.CurrentProductDirectoryChanged += OnDirectoryChanged;
         }
 
-        public void UpdateFileList()
+        private void OnDirectoryChanged(string newDir)
+        {
+            _directoryPath = Path.Combine(newDir, TargetDirectory);
+            UpdateFileList();
+        }
+
+        private void UpdateFileList()
         {
             if (!_initCompleted)
                 Initialize();
 
-            Notices = _fsHelper!.GetNotices(DirectoryPath);
+            Notices = _fsHelper!.GetNotices(_directoryPath);
         }
 
         private void Initialize()
@@ -94,7 +105,7 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
                 return;
 
             var filePaths = _fsHelper!.GetDroppedFiles(droppedFiles);
-            _fsHelper.CopyFiles(DirectoryPath, filePaths);
+            _fsHelper.CopyFiles(_directoryPath, filePaths);
 
             UpdateFileList();
         }
