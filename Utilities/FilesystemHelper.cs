@@ -8,41 +8,30 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace OrganizerWpf.UserControls.DocumentsExplorer
+namespace OrganizerWpf.Utilities
 {
-    public class FilesystemHelper
-    {
-        public List<DocumentInfo> GetDocuments(string workDirectory)
+    public static class FileSystemHelper
+    {        
+        public static List<T> GetFiles<T>(string workDirectory) 
+            where T : SerializableModel<T>, new()
         {
-            if (string.IsNullOrEmpty(workDirectory))
-                throw new ArgumentNullException("workDirectory can not be empty");
+            List<T> filesList = new();
 
-            DirectoryInfo currentDirectory = new DirectoryInfo(workDirectory);
-            var files = currentDirectory.GetFiles();
+            if (!CheckDirectory(workDirectory, out DirectoryInfo? currentDir))
+                return filesList;
 
-            List<DocumentInfo> filesList = new List<DocumentInfo>();
+            var files = currentDir!.GetFiles();            
 
             foreach (var file in files)
             {
                 if (file.Attributes.HasFlag(FileAttributes.Hidden))
                     continue;
 
-                DocumentInfo fileInfo = new DocumentInfo()
-                {
-                    Extension = file.Extension,
-                    FilePath = file.FullName,
-                    DocName = file.Name,
-                    CreationDate = file.CreationTime.ToString("dd.MM.yyyy HH:mm:ss"),
-                    UpdateDate = file.LastWriteTime.ToString("dd.MM.yyyy HH:mm:ss"),
-                    Version = "<Не указано>"
-                };
+                T fileInfo = new();
+                fileInfo.SetDefaultValues(file);
 
-                DocumentInfo? docMetaData = GetFileMetadata<DocumentInfo>(file.FullName);
-
-                if (docMetaData != null)
-                {
-                    fileInfo.Version = docMetaData.Version;
-                }
+                T? fileMetaData = GetFileMetadata<T>(file.FullName);
+                fileInfo.SetValuesFromMetadata(fileMetaData);
 
                 filesList.Add(fileInfo);
             }
@@ -50,44 +39,35 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             return filesList;
         }
 
-        public List<NoticeInfo> GetNotices(string workDirectory)
+        private static bool CheckDirectory(string path, out DirectoryInfo? checkedDir)
         {
-            if (string.IsNullOrEmpty(workDirectory))
-                throw new ArgumentNullException("workDirectory can not be empty");
+            var dirToCheck = new DirectoryInfo(path);
 
-            DirectoryInfo currentDirectory = new DirectoryInfo(workDirectory);
-            var files = currentDirectory.GetFiles();
-
-            List<NoticeInfo> filesList = new List<NoticeInfo>();
-
-            foreach (var file in files)
+            if (!dirToCheck.Exists)
             {
-                if (file.Attributes.HasFlag(FileAttributes.Hidden))
-                    continue;
-
-                NoticeInfo fileInfo = new NoticeInfo()
+                if(MessageBox.Show($"Каталога\n{path}\nне существует. Создать?", 
+                    "Каталог не найден",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question,
+                    MessageBoxResult.No) == MessageBoxResult.Yes)
                 {
-                    Extension = file.Extension,
-                    FilePath = file.FullName,
-                    DocName = file.Name,
-                    CreationDate = file.CreationTime.ToString("dd.MM.yyyy HH:mm:ss"),
-                    Reason = "<Не указано>"
-                };
-
-                NoticeInfo? noticeMetaData = GetFileMetadata<NoticeInfo>(file.FullName);
-
-                if (noticeMetaData != null)
-                {
-                    fileInfo.Reason = noticeMetaData.Reason;
+                    checkedDir = Directory.CreateDirectory(path);
+                    return true;
                 }
-
-                filesList.Add(fileInfo);
+                else
+                {
+                    checkedDir = null;
+                    return false;
+                }
             }
-
-            return filesList;
+            else
+            {
+                checkedDir = dirToCheck;
+                return true;
+            }
         }
 
-        private T? GetFileMetadata<T>(string filePath) where T : SerializableModel<T>
+        private static T? GetFileMetadata<T>(string filePath) where T : SerializableModel<T>
         {
             FileInfo file = new FileInfo(filePath);
             DirectoryInfo? dir = file.Directory;
@@ -117,7 +97,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             }            
         }
 
-        public void SetFileMetadata<T>(T modelInfo) where T : SerializableModel<T>
+        public static void SetFileMetadata<T>(T modelInfo) where T : SerializableModel<T>
         {            
             FileInfo file = new FileInfo(((IFileInfo)modelInfo).FilePath!);
             DirectoryInfo directoryInfo = file.Directory!;
@@ -126,7 +106,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             string metaFilePath = Path.Combine(directoryInfo.FullName, metaFileName);
 
             var modelMetadata = modelInfo;
-            string jsonData = SerializableModel<T>.ToJson(modelMetadata);
+            string jsonData = modelMetadata.ToJson();
 
             if (File.Exists(metaFilePath))
             {
@@ -136,7 +116,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             File.SetAttributes(metaFilePath, FileAttributes.Hidden);
         }
 
-        public List<string> GetDroppedFiles(string[] paths)
+        public static List<string> GetDroppedFilePaths(string[] paths)
         {
             List<string> filePaths = new List<string>();
 
@@ -155,7 +135,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             return filePaths;
         }
 
-        public void CopyFiles(string workDirectory, List<string> filesToCopy)
+        public static void CopyFiles(string workDirectory, List<string> filesToCopy)
         {
             if (string.IsNullOrEmpty(workDirectory)) return;
 
@@ -184,7 +164,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             }
         }
 
-        public string RenameFile(string oldPath, string newFileName)
+        public static string RenameFile(string oldPath, string newFileName)
         {
             FileInfo file = new FileInfo(oldPath);
             string newPath = Path.Combine(file.Directory!.FullName, newFileName);
@@ -193,13 +173,15 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 
             return newPath;
         }
-        public void OpenFile(string path)
-        {
-            var p = new Process();
 
-            p.StartInfo = new ProcessStartInfo(path)
+        public static void OpenFile(string path)
+        {
+            var p = new Process
             {
-                UseShellExecute = true,
+                StartInfo = new ProcessStartInfo(path)
+                {
+                    UseShellExecute = true,
+                }
             };
 
             p.Start();

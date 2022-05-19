@@ -9,38 +9,37 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <ResourceDictionary Source="../../Styles/ExtensionIcons.xaml">
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary>
-                    <ContextMenu x:Key="RowContextMenu" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                        <MenuItem Header="Удалить" Click="MenuItem_Delete_Click" />
-                        <MenuItem Header="Переименовать" Click="MenuItem_Rename_Click" />
-                        <MenuItem Header="Изменить версию" Click="MenuItem_ChangeVersion_Click" />
-                    </ContextMenu>
-
-                    <Style x:Key="RowStyle" TargetType="{x:Type DataGridRow}">
-                        <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
-                        <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick" />
-                    </Style>
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <ResourceDictionary Source="../../Styles/ExtensionIcons.xaml" />
     </UserControl.Resources>
 
-    <Border BorderBrush="#FFABADB3" 
-            AllowDrop="True" 
-            DragEnter="Border_DragEnter" DragLeave="Border_DragLeave" Drop="Border_Drop">
+    <Border x:Name="rootContainer"
+            BorderBrush="#FFABADB3" 
+            AllowDrop="True">
         <Grid>
             <DataGrid x:Name="dataGrid" 
                   Background="White" 
-                  ItemsSource="{Binding Documents}" 
+                  ItemsSource="{Binding Files}" 
+                  SelectedItem="{Binding SelectedFile, Mode=TwoWay}"
                   GridLinesVisibility="None" 
                   HeadersVisibility="Column" 
                   RowHeight="22"
                   SelectionMode="Single" 
                   AutoGenerateColumns="False"
-                  RowStyle="{StaticResource RowStyle}"
-                  CanUserAddRows="False" AllowDrop="True" MouseMove="dataGrid_MouseMove" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                  CanUserAddRows="False" AllowDrop="True" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                <DataGrid.Resources>
+                    <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}">
+                        <MenuItem Header="Удалить" Command="{Binding DeleteCommand}" />
+                        <MenuItem Header="Переименовать" Command="{Binding RenameCommand}" />
+                        <MenuItem Header="Изменить версию" Command="{Binding ChangeVersionCommand}" />
+                    </ContextMenu>                    
+                </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
+                        <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick" />
+                    </Style>
+                </DataGrid.RowStyle>
+                
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="*" Header="Название" CellTemplateSelector="{StaticResource IconTemplateSelector}"/>
                     <DataGridTextColumn Width="120" Header="Дата создания" Binding="{Binding CreationDate}"/>

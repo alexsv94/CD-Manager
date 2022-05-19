@@ -1,5 +1,6 @@
 ﻿using OrganizerWpf.Models;
 using OrganizerWpf.UserControls.DocumentsExplorer;
+using OrganizerWpf.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,127 +15,40 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace OrganizerWpf.UserControls.NoticeExplorer
 {
-    /// <summary>
-    /// Логика взаимодействия для NoticeExplorer.xaml
-    /// </summary>
     public partial class NoticeExplorer : UserControl
     {
-        #region Dependency Props
-        public string DirectoryPath
-        {
-            get { return (string)GetValue(DirectoryPathProperty); }
-            set { SetValue(DirectoryPathProperty, value); }
-        }
-        // Using a DependencyProperty as the backing store for DirectoryPath.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty DirectoryPathProperty =
-            DependencyProperty.Register("DirectoryPath", typeof(string), typeof(NoticeExplorer), new PropertyMetadata(null));
-
-        public List<NoticeInfo> Notices
-        {
-            get { return (List<NoticeInfo>)GetValue(DocumentsProperty); }
-            set { SetValue(DocumentsProperty, value); }
-        }
-        // Using a DependencyProperty as the backing store for Documents.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty DocumentsProperty =
-            DependencyProperty.Register("Notices", typeof(List<NoticeInfo>), typeof(NoticeExplorer), new PropertyMetadata(null));
-        #endregion
-
-        private bool _initCompleted;
-        private FilesystemHelper? _fsHelper;
+        public string TargetDirectory { get; set; } = string.Empty;
+        public NoticeExplorerViewModel? ViewModel { get; private set; } = null;
 
         public NoticeExplorer()
         {
             InitializeComponent();
-            dataGrid.DataContext = this;
+            Loaded += SetupViewModel;
         }
 
-        public void UpdateFileList()
+        private void SetupViewModel(object sender, RoutedEventArgs e)
         {
-            if (!_initCompleted)
-                Initialize();
-
-            Notices = _fsHelper!.GetNotices(DirectoryPath);
-            var columns = dataGrid.Columns;
-        }
-
-        private void Initialize()
-        {
-            _fsHelper = new FilesystemHelper();
-            _initCompleted = true;
-
-            UpdateFileList();
-        }
-
-        private void Border_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (ViewModel == null)
             {
-                e.Effects = DragDropEffects.Copy;
-                dropLabel.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                e.Effects = DragDropEffects.None;
-            }
-        }
+                ViewModel = new(TargetDirectory);
+                ViewModel.UI_DropLabel = dropLabel;
 
-        private void Border_DragLeave(object sender, DragEventArgs e)
-        {
-            dropLabel.Visibility = Visibility.Collapsed;
-        }
+                rootContainer.DragEnter += ViewModel.OnDragEnter;
+                rootContainer.DragLeave += ViewModel.OnDragLeave;
+                rootContainer.Drop += ViewModel.OnDrop;
 
-        private void Border_Drop(object sender, DragEventArgs e)
-        {
-            dropLabel.Visibility = Visibility.Collapsed;
-
-            string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-            if (Notices != null && Notices.Any(x => droppedFiles[0] == x.FilePath))
-                return;
-
-            var filePaths = _fsHelper!.GetDroppedFiles(droppedFiles);
-            _fsHelper.CopyFiles(DirectoryPath, filePaths);
-
-            UpdateFileList();
-        }
-
-        private void dataGrid_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.MouseDevice.LeftButton == MouseButtonState.Pressed && dataGrid.SelectedItem != null)
-            {
-                NoticeInfo itemInfo = (NoticeInfo)dataGrid.SelectedItem;
-
-                IDataObject dragObject = new DataObject(DataFormats.FileDrop, new string[] { itemInfo.FilePath! });
-                DragDrop.DoDragDrop(dataGrid, dragObject, DragDropEffects.Copy);
-            }
-        }
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            NoticeInfo selectedFile = (NoticeInfo)dataGrid.SelectedItem;
-
-            if (MessageBox.Show($"Удалить файл {selectedFile.DocName} без возможности восстановления?",
-                    "Удаление файла",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning,
-                    MessageBoxResult.No) == MessageBoxResult.Yes)
-            {
-                File.Delete(selectedFile.FilePath!);
+                dataGrid.MouseMove += ViewModel.OnMouseMove;
             }
 
-            UpdateFileList();
+            DataContext = ViewModel;
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (dataGrid.SelectedItem != null)
-            {
-                _fsHelper!.OpenFile(((NoticeInfo)dataGrid.SelectedItem).FilePath!);
-            }
+            ViewModel!.OnMouseDoubleClick();
         }
     }
 }

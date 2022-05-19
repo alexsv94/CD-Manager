@@ -1,22 +1,39 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace OrganizerWpf.Models
 {
-    public class SerializableModel<T> where T : class
+    public class SerializableModel<T> : IFileInfo
     {
+        public string? Extension { get; set; }
+        public string? DocName { get; set; }
+        public string? CreationDate { get; set; }
+        public string? UpdateDate { get; set; }
+        public string? FilePath { get; set; }
+
+        public virtual void SetDefaultValues(FileInfo file)
+        {
+            Extension = file.Extension;
+            FilePath = file.FullName;
+            DocName = file.Name;
+            CreationDate = file.CreationTime.ToString("dd.MM.yyyy HH:mm:ss");
+            UpdateDate = file.LastWriteTime.ToString("dd.MM.yyyy HH:mm:ss");            
+        }
+
+        public virtual void SetValuesFromMetadata(T? fileMetaData)
+        {
+            throw new NotImplementedException("Behaviour of method 'SetValuesFromMetadata()' not implemented");
+        }
+
         public static T? FromJson(string jsonString)
         {
             return JsonConvert.DeserializeObject<T>(jsonString);
         }
 
-        public static string ToJson(T model)
+        public string ToJson()
         {
-            return JsonConvert.SerializeObject(model);
+            return JsonConvert.SerializeObject(this);
         }
     }
 }

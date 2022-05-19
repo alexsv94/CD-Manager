@@ -8,44 +8,62 @@
         x:Name="dialogRoot"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Title="Изменение версии" Height="150" Width="400" Icon="/Icons/Windows/version.png">
+        Title="Изменение версии" Height="170" Width="400" Icon="/Icons/Windows/version.png">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
-        <TextBox 
-            Grid.Row="1"
-            Grid.ColumnSpan="2" 
-            Text="{Binding ElementName=dialogRoot, Path=NewVersion}" 
-            VerticalAlignment="Top" 
-            Margin="15,5,15,0"
-            VerticalContentAlignment="Center"
-            HorizontalContentAlignment="Left" Height="20" HorizontalAlignment="Stretch"/>
-        <Button x:Name="buttonOK" 
-                Content="ОК" 
-                Grid.Row="2" 
-                Margin="15,0,7,0" 
-                Click="buttonOK_Click" 
-                VerticalAlignment="Center" 
-                Height="25"/>
-        <Button x:Name="buttonCancel" 
-                Content="Отмена" 
-                Grid.Row="2" 
-                Grid.Column="1" 
-                Margin="7,0,15,0" 
-                Click="buttonCancel_Click" 
-                VerticalAlignment="Center" 
-                Height="25"/>
         <TextBlock HorizontalAlignment="Left" 
                    Margin="15,0,0,0" 
                    Text="Новая версия" 
                    FontWeight="Bold" 
                    VerticalAlignment="Bottom"/>
+        <TextBox 
+            Grid.Row="1"
+            Grid.ColumnSpan="2" 
+            Text="{Binding ElementName=dialogRoot, Path=NewVersion, Mode=TwoWay}" 
+            VerticalAlignment="Center" 
+            Margin="15,0,15,0"
+            VerticalContentAlignment="Center"
+            HorizontalContentAlignment="Left" Height="20"/>
+        <TextBlock Grid.Row="2"
+                   Grid.ColumnSpan="2"
+                   HorizontalAlignment="Left" 
+                   Margin="15,0,0,0" 
+                   Text="Файл извещения (необязательно)" 
+                   FontWeight="Bold" 
+                   VerticalAlignment="Bottom"/>
+        <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="15,0,15,0" Height="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="70" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox DockPanel.Dock="Left" HorizontalAlignment="Stretch" Text="{Binding ElementName=dialogRoot, Path=NoticeFilePath, Mode=TwoWay}" />
+            <Button x:Name="noticeBrowseBtn" Content="Обзор" Grid.Column="1" Click="noticeBrowseBtn_Click" />
+        </Grid>
+        <Button x:Name="buttonOK" 
+                Content="ОК" 
+                Grid.Row="4" 
+                Margin="15,5,7,5" 
+                Click="buttonOK_Click" 
+                VerticalAlignment="Center" 
+                Height="25"/>
+        <Button x:Name="buttonCancel" 
+                Content="Отмена" 
+                Grid.Row="4" 
+                Grid.Column="1" 
+                Margin="7,5,15,5" 
+                Click="buttonCancel_Click" 
+                VerticalAlignment="Center" 
+                Height="25"/>
     </Grid>
 </Window>
