@@ -12,14 +12,15 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 {
     public class FilesystemHelper
     {
-        public List<DocumentInfo> GetDocuments(string path)
+        public List<DocumentInfo> GetDocuments(string workDirectory)
         {
+            if (string.IsNullOrEmpty(workDirectory))
+                throw new ArgumentNullException("workDirectory can not be empty");
+
+            DirectoryInfo currentDirectory = new DirectoryInfo(workDirectory);
+            var files = currentDirectory.GetFiles();
+
             List<DocumentInfo> filesList = new List<DocumentInfo>();
-
-            if (!CheckDirectory(path, out DirectoryInfo? directory))
-                return filesList;
-
-            var files = directory!.GetFiles();
 
             foreach (var file in files)
             {
@@ -49,14 +50,15 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             return filesList;
         }
 
-        public List<NoticeInfo> GetNotices(string path)
+        public List<NoticeInfo> GetNotices(string workDirectory)
         {
+            if (string.IsNullOrEmpty(workDirectory))
+                throw new ArgumentNullException("workDirectory can not be empty");
+
+            DirectoryInfo currentDirectory = new DirectoryInfo(workDirectory);
+            var files = currentDirectory.GetFiles();
+
             List<NoticeInfo> filesList = new List<NoticeInfo>();
-
-            if (!CheckDirectory(path, out DirectoryInfo? directory))
-                return filesList;
-
-            var files = directory!.GetFiles();
 
             foreach (var file in files)
             {
@@ -80,38 +82,9 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
                 }
 
                 filesList.Add(fileInfo);
-            }          
+            }
 
             return filesList;
-        }
-
-        private bool CheckDirectory(string path, out DirectoryInfo? directory)
-        {
-            DirectoryInfo dirToCheckInfo = new(path);
-
-            if (!dirToCheckInfo.Exists)
-            {
-                if (MessageBox.Show($"Каталога {path} не существует, создать?",
-                    "Каталог не найден",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning,
-                    MessageBoxResult.No) == MessageBoxResult.Yes)
-                {
-                    Directory.CreateDirectory(path);
-                    directory = dirToCheckInfo;
-                    return true;
-                }
-                else
-                {
-                    directory = null;
-                    return false;
-                }
-            }
-            else
-            {
-                directory = dirToCheckInfo;
-                return true;
-            }            
         }
 
         private T? GetFileMetadata<T>(string filePath) where T : SerializableModel<T>
@@ -199,7 +172,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
                 }
 
                 if (candidate != null &&
-                    MessageBox.Show($"Файл {fileInfo.Name} уже есть в рабочей папке. \nЗаменить?",
+                    MessageBox.Show($"Файл {fileInfo.Name} уже есть в рабочей папке. Заменить?",
                     "Копирование файла",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning,
@@ -220,7 +193,6 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 
             return newPath;
         }
-
         public void OpenFile(string path)
         {
             var p = new Process();

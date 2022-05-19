@@ -3,10 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:OrganizerWpf.UserControls.DocumentsExplorer"
-             xmlns:models="clr-namespace:OrganizerWpf.Models"
-             mc:Ignorable="d" 
+             xmlns:local="clr-namespace:OrganizerWpf"
              x:Name="rootExplorer"
+             mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
@@ -14,23 +13,15 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <ContextMenu x:Key="RowContextMenu" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                        <MenuItem Header="Удалить" Command="{Binding DeleteDocumentCommand}" />
-                        <MenuItem Header="Переименовать" Command="{Binding RenameDocumentCommand}" />
-                        <MenuItem Header="Изменить версию" Command="{Binding ChangeDocumentVersionCommand}" />
+                        <MenuItem Header="Удалить" Click="MenuItem_Delete_Click" />
+                        <MenuItem Header="Переименовать" Click="MenuItem_Rename_Click" />
+                        <MenuItem Header="Изменить версию" Click="MenuItem_ChangeVersion_Click" />
                     </ContextMenu>
 
                     <Style x:Key="RowStyle" TargetType="{x:Type DataGridRow}">
                         <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
                         <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick" />
                     </Style>
-
-                    <x:Array Type="{x:Type models:DocumentInfo}" x:Key="tempData">
-                        <models:DocumentInfo DocName="Name" Extension=".txt" CreationDate="17/05/2022" Version="1"/>
-                        <models:DocumentInfo DocName="Name" Extension=".txt" CreationDate="17/05/2022" Version="1"/>
-                        <models:DocumentInfo DocName="Name" Extension=".txt" CreationDate="17/05/2022" Version="1"/>
-                        <models:DocumentInfo DocName="Name" Extension=".txt" CreationDate="17/05/2022" Version="1"/>
-                    </x:Array>
-                    
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -38,13 +29,10 @@
 
     <Border BorderBrush="#FFABADB3" 
             AllowDrop="True" 
-            DragEnter="Border_DragEnter" 
-            DragLeave="Border_DragLeave" 
-            Drop="Border_Drop">
+            DragEnter="Border_DragEnter" DragLeave="Border_DragLeave" Drop="Border_Drop">
         <Grid>
             <DataGrid x:Name="dataGrid" 
-                  Background="White"
-                  SelectedItem="{Binding SelectedDocument, Mode=TwoWay}"
+                  Background="White" 
                   ItemsSource="{Binding Documents}" 
                   GridLinesVisibility="None" 
                   HeadersVisibility="Column" 
@@ -52,10 +40,7 @@
                   SelectionMode="Single" 
                   AutoGenerateColumns="False"
                   RowStyle="{StaticResource RowStyle}"
-                  CanUserAddRows="False" AllowDrop="True" 
-                  MouseMove="dataGrid_MouseMove" 
-                  ScrollViewer.VerticalScrollBarVisibility="Visible" 
-                  VerticalScrollBarVisibility="Visible">
+                  CanUserAddRows="False" AllowDrop="True" MouseMove="dataGrid_MouseMove" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="*" Header="Название" CellTemplateSelector="{StaticResource IconTemplateSelector}"/>
                     <DataGridTextColumn Width="120" Header="Дата создания" Binding="{Binding CreationDate}"/>

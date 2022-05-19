@@ -24,7 +24,14 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
     public partial class NoticeExplorer : UserControl
     {
         #region Dependency Props
-        public string DirectoryPath { get; set; } = string.Empty;
+        public string DirectoryPath
+        {
+            get { return (string)GetValue(DirectoryPathProperty); }
+            set { SetValue(DirectoryPathProperty, value); }
+        }
+        // Using a DependencyProperty as the backing store for DirectoryPath.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DirectoryPathProperty =
+            DependencyProperty.Register("DirectoryPath", typeof(string), typeof(NoticeExplorer), new PropertyMetadata(null));
 
         public List<NoticeInfo> Notices
         {
@@ -45,19 +52,21 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
             dataGrid.DataContext = this;
         }
 
-        public void UpdateFileList(string newDir)
+        public void UpdateFileList()
         {
             if (!_initCompleted)
                 Initialize();
 
-            DirectoryPath = newDir;
-            Notices = _fsHelper!.GetNotices(newDir);
+            Notices = _fsHelper!.GetNotices(DirectoryPath);
+            var columns = dataGrid.Columns;
         }
 
         private void Initialize()
         {
             _fsHelper = new FilesystemHelper();
             _initCompleted = true;
+
+            UpdateFileList();
         }
 
         private void Border_DragEnter(object sender, DragEventArgs e)
@@ -90,7 +99,7 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
             var filePaths = _fsHelper!.GetDroppedFiles(droppedFiles);
             _fsHelper.CopyFiles(DirectoryPath, filePaths);
 
-            UpdateFileList(DirectoryPath);
+            UpdateFileList();
         }
 
         private void dataGrid_MouseMove(object sender, MouseEventArgs e)
@@ -117,7 +126,7 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
                 File.Delete(selectedFile.FilePath!);
             }
 
-            UpdateFileList(DirectoryPath);
+            UpdateFileList();
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
