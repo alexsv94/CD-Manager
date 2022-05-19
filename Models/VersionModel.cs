@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace OrganizerWpf.Models
 {
     [Serializable]
-    public class VersionInfo
+    public class VersionModel
     {
         public string? Version { get; set; }
         public string? CreationDate { get; set; }

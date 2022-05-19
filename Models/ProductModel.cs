@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OrganizerWpf.Models
 {
-    public class ProductInfo
+    public class ProductModel
     {
         public string? ProductName { get; set; }
         public string? ProductDirectoryPath { get; set; }

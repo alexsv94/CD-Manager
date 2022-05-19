@@ -22,59 +22,20 @@ namespace OrganizerWpf.Windows.MainWindow
 {    
     public partial class MainWindow : Window
     {
-        private ProductInfo _selectedProduct;
-        public ProductInfo? SelectedProduct 
-        {
-            get => _selectedProduct;
-            set
-            {
-                _selectedProduct = value!;
-                OnSelectedCurrentProductChanged();
-            }
-        }                
-        public List<ProductInfo> Products { get; set; } = new();
+        public MainWindowViewModel? ViewModel { get; set; } = null;
 
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = this;
-            UpdateProductList();
+            Loaded += SetupViewModel;
         }
 
-        private void OnSelectedCurrentProductChanged()
+        private void SetupViewModel(object sender, RoutedEventArgs e)
         {
-            string selectedProductDirectoryPath = SelectedProduct!.ProductDirectoryPath!;
-            Settings.CurrentProductDirectoryPath = selectedProductDirectoryPath;
-        }
+            if (ViewModel == null)
+                ViewModel = new(this);
 
-        private void UpdateProductList()
-        {
-            string[] paths = Directory.GetDirectories(Settings.WorkingDirectoryPath);
-
-            DirectoryInfo[] dirs = new DirectoryInfo[paths.Length];
-
-            for (int i = 0; i < paths.Length; i++)
-            {
-                dirs[i] = new DirectoryInfo(paths[i]);
-            }
-
-            Products.Clear();
-
-            foreach (var dir in dirs)
-            {
-                ProductInfo product = new ProductInfo()
-                {
-                    ProductName = dir.Name,
-                    ProductDirectoryPath = dir.FullName,
-                };
-                Products.Add(product);
-            }
-        }
-
-        private void MenuItem_Settings_Click(object sender, RoutedEventArgs e)
-        {
-            SettingsWindow settingsWindow = new SettingsWindow();
-            settingsWindow.Show();
+            DataContext = ViewModel;
         }
     }
 }

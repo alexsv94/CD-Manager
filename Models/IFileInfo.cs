@@ -11,6 +11,7 @@ namespace OrganizerWpf.Models
         public string? Extension { get; set; }
         public string? DocName { get; set; }
         public string? CreationDate { get; set; }
+        public string? UpdateDate { get; set; }
         public string? FilePath { get; set; }
     }
 }

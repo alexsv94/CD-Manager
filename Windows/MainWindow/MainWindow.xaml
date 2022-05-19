@@ -27,8 +27,8 @@
 
         <Menu Grid.ColumnSpan="4">
             <MenuItem Header="Файл">
-                <MenuItem Header="Настройки" Click="MenuItem_Settings_Click"/>
-                <MenuItem Header="Выход" />
+                <MenuItem Header="Настройки" Command="{Binding OpenSettingsWindowCommand}"/>
+                <MenuItem Header="Выход"  Command="{Binding CloseWindowCommand}"/>
             </MenuItem>
         </Menu>
         <Label Content="Поиск" FontWeight="Bold" Grid.Row="1"/>

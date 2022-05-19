@@ -8,9 +8,19 @@ namespace OrganizerWpf.Utilities
 {
     public static class Settings
     {
-        public static string WorkingDirectoryPath { get; set; } = $"C:\\Users\\{Environment.UserName}\\Desktop\\TestFolder";
-        
-        private static string _currentProductDir = String.Empty;
+        private static string _workingDirectoryPath = 
+            $"C:\\Users\\{Environment.UserName}\\Desktop\\TestFolder";
+        public static string WorkingDirectoryPath
+        {
+            get => _workingDirectoryPath;
+            set
+            {
+                _workingDirectoryPath = value;
+                WorkingDirectoryChanged?.Invoke(value);
+            }
+        }
+
+        private static string _currentProductDir = string.Empty;
         public static string CurrentProductDirectoryPath 
         { 
             get => _currentProductDir;
@@ -26,6 +36,7 @@ namespace OrganizerWpf.Utilities
 
         #region Events
         public static event Action<string>? CurrentProductDirectoryChanged;
+        public static event Action<string>? WorkingDirectoryChanged;
         #endregion
     }
 }

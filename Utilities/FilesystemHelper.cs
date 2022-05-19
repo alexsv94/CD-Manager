@@ -12,9 +12,10 @@ namespace OrganizerWpf.Utilities
 {
     public class FilesystemHelper
     {
-        public List<DocumentInfo> GetDocuments(string workDirectory)
+        public List<T> GetFiles<T>(string workDirectory) 
+            where T : SerializableModel<T>, new()
         {
-            List<DocumentInfo> filesList = new();
+            List<T> filesList = new();
 
             if (!CheckDirectory(workDirectory, out DirectoryInfo? currentDir))
                 return filesList;
@@ -26,59 +27,11 @@ namespace OrganizerWpf.Utilities
                 if (file.Attributes.HasFlag(FileAttributes.Hidden))
                     continue;
 
-                DocumentInfo fileInfo = new DocumentInfo()
-                {
-                    Extension = file.Extension,
-                    FilePath = file.FullName,
-                    DocName = file.Name,
-                    CreationDate = file.CreationTime.ToString("dd.MM.yyyy HH:mm:ss"),
-                    UpdateDate = file.LastWriteTime.ToString("dd.MM.yyyy HH:mm:ss"),
-                    Version = "<Не указано>",
-                };
+                T fileInfo = new();
+                fileInfo.SetDefaultValues(file);
 
-                DocumentInfo? docMetaData = GetFileMetadata<DocumentInfo>(file.FullName);
-
-                if (docMetaData != null)
-                {
-                    fileInfo.Version = docMetaData.Version;
-                    fileInfo.VersionHistory = docMetaData.VersionHistory;
-                }
-
-                filesList.Add(fileInfo);
-            }
-
-            return filesList;
-        }       
-
-        public List<NoticeInfo> GetNotices(string workDirectory)
-        {
-            List<NoticeInfo> filesList = new();
-
-            if (!CheckDirectory(workDirectory, out DirectoryInfo? currentDir))
-                return filesList;
-
-            var files = currentDir!.GetFiles();
-
-            foreach (var file in files)
-            {
-                if (file.Attributes.HasFlag(FileAttributes.Hidden))
-                    continue;
-
-                NoticeInfo fileInfo = new NoticeInfo()
-                {
-                    Extension = file.Extension,
-                    FilePath = file.FullName,
-                    DocName = file.Name,
-                    CreationDate = file.CreationTime.ToString("dd.MM.yyyy HH:mm:ss"),
-                    Reason = "<Не указано>"
-                };
-
-                NoticeInfo? noticeMetaData = GetFileMetadata<NoticeInfo>(file.FullName);
-
-                if (noticeMetaData != null)
-                {
-                    fileInfo.Reason = noticeMetaData.Reason;
-                }
+                T? fileMetaData = GetFileMetadata<T>(file.FullName);
+                fileInfo.SetValuesFromMetadata(fileMetaData);
 
                 filesList.Add(fileInfo);
             }
@@ -92,7 +45,7 @@ namespace OrganizerWpf.Utilities
 
             if (!dirToCheck.Exists)
             {
-                if(MessageBox.Show($"Каталога {path} \nне существует.\nСоздать?", 
+                if(MessageBox.Show($"Каталога\n{path}\nне существует. Создать?", 
                     "Каталог не найден",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question,
@@ -222,11 +175,12 @@ namespace OrganizerWpf.Utilities
         }
         public void OpenFile(string path)
         {
-            var p = new Process();
-
-            p.StartInfo = new ProcessStartInfo(path)
+            var p = new Process
             {
-                UseShellExecute = true,
+                StartInfo = new ProcessStartInfo(path)
+                {
+                    UseShellExecute = true,
+                }
             };
 
             p.Start();
