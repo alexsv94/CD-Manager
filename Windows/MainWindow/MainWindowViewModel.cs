@@ -1,5 +1,6 @@
 ﻿using OrganizerWpf.Models;
 using OrganizerWpf.Utilities;
+using OrganizerWpf.ViewModels;
 using OrganizerWpf.Windows.SettingsW;
 using System;
 using System.Collections.Generic;
@@ -13,16 +14,8 @@ using System.Windows;
 
 namespace OrganizerWpf.Windows.MainWindow
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : ViewModelBase
     {
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
-
         #region Binding Props
         private ProductModel? _selectedProduct = null;
         public ProductModel? SelectedProduct
@@ -32,9 +25,20 @@ namespace OrganizerWpf.Windows.MainWindow
             {
                 _selectedProduct = value!;
                 OnSelectedCurrentProductChanged();
+                OnPropertyChanged(nameof(SelectedProduct));
             }
         }
-        public List<ProductModel> Products { get; set; } = new();
+
+        private List<ProductModel>? _products = null;
+        public List<ProductModel>? Products 
+        {
+            get => _products;
+            set
+            {
+                _products = value;
+                OnPropertyChanged(nameof(Products));
+            }
+        }
         #endregion
 
         #region Commands
@@ -65,6 +69,9 @@ namespace OrganizerWpf.Windows.MainWindow
         public MainWindowViewModel(Window window)
         {
             _window = window;
+
+            SettingsLoader.Load();
+
             Settings.WorkingDirectoryChanged += OnWorkingDirectoryChanged;
 
             if (!string.IsNullOrEmpty(Settings.WorkingDirectoryPath))
@@ -80,11 +87,15 @@ namespace OrganizerWpf.Windows.MainWindow
         #region Handlers
         private void OnSelectedCurrentProductChanged()
         {
-            string selectedProductDirectoryPath = SelectedProduct!.ProductDirectoryPath!;
+            if (SelectedProduct == null) return;
+
+            string selectedProductDirectoryPath = SelectedProduct.ProductDirectoryPath!;
             Settings.CurrentProductDirectoryPath = selectedProductDirectoryPath;
         }
         private void UpdateProductList()
         {
+            if (string.IsNullOrEmpty(_workingDir)) return;
+            
             string[] paths = Directory.GetDirectories(_workingDir);
 
             DirectoryInfo[] dirs = new DirectoryInfo[paths.Length];
@@ -94,7 +105,7 @@ namespace OrganizerWpf.Windows.MainWindow
                 dirs[i] = new DirectoryInfo(paths[i]);
             }
 
-            Products.Clear();
+            var productsList = new List<ProductModel>();
 
             foreach (var dir in dirs)
             {
@@ -103,8 +114,10 @@ namespace OrganizerWpf.Windows.MainWindow
                     ProductName = dir.Name,
                     ProductDirectoryPath = dir.FullName,
                 };
-                Products.Add(product);
+                productsList.Add(product);
             }
+
+            Products = productsList;
         }
         #endregion
     }

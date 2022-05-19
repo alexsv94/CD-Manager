@@ -6,7 +6,6 @@
         xmlns:docs="clr-namespace:OrganizerWpf.UserControls.DocumentsExplorer"
         xmlns:notices="clr-namespace:OrganizerWpf.UserControls.NoticeExplorer"
         mc:Ignorable="d"
-        x:Name="mainWindow"
         Title="Менеджер КД" Height="800" Width="1400" Background="#FFF0F0F0" Icon="/Icons/Windows/main_32x32.png">
     
     <Grid>

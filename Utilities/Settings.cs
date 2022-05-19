@@ -25,6 +25,7 @@ namespace OrganizerWpf.Utilities
             get => _currentProductDir;
             set
             {
+                if (string.IsNullOrEmpty(value)) return;
                 _currentProductDir = value;
                 CurrentProductDirectoryChanged?.Invoke(value);
             }

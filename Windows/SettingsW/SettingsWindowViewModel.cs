@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace OrganizerWpf.Windows.SettingsW
@@ -15,14 +17,14 @@ namespace OrganizerWpf.Windows.SettingsW
     public class SettingsWindowViewModel : ViewModelBase
     {
         #region Binding Props
-        private string _workDirectory = string.Empty;
-        public string WorkDirectory
+        private string _workingDirectoryPath = string.Empty;
+        public string WorkingDirectoryPath
         {
-            get => _workDirectory;
+            get => _workingDirectoryPath;
             set
             {
-                _workDirectory = value;
-                OnPropertyChanged(nameof(WorkDirectory));
+                _workingDirectoryPath = value;
+                OnPropertyChanged(nameof(WorkingDirectoryPath));
             }
         }        
         #endregion
@@ -38,17 +40,20 @@ namespace OrganizerWpf.Windows.SettingsW
 
         public SettingsWindowViewModel()
         {
-            //Loading settings from JSON file
-            if (File.Exists("Settings.json"))
+            _settingsLoader = SettingsLoader.Load();
+            SetBindingValues();
+        }
+
+        private void SetBindingValues()
+        {
+            foreach (PropertyInfo property in typeof(SettingsLoader).GetProperties())
             {
-                _settingsLoader = SettingsLoader.FromJson(File.ReadAllText("Settings.json"));
-                _settingsLoader ??= new SettingsLoader();
-                _settingsLoader.UpdateSettings();
+                if (!GetType().GetProperties().Any(x => x.Name == property.Name))
+                    continue;
+                
+                GetType().GetProperty(property.Name)!
+                        .SetValue(this, property.GetValue(_settingsLoader));
             }
-            else
-            {
-                _settingsLoader = new SettingsLoader();
-            }             
         }
 
         private void ChangeWorkDirectory()
@@ -56,21 +61,35 @@ namespace OrganizerWpf.Windows.SettingsW
             using var dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                WorkDirectory = dialog.SelectedPath;
-                _settingsLoader!.WorkingDirectoryPath = WorkDirectory;
+                WorkingDirectoryPath = dialog.SelectedPath;
+                _settingsLoader!.WorkingDirectoryPath = WorkingDirectoryPath;
             }
         }
 
         #region Handlers
-        public void OnClose(object? sender, EventArgs e)
+        public void OnClose(CancelEventArgs e)
         {
-            if (File.Exists("Settings.json"))
-            {
-                File.Delete("Settings.json");
-            }
+            var result = System.Windows.MessageBox.Show("Сохранить изменения? " +
+                "Если вы нажмете 'Нет', все изменения откатятся.",
+                "Менеджер КД",
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Question,
+                MessageBoxResult.Cancel);
 
-            File.WriteAllText("Settings.json", _settingsLoader!.ToJson());
-            _settingsLoader!.UpdateSettings();
+
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    {
+                        _settingsLoader!.Save();
+                    }
+                    break;
+                case MessageBoxResult.Cancel:
+                    {
+                        e.Cancel = true;
+                    }
+                    break;
+            }            
         }
         #endregion
     }

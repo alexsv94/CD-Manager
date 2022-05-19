@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Reflection;
+using System.Windows;
 
 namespace OrganizerWpf.Utilities
 {
@@ -12,12 +14,24 @@ namespace OrganizerWpf.Utilities
         public string EmployeeName { get; set; } = string.Empty;
         public bool NeedToSpecifyVersionAfterCopy { get; set; }
         
+        public static SettingsLoader Load()
+        {
+            if (!File.Exists("Settings.json")) return new();
+            
+            string jsonString = File.ReadAllText("Settings.json");
+            var settings = JsonConvert.DeserializeObject<SettingsLoader>(jsonString);
+            
+            if (settings == null) return new();
+            
+            settings.UpdateSettings();
+            return settings;
+        }
         public void ReadValuesFromSettings()
         {
             foreach (PropertyInfo property in typeof(Settings).GetProperties(BindingFlags.Static | BindingFlags.Public))
             {
                 GetType().GetProperty(property.Name)!
-                        .SetValue(this, property.GetValue(this));
+                        .SetValue(this, property.GetValue(null));
             }
         }
         public void UpdateSettings()
@@ -31,14 +45,15 @@ namespace OrganizerWpf.Utilities
             }
         }
 
-        public static SettingsLoader? FromJson(string jsonString)
+        public void Save()
         {
-            return JsonConvert.DeserializeObject<SettingsLoader>(jsonString);
-        }
+            if (File.Exists("Settings.json"))
+            {
+                File.Delete("Settings.json");
+            }
 
-        public string ToJson()
-        {
-            return JsonConvert.SerializeObject(this);
+            File.WriteAllText("Settings.json", JsonConvert.SerializeObject(this));
+            UpdateSettings();
         }
     }
 }

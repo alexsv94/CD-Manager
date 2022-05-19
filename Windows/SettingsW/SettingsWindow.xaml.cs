@@ -1,4 +1,5 @@
 ﻿using OrganizerWpf.Utilities;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Forms;
 
@@ -19,9 +20,12 @@ namespace OrganizerWpf.Windows.SettingsW
             if (ViewModel == null)
                 ViewModel = new();
 
-            Closed += ViewModel.OnClose;
-
             DataContext = ViewModel;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            ViewModel?.OnClose(e);
         }
     }
 }

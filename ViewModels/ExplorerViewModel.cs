@@ -68,7 +68,7 @@ namespace OrganizerWpf.ViewModels
 
         #region Handlers
         private void OnDirectoryChanged(string newDir)
-        {
+        {            
             _directoryPath = Path.Combine(newDir, _targetDirectory);
             UpdateFileList();
         }
