@@ -20,7 +20,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 
         protected override void UpdateFileList()
         {
-            Files = _fsHelper!.GetFiles<DocumentModel>(_directoryPath);
+            Files = FileSystemHelper.GetFiles<DocumentModel>(_directoryPath);
         }
 
         private void ChangeDocumentVersion()
@@ -59,7 +59,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
                 SelectedFile.VersionHistory = list.ToArray();
             }
 
-            _fsHelper!.SetFileMetadata(SelectedFile);
+            FileSystemHelper.SetFileMetadata(SelectedFile);
 
             UpdateFileList();
         }

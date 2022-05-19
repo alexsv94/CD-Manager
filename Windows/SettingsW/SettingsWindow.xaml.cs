@@ -4,26 +4,24 @@ using System.Windows.Forms;
 
 namespace OrganizerWpf.Windows.SettingsW
 {
-    /// <summary>
-    /// Логика взаимодействия для SettingsWindow.xaml
-    /// </summary>
-    public partial class SettingsWindow : Window
+    public partial class SettingsWindow : Window, IView<SettingsWindowViewModel>
     {
+        public SettingsWindowViewModel? ViewModel { get; set; }
+
         public SettingsWindow()
         {
             InitializeComponent();
+            Loaded += SetupViewModel;
         }
 
-        private void workDirBrowseBtn_Click(object sender, RoutedEventArgs e)
+        public void SetupViewModel(object sender, RoutedEventArgs e)
         {
-            using (var dialog = new FolderBrowserDialog())
-            {
-                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    Settings.WorkingDirectoryPath = dialog.SelectedPath;
-                    workDirTextBox.Text = dialog.SelectedPath;
-                }
-            }
+            if (ViewModel == null)
+                ViewModel = new();
+
+            Closed += ViewModel.OnClose;
+
+            DataContext = ViewModel;
         }
     }
 }

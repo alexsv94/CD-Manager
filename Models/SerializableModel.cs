@@ -31,9 +31,9 @@ namespace OrganizerWpf.Models
             return JsonConvert.DeserializeObject<T>(jsonString);
         }
 
-        public static string ToJson(T model)
+        public string ToJson()
         {
-            return JsonConvert.SerializeObject(model);
+            return JsonConvert.SerializeObject(this);
         }
     }
 }

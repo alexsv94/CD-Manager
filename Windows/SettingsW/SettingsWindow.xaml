@@ -49,8 +49,8 @@
                                 <ColumnDefinition Width="70" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBox x:Name="workDirTextBox" DockPanel.Dock="Left" HorizontalAlignment="Left" Width="347"/>
-                            <Button x:Name="workDirBrowseBtn" Content="Обзор" Grid.Column="1" Click="workDirBrowseBtn_Click"/>
+                            <TextBox DockPanel.Dock="Left" HorizontalAlignment="Stretch" Text="{Binding WorkDirectory}"/>
+                            <Button Content="Обзор" Grid.Column="1" Command="{Binding WorkDirChooseDialogOpenCommand}"/>
                         </Grid>                        
                     </Grid>
                 </ScrollViewer>

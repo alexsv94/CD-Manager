@@ -10,9 +10,9 @@ using System.Windows;
 
 namespace OrganizerWpf.Utilities
 {
-    public class FilesystemHelper
-    {
-        public List<T> GetFiles<T>(string workDirectory) 
+    public static class FileSystemHelper
+    {        
+        public static List<T> GetFiles<T>(string workDirectory) 
             where T : SerializableModel<T>, new()
         {
             List<T> filesList = new();
@@ -39,7 +39,7 @@ namespace OrganizerWpf.Utilities
             return filesList;
         }
 
-        private bool CheckDirectory(string path, out DirectoryInfo? checkedDir)
+        private static bool CheckDirectory(string path, out DirectoryInfo? checkedDir)
         {
             var dirToCheck = new DirectoryInfo(path);
 
@@ -67,7 +67,7 @@ namespace OrganizerWpf.Utilities
             }
         }
 
-        private T? GetFileMetadata<T>(string filePath) where T : SerializableModel<T>
+        private static T? GetFileMetadata<T>(string filePath) where T : SerializableModel<T>
         {
             FileInfo file = new FileInfo(filePath);
             DirectoryInfo? dir = file.Directory;
@@ -97,7 +97,7 @@ namespace OrganizerWpf.Utilities
             }            
         }
 
-        public void SetFileMetadata<T>(T modelInfo) where T : SerializableModel<T>
+        public static void SetFileMetadata<T>(T modelInfo) where T : SerializableModel<T>
         {            
             FileInfo file = new FileInfo(((IFileInfo)modelInfo).FilePath!);
             DirectoryInfo directoryInfo = file.Directory!;
@@ -106,7 +106,7 @@ namespace OrganizerWpf.Utilities
             string metaFilePath = Path.Combine(directoryInfo.FullName, metaFileName);
 
             var modelMetadata = modelInfo;
-            string jsonData = SerializableModel<T>.ToJson(modelMetadata);
+            string jsonData = modelMetadata.ToJson();
 
             if (File.Exists(metaFilePath))
             {
@@ -116,7 +116,7 @@ namespace OrganizerWpf.Utilities
             File.SetAttributes(metaFilePath, FileAttributes.Hidden);
         }
 
-        public List<string> GetDroppedFiles(string[] paths)
+        public static List<string> GetDroppedFilePaths(string[] paths)
         {
             List<string> filePaths = new List<string>();
 
@@ -135,7 +135,7 @@ namespace OrganizerWpf.Utilities
             return filePaths;
         }
 
-        public void CopyFiles(string workDirectory, List<string> filesToCopy)
+        public static void CopyFiles(string workDirectory, List<string> filesToCopy)
         {
             if (string.IsNullOrEmpty(workDirectory)) return;
 
@@ -164,7 +164,7 @@ namespace OrganizerWpf.Utilities
             }
         }
 
-        public string RenameFile(string oldPath, string newFileName)
+        public static string RenameFile(string oldPath, string newFileName)
         {
             FileInfo file = new FileInfo(oldPath);
             string newPath = Path.Combine(file.Directory!.FullName, newFileName);
@@ -173,7 +173,8 @@ namespace OrganizerWpf.Utilities
 
             return newPath;
         }
-        public void OpenFile(string path)
+
+        public static void OpenFile(string path)
         {
             var p = new Process
             {

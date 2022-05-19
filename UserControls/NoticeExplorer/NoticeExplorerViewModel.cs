@@ -1,4 +1,5 @@
 ﻿using OrganizerWpf.Models;
+using OrganizerWpf.Utilities;
 using OrganizerWpf.ViewModels;
 
 namespace OrganizerWpf.UserControls.NoticeExplorer
@@ -9,7 +10,7 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
 
         protected override void UpdateFileList()
         {
-            Files = _fsHelper!.GetFiles<NoticeModel>(_directoryPath);
+            Files = FileSystemHelper.GetFiles<NoticeModel>(_directoryPath);
         }
     }
 }

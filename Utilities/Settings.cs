@@ -8,8 +8,7 @@ namespace OrganizerWpf.Utilities
 {
     public static class Settings
     {
-        private static string _workingDirectoryPath = 
-            $"C:\\Users\\{Environment.UserName}\\Desktop\\TestFolder";
+        private static string _workingDirectoryPath = string.Empty;            
         public static string WorkingDirectoryPath
         {
             get => _workingDirectoryPath;

@@ -2,27 +2,17 @@
 using OrganizerWpf.Models;
 using OrganizerWpf.Utilities;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace OrganizerWpf.ViewModels
 {
-    public abstract class ExplorerViewModel<T> : INotifyPropertyChanged 
+    public abstract class ExplorerViewModel<T> : ViewModelBase
         where T : SerializableModel<T>
     {
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
-
         #region Commands
         private RelayCommand? _deleteCommand = null;
         public RelayCommand DeleteCommand =>
@@ -60,12 +50,10 @@ namespace OrganizerWpf.ViewModels
         public Label? UI_DropLabel;
 
         protected readonly string _targetDirectory = string.Empty;
-        protected readonly FilesystemHelper? _fsHelper = null;
         protected string _directoryPath = string.Empty;
 
         public ExplorerViewModel(string targetDir)
         {
-            _fsHelper = new();
             _targetDirectory = targetDir;
             Settings.CurrentProductDirectoryChanged += OnDirectoryChanged;
         }
@@ -112,8 +100,8 @@ namespace OrganizerWpf.ViewModels
             if (Files != null && Files.Any(x => droppedFiles[0] == x.FilePath))
                 return;
 
-            var filePaths = _fsHelper!.GetDroppedFiles(droppedFiles);
-            _fsHelper.CopyFiles(_directoryPath, filePaths);
+            var filePaths = FileSystemHelper.GetDroppedFilePaths(droppedFiles);
+            FileSystemHelper.CopyFiles(_directoryPath, filePaths);
 
             UpdateFileList();
         }
@@ -129,7 +117,7 @@ namespace OrganizerWpf.ViewModels
 
         public void OnMouseDoubleClick()
         {
-            _fsHelper!.OpenFile(SelectedFile!.FilePath!);
+            FileSystemHelper.OpenFile(SelectedFile!.FilePath!);
         }
         #endregion
 
@@ -164,7 +152,7 @@ namespace OrganizerWpf.ViewModels
             if ((bool)result!)
             {
                 SelectedFile.DocName = renameDialog.NewFileName;
-                SelectedFile.FilePath = _fsHelper!.RenameFile(SelectedFile.FilePath!, SelectedFile.DocName);
+                SelectedFile.FilePath = FileSystemHelper.RenameFile(SelectedFile.FilePath!, SelectedFile.DocName);
 
                 UpdateFileList();
             }
