@@ -11,7 +11,7 @@ using System.Windows;
 namespace OrganizerWpf.Utilities
 {
     public static class FileSystemHelper
-    {        
+    {
         public static List<T> GetFiles<T>(string workDirectory) 
             where T : SerializableModel<T>, new()
         {
@@ -67,7 +67,8 @@ namespace OrganizerWpf.Utilities
             }
         }
 
-        private static T? GetFileMetadata<T>(string filePath) where T : SerializableModel<T>
+        private static T? GetFileMetadata<T>(string filePath) 
+            where T : SerializableModel<T>
         {
             FileInfo file = new FileInfo(filePath);
             DirectoryInfo? dir = file.Directory;
@@ -97,9 +98,10 @@ namespace OrganizerWpf.Utilities
             }            
         }
 
-        public static void SetFileMetadata<T>(T modelInfo) where T : SerializableModel<T>
+        public static void SetFileMetadata<T>(T modelInfo) 
+            where T : SerializableModel<T>
         {            
-            FileInfo file = new FileInfo(((IFileInfo)modelInfo).FilePath!);
+            FileInfo file = new FileInfo(((IFileSystemUnit)modelInfo).FullPath!);
             DirectoryInfo directoryInfo = file.Directory!;
 
             string metaFileName = file.Name + ".meta.json";

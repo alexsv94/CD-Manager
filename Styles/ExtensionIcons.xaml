@@ -27,7 +27,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/unknown.png"/>
-                    <TextBlock Text="{Binding DocName}" Style="{StaticResource NameBox}"></TextBlock>
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
                 </Grid>
             </DataTemplate>
         </s:IconTemplateSelector.DefaultTemplate>
@@ -40,7 +40,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/cdr.png"/>
-                    <TextBlock Text="{Binding DocName}" Style="{StaticResource NameBox}"></TextBlock>
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
                 </Grid>
             </DataTemplate>
         </s:IconTemplateSelector.CDRTemplate>
@@ -53,7 +53,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/cdw.png"/>
-                    <TextBlock Text="{Binding DocName}" Style="{StaticResource NameBox}"></TextBlock>
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
                 </Grid>
             </DataTemplate>
         </s:IconTemplateSelector.CDWTemplate>
@@ -66,7 +66,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/dch.png"/>
-                    <TextBlock Text="{Binding DocName}" Style="{StaticResource NameBox}"></TextBlock>
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
                 </Grid>
             </DataTemplate>
         </s:IconTemplateSelector.DCHTemplate>
@@ -79,7 +79,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/doc.png"/>
-                    <TextBlock Text="{Binding DocName}" Style="{StaticResource NameBox}"></TextBlock>
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
                 </Grid>
             </DataTemplate>
         </s:IconTemplateSelector.DOCTemplate>
@@ -92,7 +92,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/dwg.png"/>
-                    <TextBlock Text="{Binding DocName}" Style="{StaticResource NameBox}"></TextBlock>
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
                 </Grid>
             </DataTemplate>
         </s:IconTemplateSelector.DWGTemplate>
@@ -105,7 +105,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/pdf.png"/>
-                    <TextBlock Text="{Binding DocName}" Style="{StaticResource NameBox}"></TextBlock>
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
                 </Grid>
             </DataTemplate>
         </s:IconTemplateSelector.PDFTemplate>
@@ -118,7 +118,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/txt.png"/>
-                    <TextBlock Text="{Binding DocName}" Style="{StaticResource NameBox}"></TextBlock>
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
                 </Grid>
             </DataTemplate>
         </s:IconTemplateSelector.TXTTemplate>
@@ -131,7 +131,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/xls.png"/>
-                    <TextBlock Text="{Binding DocName}" Style="{StaticResource NameBox}"></TextBlock>
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
                 </Grid>
             </DataTemplate>
         </s:IconTemplateSelector.XLSTemplate>
@@ -144,7 +144,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/zip.png"/>
-                    <TextBlock Text="{Binding DocName}" Style="{StaticResource NameBox}"></TextBlock>
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
                 </Grid>
             </DataTemplate>
         </s:IconTemplateSelector.ZIPTemplate>

@@ -24,7 +24,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
-            var doc = item as IFileInfo;
+            var doc = item as IFileSystemUnit;
 
             if (doc == null)
                 return base.SelectTemplate(item, container);

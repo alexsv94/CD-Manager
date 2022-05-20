@@ -97,7 +97,7 @@ namespace OrganizerWpf.ViewModels
 
             string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-            if (Files != null && Files.Any(x => droppedFiles[0] == x.FilePath))
+            if (Files != null && Files.Any(x => droppedFiles[0] == x.FullPath))
                 return;
 
             var filePaths = FileSystemHelper.GetDroppedFilePaths(droppedFiles);
@@ -110,14 +110,14 @@ namespace OrganizerWpf.ViewModels
         {
             if (e.MouseDevice.LeftButton == MouseButtonState.Pressed)
             {
-                IDataObject dragObject = new DataObject(DataFormats.FileDrop, new string[] { SelectedFile!.FilePath! });
+                IDataObject dragObject = new DataObject(DataFormats.FileDrop, new string[] { SelectedFile!.FullPath! });
                 DragDrop.DoDragDrop(sender as DataGrid, dragObject, DragDropEffects.Copy);
             }
         }
 
         public void OnMouseDoubleClick()
         {
-            FileSystemHelper.OpenFile(SelectedFile!.FilePath!);
+            FileSystemHelper.OpenFile(SelectedFile!.FullPath!);
         }
         #endregion
 
@@ -125,13 +125,13 @@ namespace OrganizerWpf.ViewModels
         {
             if (SelectedFile == null) return;
 
-            if (MessageBox.Show($"Удалить файл {SelectedFile.DocName} без возможности восстановления?",
+            if (MessageBox.Show($"Удалить файл {SelectedFile.Name} без возможности восстановления?",
                     "Удаление файла",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning,
                     MessageBoxResult.No) == MessageBoxResult.Yes)
             {
-                File.Delete(SelectedFile.FilePath!);
+                File.Delete(SelectedFile.FullPath!);
             }
 
             UpdateFileList();
@@ -143,16 +143,16 @@ namespace OrganizerWpf.ViewModels
 
             RenameDialog renameDialog = new()
             {
-                OldFileName = SelectedFile.DocName!,
-                NewFileName = SelectedFile.DocName!
+                OldFileName = SelectedFile.Name!,
+                NewFileName = SelectedFile.Name!
             };
 
             bool? result = renameDialog.ShowDialog();
 
             if ((bool)result!)
             {
-                SelectedFile.DocName = renameDialog.NewFileName;
-                SelectedFile.FilePath = FileSystemHelper.RenameFile(SelectedFile.FilePath!, SelectedFile.DocName);
+                SelectedFile.Name = renameDialog.NewFileName;
+                SelectedFile.FullPath = FileSystemHelper.RenameFile(SelectedFile.FullPath!, SelectedFile.Name);
 
                 UpdateFileList();
             }
