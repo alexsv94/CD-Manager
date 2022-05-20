@@ -4,7 +4,7 @@ using System.IO;
 
 namespace OrganizerWpf.Models
 {
-    public class SerializableModel<T> : IFileSystemUnit
+    public class SerializableModel<T> : IFileSystemItem
     {
         public string? Extension { get; set; }
         public string? Name { get; set; }

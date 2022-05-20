@@ -12,15 +12,24 @@ namespace OrganizerWpf.Utilities
 {
     public static class FileSystemHelper
     {
-        public static List<T> GetFiles<T>(string workDirectory) 
+        public static List<IFileSystemItem> GetItems<T>(string workDirectory) 
             where T : SerializableModel<T>, new()
         {
-            List<T> filesList = new();
+            List<IFileSystemItem> itemsList = new();
 
             if (!CheckDirectory(workDirectory, out DirectoryInfo? currentDir))
-                return filesList;
+                return itemsList;
 
-            var files = currentDir!.GetFiles();            
+            var dirs = currentDir!.GetDirectories();
+
+            foreach (var dir in dirs)
+            {
+                var dirInfo = new DirectoryModel();
+                dirInfo.SetAllValues(dir);
+                itemsList.Add(dirInfo);
+            }
+
+            var files = currentDir!.GetFiles();
 
             foreach (var file in files)
             {
@@ -33,10 +42,10 @@ namespace OrganizerWpf.Utilities
                 T? fileMetaData = GetFileMetadata<T>(file.FullName);
                 fileInfo.SetValuesFromMetadata(fileMetaData);
 
-                filesList.Add(fileInfo);
+                itemsList.Add(fileInfo);
             }
 
-            return filesList;
+            return itemsList;
         }
 
         private static bool CheckDirectory(string path, out DirectoryInfo? checkedDir)
@@ -101,7 +110,7 @@ namespace OrganizerWpf.Utilities
         public static void SetFileMetadata<T>(T modelInfo) 
             where T : SerializableModel<T>
         {            
-            FileInfo file = new FileInfo(((IFileSystemUnit)modelInfo).FullPath!);
+            FileInfo file = new FileInfo(((IFileSystemItem)modelInfo).FullPath!);
             DirectoryInfo directoryInfo = file.Directory!;
 
             string metaFileName = file.Name + ".meta.json";
@@ -118,60 +127,133 @@ namespace OrganizerWpf.Utilities
             File.SetAttributes(metaFilePath, FileAttributes.Hidden);
         }
 
-        public static List<string> GetDroppedFilePaths(string[] paths)
+        public static List<string> GetDroppedFilePaths(string[] paths, bool includeFolders)
         {
             List<string> filePaths = new List<string>();
 
             foreach (string obj in paths)
             {
-                if (Directory.Exists(obj))
-                {
+                if (Directory.Exists(obj) && !includeFolders)
+                {                    
                     filePaths.AddRange(Directory.GetFiles(obj, "*.*", SearchOption.AllDirectories));
-                }
-                else
-                {
                     filePaths.Add(obj);
                 }
+
+                if (includeFolders) filePaths.Add(obj);
             }
 
             return filePaths;
         }
 
-        public static void CopyFiles(string workDirectory, List<string> filesToCopy)
+        public static void CopyItems(string workDirectory, List<string> itemsToCopy)
         {
             if (string.IsNullOrEmpty(workDirectory)) return;
 
-            foreach (var file in filesToCopy)
-            {
-                FileInfo fileInfo = new FileInfo(file);
-                FileInfo? candidate = new DirectoryInfo(workDirectory)
+            foreach (var item in itemsToCopy)
+            { 
+                FileInfo fileInfo = new(item);
+                DirectoryInfo directoryInfo = new(item);
+
+                if (directoryInfo.Exists)
+                {
+                    string destinationPath = Path.Combine(workDirectory, directoryInfo.Name);
+                    CopyDirectory(directoryInfo.FullName, destinationPath);
+                }
+                else if (fileInfo.Exists)
+                {
+                    FileInfo? fileToCheck = new DirectoryInfo(workDirectory)
                                             .GetFiles()
                                             .FirstOrDefault(x => x.Name == fileInfo.Name);
 
-                if (candidate == null)
-                {
-                    File.Copy(fileInfo.FullName!, Path.Combine(workDirectory, fileInfo.Name));
-                }
-
-                if (candidate != null &&
-                    MessageBox.Show($"Файл {fileInfo.Name} уже есть в рабочей папке. Заменить?",
-                    "Копирование файла",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning,
-                    MessageBoxResult.No) == MessageBoxResult.Yes)
-                {
-                    File.Delete(candidate.FullName);
-                    File.Copy(fileInfo.FullName, candidate.FullName);
+                    CopyFile(fileToCheck, fileInfo, workDirectory);
                 }
             }
         }
 
-        public static string RenameFile(string oldPath, string newFileName)
+        private static void CopyFile(FileInfo? checkedFile, FileInfo fileToCopy, string workDir)
         {
-            FileInfo file = new FileInfo(oldPath);
-            string newPath = Path.Combine(file.Directory!.FullName, newFileName);
+            if (CheckCopyPosibility(checkedFile))                
+                fileToCopy.CopyTo(Path.Combine(workDir, fileToCopy.Name));
+        }
 
-            File.Move(oldPath, newPath);
+        private static void CopyDirectory(string sourceDir, string destinationDir)
+        {
+            if (!CheckCopyPosibility(new DirectoryInfo(destinationDir))) return;
+
+            DirectoryInfo dir = new(sourceDir);
+
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            Directory.CreateDirectory(destinationDir);
+
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                string targetFilePath = Path.Combine(destinationDir, file.Name);
+                file.CopyTo(targetFilePath);
+            }
+
+            foreach (DirectoryInfo subDir in dirs)
+            {
+                string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
+                CopyDirectory(subDir.FullName, newDestinationDir);
+            }
+        }
+
+        private static bool CheckCopyPosibility(FileSystemInfo? item)
+        {
+            if (item != null && item.Exists)
+            {
+                string typeOfElement = item is FileInfo ? "Файл" : "Папка";
+                
+                var result = MessageBox.Show($"{typeOfElement} {item.Name} уже существует. Заменить?",
+                "Копирование",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning,
+                MessageBoxResult.No);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (item is DirectoryInfo dir)
+                        dir.Delete(true);
+                    else
+                        item.Delete();
+
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+                return true;
+        }
+
+        public static string? RenameItem(string oldPath, string newItemName)
+        {
+            string? newPath = null;
+
+            if (File.Exists(oldPath))
+            {
+                FileInfo file = new FileInfo(oldPath);
+
+                newPath = Path.Combine(file.Directory!.FullName, newItemName);
+                File.Move(oldPath, newPath);
+
+                return newPath;
+            }
+            else if (Directory.Exists(oldPath))
+            {
+                DirectoryInfo dir = new DirectoryInfo(oldPath);                
+                
+                if (dir.Parent != null)
+                {
+                    newPath = Path.Combine(dir.Parent.FullName, newItemName);                    
+                }
+                else
+                {
+                    newPath = Path.Combine(dir.FullName, newItemName);                    
+                }
+
+                Directory.Move(oldPath, newPath);
+            }
 
             return newPath;
         }

@@ -5,10 +5,11 @@ using OrganizerWpf.ViewModels;
 using System;
 using System.IO;
 using System.Linq;
+using System.Windows;
 
 namespace OrganizerWpf.UserControls.DocumentsExplorer
 {
-    public class DocumentsExplorerViewModel : ExplorerViewModel<DocumentModel>
+    public class DocumentsExplorerViewModel : ExplorerViewModel
     {
         public DocumentsExplorerViewModel(string targetDir) : base(targetDir) { }
 
@@ -20,17 +21,18 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 
         protected override void UpdateFileList()
         {
-            Files = FileSystemHelper.GetFiles<DocumentModel>(_directoryPath);
-        }
+            Items = FileSystemHelper.GetItems<DocumentModel>(_currentDirectory.FullName);
+            base.UpdateFileList();
+        }        
 
         private void ChangeDocumentVersion()
         {
-            if (SelectedFile == null) return;
+            if (SelectedItem == null || SelectedItem is not DocumentModel doc) return;
 
             ChangeVersionDialog versionDialog = new()
             {
-                OldVersion = SelectedFile.Version,
-                NewVersion = SelectedFile.Version
+                OldVersion = doc.Version,
+                NewVersion = doc.Version
             };
             bool? result = versionDialog.ShowDialog();
 
@@ -39,29 +41,39 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             var noticeInfo = new FileInfo(versionDialog.NoticeFilePath!);
             var newVersionObject = new VersionModel()
             {
-                Version = SelectedFile.Version,
+                Version = doc.Version,
                 CreationDate = string.IsNullOrEmpty(versionDialog.NoticeFilePath) 
                     ? DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") 
                     : noticeInfo.CreationTime.ToString("dd.MM.yyyy HH:mm:ss"),
                 NoticeFilePath = versionDialog.NoticeFilePath
             };
 
-            SelectedFile.Version = versionDialog.NewVersion;
+            doc.Version = versionDialog.NewVersion;
 
-            if (SelectedFile.VersionHistory == null)
+            if (doc.VersionHistory == null)
             {
-                SelectedFile.VersionHistory = new VersionModel[] { newVersionObject };
+                doc.VersionHistory = new VersionModel[] { newVersionObject };
             }
             else
             {
-                var list = SelectedFile.VersionHistory.ToList();
+                var list = doc.VersionHistory.ToList();
                 list.Add(newVersionObject);
-                SelectedFile.VersionHistory = list.ToArray();
+                doc.VersionHistory = list.ToArray();
             }
 
-            FileSystemHelper.SetFileMetadata(SelectedFile);
+            FileSystemHelper.SetFileMetadata(doc);
 
             UpdateFileList();
         }
+
+        #region Handlers
+        public void SetMenuItemVisibility(object sender)
+        {
+            if (SelectedItem is not DocumentModel)
+                (sender as FrameworkElement)!.Visibility = Visibility.Collapsed;
+            else
+                (sender as FrameworkElement)!.Visibility = Visibility.Visible;
+        }
+        #endregion
     }
 }

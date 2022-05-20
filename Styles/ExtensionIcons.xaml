@@ -31,6 +31,19 @@
                 </Grid>
             </DataTemplate>
         </s:IconTemplateSelector.DefaultTemplate>
+        <s:IconTemplateSelector.FolderTemplate>
+            <DataTemplate>
+                <Grid Style="{StaticResource GridStyle}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/folder.png"/>
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
+                </Grid>
+            </DataTemplate>
+        </s:IconTemplateSelector.FolderTemplate>
         <s:IconTemplateSelector.CDRTemplate>
             <DataTemplate>
                 <Grid Style="{StaticResource GridStyle}">

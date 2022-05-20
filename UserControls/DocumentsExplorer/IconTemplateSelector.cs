@@ -10,7 +10,8 @@ using System.Windows.Controls;
 namespace OrganizerWpf.UserControls.DocumentsExplorer
 {
     public class IconTemplateSelector : DataTemplateSelector
-    {              
+    {
+        public DataTemplate? FolderTemplate { get; set; }
         public DataTemplate? DOCTemplate { get; set; }
         public DataTemplate? CDRTemplate { get; set; }
         public DataTemplate? CDWTemplate { get; set; }
@@ -24,13 +25,14 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
-            var doc = item as IFileSystemUnit;
+            var doc = item as IFileSystemItem;
 
             if (doc == null)
                 return base.SelectTemplate(item, container);
 
             return doc.Extension switch
             {
+                "folder" => FolderTemplate,
                 ".doc" or ".docx" => DOCTemplate,
                 ".cdr" => CDRTemplate,
                 ".cdw" => CDWTemplate,

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OrganizerWpf.Models
 {
-    public interface IFileSystemUnit
+    public interface IFileSystemItem
     {
         public string? Extension { get; set; }
         public string? Name { get; set; }

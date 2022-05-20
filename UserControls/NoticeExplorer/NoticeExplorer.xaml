@@ -16,8 +16,8 @@
         <Grid>
             <DataGrid x:Name="dataGrid"
                   Background="White" 
-                  ItemsSource="{Binding Files}" 
-                  SelectedItem="{Binding SelectedFile, Mode=TwoWay}"
+                  ItemsSource="{Binding Items}" 
+                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                   GridLinesVisibility="None" 
                   HeadersVisibility="Column" 
                   RowHeight="22"

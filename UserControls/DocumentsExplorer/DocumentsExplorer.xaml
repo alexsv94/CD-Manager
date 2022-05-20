@@ -18,8 +18,8 @@
         <Grid>
             <DataGrid x:Name="dataGrid" 
                   Background="White" 
-                  ItemsSource="{Binding Files}" 
-                  SelectedItem="{Binding SelectedFile, Mode=TwoWay}"
+                  ItemsSource="{Binding Items}" 
+                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                   GridLinesVisibility="None" 
                   HeadersVisibility="Column" 
                   RowHeight="22"
@@ -30,7 +30,7 @@
                     <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}">
                         <MenuItem Header="Удалить" Command="{Binding DeleteCommand}" />
                         <MenuItem Header="Переименовать" Command="{Binding RenameCommand}" />
-                        <MenuItem Header="Изменить версию" Command="{Binding ChangeVersionCommand}" />
+                        <MenuItem Header="Изменить версию" Command="{Binding ChangeVersionCommand}" Loaded="MenuItem_СhangeVersion_Loaded" />
                     </ContextMenu>                    
                 </DataGrid.Resources>
                 <DataGrid.RowStyle>

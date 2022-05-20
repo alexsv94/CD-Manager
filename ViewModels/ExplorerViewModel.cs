@@ -10,13 +10,12 @@ using System.Windows.Input;
 
 namespace OrganizerWpf.ViewModels
 {
-    public abstract class ExplorerViewModel<T> : ViewModelBase
-        where T : SerializableModel<T>
+    public abstract class ExplorerViewModel : ViewModelBase
     {
         #region Commands
         private RelayCommand? _deleteCommand = null;
         public RelayCommand DeleteCommand =>
-            _deleteCommand ??= new RelayCommand(obj => DeleteFile());
+            _deleteCommand ??= new RelayCommand(obj => DeleteItem());
 
         private RelayCommand? _renameCommand = null;
         public RelayCommand RenameCommand =>
@@ -24,25 +23,25 @@ namespace OrganizerWpf.ViewModels
         #endregion
 
         #region Binding Props
-        protected List<T>? _files = null;
-        public List<T>? Files
+        protected List<IFileSystemItem>? _items = null;
+        public List<IFileSystemItem>? Items
         {
-            get => _files;
+            get => _items;
             set
             {
-                _files = value;
-                OnPropertyChanged(nameof(Files));
+                _items = value;
+                OnPropertyChanged(nameof(Items));
             }
         }
 
-        protected T? _selectedFile = null;
-        public T? SelectedFile
+        protected IFileSystemItem? _selectedItem = null;
+        public IFileSystemItem? SelectedItem
         {
-            get => _selectedFile;
+            get => _selectedItem;
             set
             {
-                _selectedFile = value;
-                OnPropertyChanged(nameof(SelectedFile));
+                _selectedItem = value;
+                OnPropertyChanged(nameof(SelectedItem));
             }
         }
         #endregion
@@ -50,7 +49,8 @@ namespace OrganizerWpf.ViewModels
         public Label? UI_DropLabel;
 
         protected readonly string _targetDirectory = string.Empty;
-        protected string _directoryPath = string.Empty;
+        protected DirectoryInfo _rootDirectory;
+        protected DirectoryInfo _currentDirectory;
 
         public ExplorerViewModel(string targetDir)
         {
@@ -63,13 +63,29 @@ namespace OrganizerWpf.ViewModels
         /// </summary>
         protected virtual void UpdateFileList()
         {
-            
+            if (_currentDirectory.FullName != _rootDirectory.FullName)
+            {
+                IFileSystemItem backDirItem = new DirectoryModel()
+                {
+                    Name = "<...>",
+                    FullPath = _currentDirectory.Parent!.FullName,
+                    Extension = "folder"
+                };
+
+                var list = new List<IFileSystemItem>
+                {
+                    backDirItem
+                };
+                list.AddRange(Items!);
+                Items = list;
+            }
         }
 
         #region Handlers
         private void OnDirectoryChanged(string newDir)
-        {            
-            _directoryPath = Path.Combine(newDir, _targetDirectory);
+        {
+            _currentDirectory = new(Path.Combine(newDir, _targetDirectory));
+            _rootDirectory = new(_currentDirectory.FullName);
             UpdateFileList();
         }
 
@@ -97,41 +113,54 @@ namespace OrganizerWpf.ViewModels
 
             string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-            if (Files != null && Files.Any(x => droppedFiles[0] == x.FullPath))
+            if (Items != null && Items.Any(x => droppedFiles[0] == x.FullPath))
                 return;
 
-            var filePaths = FileSystemHelper.GetDroppedFilePaths(droppedFiles);
-            FileSystemHelper.CopyFiles(_directoryPath, filePaths);
+            var filePaths = FileSystemHelper.GetDroppedFilePaths(droppedFiles, true);
+            FileSystemHelper.CopyItems(_currentDirectory.FullName, filePaths);
 
             UpdateFileList();
         }
 
         public void OnMouseMove(object sender, MouseEventArgs e)
         {
-            if (e.MouseDevice.LeftButton == MouseButtonState.Pressed)
+            if (e.MouseDevice.LeftButton == MouseButtonState.Pressed && SelectedItem != null)
             {
-                IDataObject dragObject = new DataObject(DataFormats.FileDrop, new string[] { SelectedFile!.FullPath! });
+                IDataObject dragObject = new DataObject(DataFormats.FileDrop, new string[] { SelectedItem.FullPath! });
                 DragDrop.DoDragDrop(sender as DataGrid, dragObject, DragDropEffects.Copy);
             }
         }
 
         public void OnMouseDoubleClick()
         {
-            FileSystemHelper.OpenFile(SelectedFile!.FullPath!);
+            if (SelectedItem is DirectoryModel dir)
+            {
+                _currentDirectory = new(dir.FullPath!);
+                UpdateFileList();
+            }
+            else
+            {
+                FileSystemHelper.OpenFile(SelectedItem!.FullPath!);
+            }
         }
         #endregion
 
-        protected void DeleteFile()
+        protected void DeleteItem()
         {
-            if (SelectedFile == null) return;
+            if (SelectedItem == null) return;
 
-            if (MessageBox.Show($"Удалить файл {SelectedFile.Name} без возможности восстановления?",
-                    "Удаление файла",
+            string typeOfItem = SelectedItem is DirectoryModel ? "Папку" : "Файл";
+
+            if (MessageBox.Show($"Удалить {typeOfItem} {SelectedItem.Name} без возможности восстановления?",
+                    "Удаление",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning,
                     MessageBoxResult.No) == MessageBoxResult.Yes)
             {
-                File.Delete(SelectedFile.FullPath!);
+                if (SelectedItem is DirectoryModel)
+                    Directory.Delete(SelectedItem.FullPath!, true);
+                else
+                    File.Delete(SelectedItem.FullPath!);
             }
 
             UpdateFileList();
@@ -139,20 +168,20 @@ namespace OrganizerWpf.ViewModels
 
         protected void RenameFile()
         {
-            if (SelectedFile == null) return;
+            if (SelectedItem == null) return;
 
             RenameDialog renameDialog = new()
             {
-                OldFileName = SelectedFile.Name!,
-                NewFileName = SelectedFile.Name!
+                OldFileName = SelectedItem.Name!,
+                NewFileName = SelectedItem.Name!
             };
 
             bool? result = renameDialog.ShowDialog();
 
             if ((bool)result!)
             {
-                SelectedFile.Name = renameDialog.NewFileName;
-                SelectedFile.FullPath = FileSystemHelper.RenameFile(SelectedFile.FullPath!, SelectedFile.Name);
+                SelectedItem.Name = renameDialog.NewFileName;
+                SelectedItem.FullPath = FileSystemHelper.RenameItem(SelectedItem.FullPath!, SelectedItem.Name);
 
                 UpdateFileList();
             }
