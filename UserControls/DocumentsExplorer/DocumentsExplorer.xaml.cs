@@ -36,5 +36,10 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
         {
             ViewModel!.OnMouseDoubleClick();
         }
+
+        private void MenuItem_СhangeVersion_Loaded(object sender, RoutedEventArgs e)
+        {
+            ViewModel!.SetMenuItemVisibility(sender);
+        }
     }
 }
