@@ -26,8 +26,6 @@ namespace OrganizerWpf.Dialogs.RenameDialog
             get { return (string)GetValue(NewFileNameProperty); }
             set { SetValue(NewFileNameProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for NewFileName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NewFileNameProperty =
             DependencyProperty.Register("NewFileName", typeof(string), typeof(RenameDialog), new PropertyMetadata(""));
 
@@ -35,6 +33,7 @@ namespace OrganizerWpf.Dialogs.RenameDialog
         public RenameDialog()
         {
             InitializeComponent();
+            nameTextBox.Focus();
         }
 
         private void buttonOK_Click(object sender, RoutedEventArgs e)

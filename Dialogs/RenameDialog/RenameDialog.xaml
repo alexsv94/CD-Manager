@@ -19,13 +19,16 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBox 
+            x:Name="nameTextBox"
             Grid.ColumnSpan="2" 
             Text="{Binding ElementName=dialogRoot, Path=NewFileName}" 
             VerticalAlignment="Center" 
-            Margin="15,-4,15,0"
+            Margin="15,0,15,0"
+            Height="20" 
             VerticalContentAlignment="Center"
-            HorizontalContentAlignment="Left" Height="20" HorizontalAlignment="Stretch"/>
-        <Button x:Name="buttonOK" Content="ОК" Grid.Row="1" Margin="15,0,7,0" Click="buttonOK_Click" VerticalAlignment="Center" Height="25"/>
-        <Button x:Name="buttonCancel" Content="Отмена" Grid.Row="1" Grid.Column="1" Margin="7,0,15,0" Click="buttonCancel_Click" VerticalAlignment="Center" Height="25"/>
+            HorizontalContentAlignment="Left" 
+            HorizontalAlignment="Stretch" TabIndex="0"/>
+        <Button x:Name="buttonOK" Content="ОК" Grid.Row="1" Margin="15,0,7,0" Click="buttonOK_Click" VerticalAlignment="Center" Height="25" TabIndex="1"/>
+        <Button x:Name="buttonCancel" Content="Отмена" Grid.Row="1" Grid.Column="1" Margin="7,0,15,0" Click="buttonCancel_Click" VerticalAlignment="Center" Height="25" TabIndex="2"/>
     </Grid>
 </Window>
