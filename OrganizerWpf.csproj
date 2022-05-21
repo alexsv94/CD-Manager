@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\Controls\arrowRight.png" />
     <None Remove="Icons\FileExtensions\cdr.png" />
     <None Remove="Icons\FileExtensions\cdw.png" />
     <None Remove="Icons\FileExtensions\dch.png" />
@@ -37,6 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Icons\Controls\arrowRight.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Icons\FileExtensions\cdr.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

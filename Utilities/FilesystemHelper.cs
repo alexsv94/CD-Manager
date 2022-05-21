@@ -1,4 +1,5 @@
 ﻿using OrganizerWpf.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -45,6 +46,20 @@ namespace OrganizerWpf.Utilities
             return itemsList;
         }
 
+        public static SerializableModel<T>? GetFile<T>(string path)
+            where T : SerializableModel<T>, new()
+        {
+            SerializableModel<T> item = new();
+
+            FileInfo file = new(path);
+            if (!file.Exists) return null;
+
+            T itemInfo = new();
+            itemInfo.SetDefaultValues(file);
+
+            return itemInfo;
+        }
+
         private static bool CheckDirectory(string path, out DirectoryInfo? checkedDir)
         {
             var dirToCheck = new DirectoryInfo(path);
@@ -73,7 +88,7 @@ namespace OrganizerWpf.Utilities
             }
         }
 
-        private static T? GetFileMetadata<T>(string filePath) 
+        public static T? GetFileMetadata<T>(string filePath) 
             where T : SerializableModel<T>
         {
             FileInfo file = new FileInfo(filePath);
@@ -104,7 +119,7 @@ namespace OrganizerWpf.Utilities
             }            
         }
 
-        public static void SetFileMetadata<T>(T modelInfo) 
+        public static void SaveFileMetadata<T>(T modelInfo) 
             where T : SerializableModel<T>
         {            
             FileInfo file = new FileInfo(((IFileSystemItem)modelInfo).FullPath!);
@@ -232,7 +247,19 @@ namespace OrganizerWpf.Utilities
                 FileInfo file = new FileInfo(oldPath);
 
                 newPath = Path.Combine(file.Directory!.FullName, newItemName);
-                File.Move(oldPath, newPath);
+
+                try
+                {
+                    File.Move(oldPath, newPath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Файл занят другим процессом",
+                        "Ошибка переименования",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return oldPath;
+                }                
 
                 return newPath;
             }
@@ -249,7 +276,19 @@ namespace OrganizerWpf.Utilities
                     newPath = Path.Combine(dir.FullName, newItemName);                    
                 }
 
-                Directory.Move(oldPath, newPath);
+                try
+                {
+                    Directory.Move(oldPath, newPath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Папка занята другим процессом",
+                        "Ошибка переименования",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return oldPath;
+                }
+                
             }
 
             return newPath;

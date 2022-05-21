@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="OrganizerWpf.UserControls.DirLink.DirLink"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OrganizerWpf.UserControls.DirLink"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="200">
+    <UserControl.Resources>
+        <Style x:Key="dirNameText" TargetType="Label">
+            <Setter Property="Foreground" Value="Black" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="BlueViolet" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel Orientation="Horizontal">
+        <Image Source="../../Icons/Controls/arrowRight.png" Width="12" Height="12" VerticalAlignment="Center" />
+        <Label Content="{Binding Text}" Style="{StaticResource dirNameText}" Cursor="Hand" MouseUp="Label_MouseUp" VerticalAlignment="Center"/>
+    </StackPanel>
+</UserControl>

@@ -1,5 +1,6 @@
 ﻿using OrganizerWpf.Dialogs.RenameDialog;
 using OrganizerWpf.Models;
+using OrganizerWpf.UserControls.DirLink;
 using OrganizerWpf.Utilities;
 using System.Collections.Generic;
 using System.IO;
@@ -15,11 +16,11 @@ namespace OrganizerWpf.ViewModels
         #region Commands
         private RelayCommand? _deleteCommand = null;
         public RelayCommand DeleteCommand =>
-            _deleteCommand ??= new RelayCommand(obj => DeleteItem());
+            _deleteCommand ??= new RelayCommand(obj => DeleteItem(obj as IFileSystemItem));
 
         private RelayCommand? _renameCommand = null;
         public RelayCommand RenameCommand =>
-            _renameCommand ??= new RelayCommand(obj => RenameFile());
+            _renameCommand ??= new RelayCommand(obj => RenameFile(obj as IFileSystemItem));
         #endregion
 
         #region Binding Props
@@ -47,6 +48,7 @@ namespace OrganizerWpf.ViewModels
         #endregion
 
         public Label? UI_DropLabel;
+        public StackPanel? UI_AdressPanel;
 
         protected readonly string _targetDirectory = string.Empty;
         protected DirectoryInfo _rootDirectory;
@@ -55,12 +57,25 @@ namespace OrganizerWpf.ViewModels
         public ExplorerViewModel(string targetDir)
         {
             _targetDirectory = targetDir;
-            Settings.CurrentProductDirectoryChanged += OnDirectoryChanged;
+            Settings.CurrentProductDirectoryChanged += OnRootDirectoryChanged;
         }
 
-        /// <summary>
-        /// Update data of current type
-        /// </summary>
+        public void GoToRootDirectoty()
+        {
+            ChangeCurrentDirectory(_rootDirectory.FullName);
+
+            if (UI_AdressPanel != null)
+            {
+                UI_AdressPanel.Children.RemoveRange(1, UI_AdressPanel.Children.Count - 1);
+            }
+        }
+
+        public void ChangeCurrentDirectory(string newDir)
+        {
+            _currentDirectory = new(newDir);
+            UpdateFileList();
+        }
+        
         protected virtual void UpdateFileList()
         {
             if (_currentDirectory.FullName != _rootDirectory.FullName)
@@ -82,11 +97,11 @@ namespace OrganizerWpf.ViewModels
         }
 
         #region Handlers
-        private void OnDirectoryChanged(string newDir)
+        private void OnRootDirectoryChanged(string newDir)
         {
             _currentDirectory = new(Path.Combine(newDir, _targetDirectory));
             _rootDirectory = new(_currentDirectory.FullName);
-            UpdateFileList();
+            GoToRootDirectoty();
         }
 
         public void OnDragEnter(object sender, DragEventArgs e)
@@ -124,18 +139,41 @@ namespace OrganizerWpf.ViewModels
 
         public void OnMouseMove(object sender, MouseEventArgs e)
         {
-            if (e.MouseDevice.LeftButton == MouseButtonState.Pressed && SelectedItem != null)
+            if (e.MouseDevice.LeftButton == MouseButtonState.Pressed)
             {
-                IDataObject dragObject = new DataObject(DataFormats.FileDrop, new string[] { SelectedItem.FullPath! });
-                DragDrop.DoDragDrop(sender as DataGrid, dragObject, DragDropEffects.Copy);
+                DataGridRow row = (DataGridRow)sender;
+                string dragFilePath = (row.DataContext as IFileSystemItem)!.FullPath!;
+                IDataObject dragObject = new DataObject(DataFormats.FileDrop, new string[] { dragFilePath });
+                DragDrop.DoDragDrop(row, dragObject, DragDropEffects.Copy);
             }
         }
 
-        public void OnMouseDoubleClick()
+        public void OnMouseDoubleClick(MouseButtonEventArgs e)
         {
+            if (e.RightButton == MouseButtonState.Pressed) return;
+            
             if (SelectedItem is DirectoryModel dir)
             {
                 _currentDirectory = new(dir.FullPath!);
+
+                if (UI_AdressPanel != null)
+                {
+                    if (dir.Name != "<...>")
+                    {
+                        DirLink dirLink = new DirLink()
+                        {
+                            Text = dir.Name!,
+                            DirPath = dir.FullPath!,
+                            ClickCallback = ChangeCurrentDirectory
+                        };
+                        UI_AdressPanel.Children.Add(dirLink);
+                    }
+                    else
+                    {
+                        UI_AdressPanel.Children.RemoveAt(UI_AdressPanel.Children.Count - 1);
+                    }                    
+                }                
+
                 UpdateFileList();
             }
             else
@@ -145,43 +183,43 @@ namespace OrganizerWpf.ViewModels
         }
         #endregion
 
-        protected void DeleteItem()
+        protected void DeleteItem(IFileSystemItem? item)
         {
-            if (SelectedItem == null) return;
+            if (item == null) return;
 
-            string typeOfItem = SelectedItem is DirectoryModel ? "Папку" : "Файл";
+            string typeOfItem = item is DirectoryModel ? "папку" : "файл";
 
-            if (MessageBox.Show($"Удалить {typeOfItem} {SelectedItem.Name} без возможности восстановления?",
+            if (MessageBox.Show($"Удалить {typeOfItem} {item.Name} без возможности восстановления?",
                     "Удаление",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning,
                     MessageBoxResult.No) == MessageBoxResult.Yes)
             {
-                if (SelectedItem is DirectoryModel)
-                    Directory.Delete(SelectedItem.FullPath!, true);
+                if (item is DirectoryModel)
+                    Directory.Delete(item.FullPath!, true);
                 else
-                    File.Delete(SelectedItem.FullPath!);
-            }
+                    File.Delete(item.FullPath!);
 
-            UpdateFileList();
+                UpdateFileList();
+            }            
         }
 
-        protected void RenameFile()
+        protected void RenameFile(IFileSystemItem? item)
         {
-            if (SelectedItem == null) return;
+            if (item == null) return;
 
             RenameDialog renameDialog = new()
             {
-                OldFileName = SelectedItem.Name!,
-                NewFileName = SelectedItem.Name!
+                OldFileName = item.Name!,
+                NewFileName = item.Name!
             };
 
             bool? result = renameDialog.ShowDialog();
 
             if ((bool)result!)
             {
-                SelectedItem.Name = renameDialog.NewFileName;
-                SelectedItem.FullPath = FileSystemHelper.RenameItem(SelectedItem.FullPath!, SelectedItem.Name);
+                item.Name = renameDialog.NewFileName;
+                item.FullPath = FileSystemHelper.RenameItem(item.FullPath!, item.Name);
 
                 UpdateFileList();
             }

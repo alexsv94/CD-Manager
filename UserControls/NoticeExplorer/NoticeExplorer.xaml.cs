@@ -48,7 +48,7 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            ViewModel!.OnMouseDoubleClick();
+            ViewModel!.OnMouseDoubleClick(e);
         }
     }
 }

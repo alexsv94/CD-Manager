@@ -16,7 +16,30 @@
             BorderBrush="#FFABADB3" 
             AllowDrop="True">
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" x:Name="adressPanel">
+                <Label x:Name="rootDirectoryLink"
+                    Content="{Binding ElementName=rootExplorer, Path=TargetDirectory}" 
+                    FontWeight="Bold" 
+                    VerticalAlignment="Center" Cursor="Hand">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Setter Property="Foreground" Value="Black" />
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="BlueViolet" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>                        
+                    </Label.Style>
+                </Label>
+            </StackPanel>
             <DataGrid x:Name="dataGrid" 
+                  Grid.Row="1"
                   Background="White" 
                   ItemsSource="{Binding Items}" 
                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
@@ -28,23 +51,37 @@
                   CanUserAddRows="False" AllowDrop="True" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                 <DataGrid.Resources>
                     <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}">
-                        <MenuItem Header="Удалить" Command="{Binding DeleteCommand}" />
-                        <MenuItem Header="Переименовать" Command="{Binding RenameCommand}" />
-                        <MenuItem Header="Изменить версию" Command="{Binding ChangeVersionCommand}" Loaded="MenuItem_СhangeVersion_Loaded" />
-                    </ContextMenu>                    
+                        <MenuItem Header="Удалить" 
+                                  Command="{Binding DeleteCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
+                        <MenuItem Header="Переименовать" 
+                                  Command="{Binding RenameCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
+                        <MenuItem Header="Изменить версию" 
+                                  Command="{Binding ChangeVersionCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"
+                                  Loaded="MenuItem_СhangeVersion_Loaded" />
+                        <MenuItem Header="История версий" 
+                                  Command="{Binding ShowVersionHistoryCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"
+                                  Loaded="MenuItem_СhangeVersion_Loaded" />
+                    </ContextMenu> 
                 </DataGrid.Resources>
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
+                        <Setter Property="FontSize" Value="14" />
                         <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick" />
+                        <EventSetter Event="MouseMove" Handler="DataGridRow_MouseMove" />                        
+                        <EventSetter Event="ContextMenuOpening" Handler="DataGridRow_ContextMenuOpening" />                        
                     </Style>
                 </DataGrid.RowStyle>
                 
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="*" Header="Название" CellTemplateSelector="{StaticResource IconTemplateSelector}"/>
-                    <DataGridTextColumn Width="120" Header="Дата создания" Binding="{Binding CreationDate}"/>
-                    <DataGridTextColumn Width="120" Header="Дата изменения" Binding="{Binding UpdateDate}"/>
-                    <DataGridTextColumn Width="120" Header="Версия" Binding="{Binding Version}"/>
+                    <DataGridTextColumn Width="140" Header="Дата создания" Binding="{Binding CreationDate}"/>
+                    <DataGridTextColumn Width="140" Header="Дата изменения" Binding="{Binding UpdateDate}"/>
+                    <DataGridTextColumn Width="140" Header="Версия" Binding="{Binding Version}"/>
                 </DataGrid.Columns>
             </DataGrid>
             <Label Content="Перетащите файлы, чтобы скопировать" 

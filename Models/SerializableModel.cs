@@ -23,7 +23,7 @@ namespace OrganizerWpf.Models
 
         public virtual void SetValuesFromMetadata(T? fileMetaData)
         {
-            throw new NotImplementedException("Behaviour of method 'SetValuesFromMetadata()' not implemented");
+            throw new NotImplementedException("Method 'SetValuesFromMetadata()' is not implemented");
         }
 
         public static T? FromJson(string jsonString)

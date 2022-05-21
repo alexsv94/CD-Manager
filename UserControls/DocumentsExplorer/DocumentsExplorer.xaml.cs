@@ -5,8 +5,15 @@ using System.Windows.Input;
 namespace OrganizerWpf.UserControls.DocumentsExplorer
 {
     public partial class DocumentsExplorer : UserControl
-    {         
-        public string TargetDirectory { get; set; } = string.Empty;
+    {
+        public string TargetDirectory
+        {
+            get { return (string)GetValue(TargetDirectoryProperty); }
+            set { SetValue(TargetDirectoryProperty, value); }
+        }
+        public static readonly DependencyProperty TargetDirectoryProperty =
+            DependencyProperty.Register("TargetDirectory", typeof(string), typeof(DocumentsExplorer), new PropertyMetadata(""));
+
         public DocumentsExplorerViewModel? ViewModel { get; private set; } = null;
 
         public DocumentsExplorer()
@@ -21,12 +28,13 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             {
                 ViewModel = new(TargetDirectory);
                 ViewModel.UI_DropLabel = dropLabel;
+                ViewModel.UI_AdressPanel = adressPanel;
 
                 rootContainer.DragEnter += ViewModel.OnDragEnter;
                 rootContainer.DragLeave += ViewModel.OnDragLeave;
                 rootContainer.Drop += ViewModel.OnDrop;
 
-                dataGrid.MouseMove += ViewModel.OnMouseMove;
+                rootDirectoryLink.MouseUp += (object sender, MouseButtonEventArgs e) => ViewModel.GoToRootDirectoty();
             }
                 
             DataContext = ViewModel;
@@ -34,12 +42,22 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
         
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            ViewModel!.OnMouseDoubleClick();
+            ViewModel!.OnMouseDoubleClick(e);
         }
 
         private void MenuItem_СhangeVersion_Loaded(object sender, RoutedEventArgs e)
         {
             ViewModel!.SetMenuItemVisibility(sender);
+        }
+
+        private void DataGridRow_MouseMove(object sender, MouseEventArgs e)
+        {
+            ViewModel!.OnMouseMove(sender, e);
+        }
+
+        private void DataGridRow_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            ViewModel!.SetContextMenuVisibility(sender);
         }
     }
 }

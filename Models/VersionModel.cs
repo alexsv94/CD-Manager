@@ -11,6 +11,6 @@ namespace OrganizerWpf.Models
     {
         public string? Version { get; set; }
         public string? CreationDate { get; set; }
-        public string? NoticeFilePath { get; set; } 
+        public NoticeModel? NoticeFile { get; set; }
     }
 }

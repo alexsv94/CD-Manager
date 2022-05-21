@@ -30,13 +30,13 @@ namespace OrganizerWpf.Dialogs.ChangeVersionDialog
         public static readonly DependencyProperty NewVersionProperty =
             DependencyProperty.Register("NewVersion", typeof(string), typeof(ChangeVersionDialog), new PropertyMetadata(""));
 
-        public string? NoticeFilePath
+        public string NoticeFilePath
         {
             get { return (string)GetValue(NoticeFilePathProperty); }
             set { SetValue(NoticeFilePathProperty, value); }
         }
         public static readonly DependencyProperty NoticeFilePathProperty =
-            DependencyProperty.Register("NoticeFilePath", typeof(string), typeof(ChangeVersionDialog), new PropertyMetadata(""));
+            DependencyProperty.Register("NoticeFilePath", typeof(string), typeof(ChangeVersionDialog), new PropertyMetadata(string.Empty));
 
         public ChangeVersionDialog()
         {
