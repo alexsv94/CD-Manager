@@ -90,9 +90,9 @@ namespace OrganizerWpf.Windows.VersionHistory
             var newVersionObject = new VersionModel()
             {
                 Version = document.Version,
-                CreationDate = string.IsNullOrEmpty(versionDialog.NoticeFilePath)
-                    ? DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")
-                    : noticeInfo != null ? noticeInfo.CreationDate! : DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"),
+                CreationTime = string.IsNullOrEmpty(versionDialog.NoticeFilePath)
+                    ? DateTime.Now
+                    : noticeInfo != null ? noticeInfo.CreationTime! : DateTime.Now,
                 NoticeFile = noticeInfo,
             };
 
@@ -131,9 +131,9 @@ namespace OrganizerWpf.Windows.VersionHistory
             var versionObject = _document.VersionHistory!.FirstOrDefault(x => x.Version == versionDialog.OldVersion)!;
 
             versionObject.Version = versionDialog.NewVersion;
-            versionObject.CreationDate = string.IsNullOrEmpty(versionDialog.NoticeFilePath)
-                    ? DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")
-                    : noticeInfo != null ? noticeInfo.CreationDate! : DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
+            versionObject.CreationTime = string.IsNullOrEmpty(versionDialog.NoticeFilePath)
+                    ? DateTime.Now
+                    : noticeInfo != null ? noticeInfo.CreationTime! : DateTime.Now;
             versionObject.NoticeFile = noticeInfo;
 
             FileSystemHelper.SaveFileMetadata(_document);
@@ -161,7 +161,7 @@ namespace OrganizerWpf.Windows.VersionHistory
 
             foreach (var v in versionsList)
             {
-                dateTimeList.Add(DateTime.Parse(v.CreationDate!));
+                dateTimeList.Add((DateTime)(v.CreationTime!));
             }
 
             DateTime latestDate = dateTimeList.First();
@@ -172,7 +172,7 @@ namespace OrganizerWpf.Windows.VersionHistory
                     latestDate = dateTime;
             }
 
-            return versionsList.FirstOrDefault(x => DateTime.Parse(x.CreationDate!) == latestDate)!;
+            return versionsList.FirstOrDefault(x => x.CreationTime! == latestDate)!;
         }
     }
 }

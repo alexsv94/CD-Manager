@@ -11,8 +11,8 @@ namespace OrganizerWpf.Models
     {
         public string? Extension { get; set; }
         public string? Name { get; set; }
-        public string? CreationDate { get; set; }
-        public string? UpdateDate { get; set; }
+        public DateTime? CreationTime { get; set; }
+        public DateTime? UpdateTime { get; set; }
         public string? FullPath { get; set; }
 
         public void SetAllValues(DirectoryInfo dir)
@@ -20,8 +20,8 @@ namespace OrganizerWpf.Models
             Extension = "folder";
             FullPath = dir.FullName;
             Name = dir.Name;
-            CreationDate = dir.CreationTime.ToString("dd.MM.yyyy HH:mm:ss");
-            UpdateDate = dir.LastWriteTime.ToString("dd.MM.yyyy HH:mm:ss");
+            CreationTime = dir.CreationTime;
+            UpdateTime = dir.LastWriteTime;
         }
     }
 }

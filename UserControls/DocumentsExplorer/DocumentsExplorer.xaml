@@ -4,12 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OrganizerWpf"
+             xmlns:conv="clr-namespace:OrganizerWpf.Utilities.Converters"
              x:Name="rootExplorer"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <ResourceDictionary Source="../../Styles/ExtensionIcons.xaml" />
+        <ResourceDictionary Source="../../Styles/ExtensionIcons.xaml">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <conv:DateTimeToStringConverter x:Key="dateConverter" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>        
     </UserControl.Resources>
 
     <Border x:Name="rootContainer"
@@ -79,8 +86,10 @@
                 
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="*" Header="Название" CellTemplateSelector="{StaticResource IconTemplateSelector}"/>
-                    <DataGridTextColumn Width="140" Header="Дата создания" Binding="{Binding CreationDate}"/>
-                    <DataGridTextColumn Width="140" Header="Дата изменения" Binding="{Binding UpdateDate}"/>
+                    <DataGridTextColumn Width="140" Header="Дата создания" 
+                                        Binding="{Binding Path=CreationTime, Converter={StaticResource dateConverter}}"/>
+                    <DataGridTextColumn Width="140" Header="Дата изменения" 
+                                        Binding="{Binding Path=UpdateTime, Converter={StaticResource dateConverter}}"/>
                     <DataGridTextColumn Width="140" Header="Версия" Binding="{Binding Version}"/>
                 </DataGrid.Columns>
             </DataGrid>

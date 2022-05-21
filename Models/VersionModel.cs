@@ -10,7 +10,7 @@ namespace OrganizerWpf.Models
     public class VersionModel
     {
         public string? Version { get; set; }
-        public string? CreationDate { get; set; }
+        public DateTime? CreationTime { get; set; }
         public NoticeModel? NoticeFile { get; set; }
     }
 }

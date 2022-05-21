@@ -50,9 +50,9 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             var newVersionObject = new VersionModel()
             {
                 Version = document.Version,
-                CreationDate = string.IsNullOrEmpty(versionDialog.NoticeFilePath)
-                    ? DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")
-                    : noticeInfo != null ? noticeInfo.CreationDate! : DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"),
+                CreationTime = string.IsNullOrEmpty(versionDialog.NoticeFilePath)
+                    ? DateTime.Now
+                    : noticeInfo != null ? noticeInfo.CreationTime : DateTime.Now,
                 NoticeFile = noticeInfo ?? FileSystemHelper.GetFile<NoticeModel>(versionDialog.NoticeFilePath) as NoticeModel,
             };            
 
@@ -79,7 +79,9 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             VersionHistoryWindow historyWindow = new();
             historyWindow.Document = document;
 
-            historyWindow.Show();
+            historyWindow.ShowDialog();
+
+            UpdateFileList();
         }
 
         #region Handlers

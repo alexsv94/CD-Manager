@@ -8,8 +8,8 @@ namespace OrganizerWpf.Models
     {
         public string? Extension { get; set; }
         public string? Name { get; set; }
-        public string? CreationDate { get; set; }
-        public string? UpdateDate { get; set; }
+        public DateTime? CreationTime { get; set; }
+        public DateTime? UpdateTime { get; set; }
         public string? FullPath { get; set; }
 
         public virtual void SetDefaultValues(FileInfo file)
@@ -17,8 +17,8 @@ namespace OrganizerWpf.Models
             Extension = file.Extension;
             FullPath = file.FullName;
             Name = file.Name;
-            CreationDate = file.CreationTime.ToString("dd.MM.yyyy HH:mm:ss");
-            UpdateDate = file.LastWriteTime.ToString("dd.MM.yyyy HH:mm:ss");            
+            CreationTime = file.CreationTime;
+            UpdateTime = file.LastWriteTime;            
         }
 
         public virtual void SetValuesFromMetadata(T? fileMetaData)

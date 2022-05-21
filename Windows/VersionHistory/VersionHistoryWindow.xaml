@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OrganizerWpf.Windows.VersionHistory"
+        xmlns:conv="clr-namespace:OrganizerWpf.Utilities.Converters"
         mc:Ignorable="d"
-        WindowStyle="ToolWindow"
-        Title="Исторя версий" Height="200" MinHeight="200" Width="900" MinWidth="900">
+        Title="Исторя версий" Height="200" MinHeight="200" Width="900" MinWidth="900" Icon="/Icons/Windows/version.png">
     <Window.Resources>
         <Style TargetType="Image" x:Key="Icon">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -21,6 +21,7 @@
         <Style TargetType="Grid" x:Key="GridStyle">
             <Setter Property="Height" Value="20" />
         </Style>
+        <conv:DateTimeToStringConverter x:Key="dateConverter" />
     </Window.Resources>
 
     <DataGrid x:Name="dataGrid"
@@ -36,7 +37,7 @@
 
         <DataGrid.Columns>
             <DataGridTextColumn Header="Версия" Width="220" Binding="{Binding Version}"/>
-            <DataGridTextColumn Header="Дата создания" Width="140" Binding="{Binding CreationDate}"/>
+            <DataGridTextColumn Header="Дата создания" Width="140" Binding="{Binding CreationTime, Converter={StaticResource dateConverter}}"/>
             <DataGridTemplateColumn Header="Файл извещения" Width="*">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
