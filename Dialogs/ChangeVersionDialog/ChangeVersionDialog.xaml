@@ -44,15 +44,15 @@
                    Text="Документ" 
                    FontWeight="Bold" 
                    VerticalAlignment="Bottom"/>
-        
-        <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="15,0,15,0" Height="20">
+
+        <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="15,0,15,0" Height="20" x:Name="documentPathRegion" AllowDrop="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="70" />
             </Grid.ColumnDefinitions>
-
-            <TextBox DockPanel.Dock="Left" HorizontalAlignment="Stretch" Text="{Binding NewDocument.FullName, Mode=OneWay}" IsReadOnly="True" AllowDrop="True"/>
-            <Button x:Name="docBrowseBtn" Content="Обзор" Grid.Column="1" Command="{Binding ChooseDocumentFileCommand}" />
+            
+            <TextBox HorizontalAlignment="Stretch" Text="{Binding NewDocument.FullName, Mode=OneWay}" IsReadOnly="True"/>
+            <Button Content="Обзор" Grid.Column="1" Command="{Binding ChooseDocumentFileCommand}" />
         </Grid>
 
         <TextBlock Grid.Row="4"

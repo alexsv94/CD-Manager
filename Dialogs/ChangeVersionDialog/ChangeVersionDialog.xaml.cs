@@ -31,7 +31,12 @@ namespace OrganizerWpf.Dialogs.ChangeVersionDialog
             if (ViewModel == null)
             {
                 ViewModel = new();
-            }
+
+                documentPathRegion.DragEnter += ViewModel.OnDragEnter;
+                documentPathRegion.DragLeave += ViewModel.OnDragLeave;
+                documentPathRegion.Drop += ViewModel.OnDrop;
+            }           
+
             DataContext = ViewModel;
         }
         private void DialogOK(object sender, RoutedEventArgs e)
