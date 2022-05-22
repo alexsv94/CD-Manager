@@ -46,16 +46,19 @@ namespace OrganizerWpf.Utilities
             return itemsList;
         }
 
-        public static SerializableModel<T>? GetFile<T>(string path)
+        public static T? GetFile<T>(string path)
             where T : SerializableModel<T>, new()
         {
-            SerializableModel<T> item = new();
-
+            if (string.IsNullOrWhiteSpace(path)) return null;
+            
             FileInfo file = new(path);
             if (!file.Exists) return null;
 
             T itemInfo = new();
             itemInfo.SetDefaultValues(file);
+
+            T? itemMetaData = GetFileMetadata<T>(file.FullName);
+            itemInfo.SetValuesFromMetadata(itemMetaData);
 
             return itemInfo;
         }
@@ -91,6 +94,8 @@ namespace OrganizerWpf.Utilities
         public static T? GetFileMetadata<T>(string filePath) 
             where T : SerializableModel<T>
         {
+            if (string.IsNullOrEmpty(filePath)) return null;
+            
             FileInfo file = new FileInfo(filePath);
             DirectoryInfo? dir = file.Directory;
 
@@ -305,6 +310,11 @@ namespace OrganizerWpf.Utilities
             };
 
             p.Start();
+        }
+
+        public static void ReplaceFile(string sourceFile, string destinationFile)
+        {
+            File.Copy(sourceFile, destinationFile, true);
         }
     }
 }

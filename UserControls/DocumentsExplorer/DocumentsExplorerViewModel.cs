@@ -35,39 +35,15 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
         {
             if (document == null) return;
 
-            ChangeVersionDialog versionDialog = new()
-            {
-                OldVersion = document.Version,
-                NewVersion = document.Version
-            };
+            ChangeVersionDialog versionDialog = new();
+            versionDialog.ViewModel!.NewVersion = document.Version.Version;
+            versionDialog.ViewModel!.OldDocument = document;
+            versionDialog.ViewModel!.OldVersion = document.Version.Version;
+            versionDialog.ViewModel!.NewDocumentRequired = true;
+
             bool? result = versionDialog.ShowDialog();
 
             if (!(bool)result!) return;
-
-            document.Version = versionDialog.NewVersion;
-
-            var noticeInfo = FileSystemHelper.GetFileMetadata<NoticeModel>(versionDialog.NoticeFilePath);
-            var newVersionObject = new VersionModel()
-            {
-                Version = document.Version,
-                CreationTime = string.IsNullOrEmpty(versionDialog.NoticeFilePath)
-                    ? DateTime.Now
-                    : noticeInfo != null ? noticeInfo.CreationTime : DateTime.Now,
-                NoticeFile = noticeInfo ?? FileSystemHelper.GetFile<NoticeModel>(versionDialog.NoticeFilePath) as NoticeModel,
-            };            
-
-            if (document.VersionHistory == null)
-            {
-                document.VersionHistory = new VersionModel[] { newVersionObject };
-            }
-            else
-            {
-                var list = document.VersionHistory.ToList();
-                list.Add(newVersionObject);
-                document.VersionHistory = list.ToArray();
-            }
-
-            FileSystemHelper.SaveFileMetadata(document);
 
             UpdateFileList();
         }

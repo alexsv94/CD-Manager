@@ -8,13 +8,15 @@
         x:Name="dialogRoot"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Title="Изменение версии" Height="170" Width="400" Icon="/Icons/Windows/version.png">
+        Title="Изменение версии" Height="230" Width="400" Icon="/Icons/Windows/version.png">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="6*"/>
             <RowDefinition Height="5*"/>
             <RowDefinition Height="6*"/>
             <RowDefinition Height="5*"/>
@@ -29,40 +31,58 @@
         <TextBox 
             Grid.Row="1"
             Grid.ColumnSpan="2" 
-            Text="{Binding ElementName=dialogRoot, Path=NewVersion, Mode=TwoWay}" 
+            Text="{Binding NewVersion, Mode=TwoWay}" 
             VerticalAlignment="Center" 
             Margin="15,0,15,0"
             VerticalContentAlignment="Center"
             HorizontalContentAlignment="Left" Height="20"/>
+
         <TextBlock Grid.Row="2"
                    Grid.ColumnSpan="2"
                    HorizontalAlignment="Left" 
                    Margin="15,0,0,0" 
-                   Text="Файл извещения (необязательно)" 
+                   Text="Документ" 
                    FontWeight="Bold" 
                    VerticalAlignment="Bottom"/>
+        
         <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="15,0,15,0" Height="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="70" />
             </Grid.ColumnDefinitions>
 
-            <TextBox DockPanel.Dock="Left" HorizontalAlignment="Stretch" Text="{Binding ElementName=dialogRoot, Path=NoticeFilePath, Mode=TwoWay}" />
-            <Button x:Name="noticeBrowseBtn" Content="Обзор" Grid.Column="1" Click="noticeBrowseBtn_Click" />
+            <TextBox DockPanel.Dock="Left" HorizontalAlignment="Stretch" Text="{Binding NewDocument.FullName, Mode=OneWay}" IsReadOnly="True" AllowDrop="True"/>
+            <Button x:Name="docBrowseBtn" Content="Обзор" Grid.Column="1" Command="{Binding ChooseDocumentFileCommand}" />
         </Grid>
-        <Button x:Name="buttonOK" 
-                Content="ОК" 
-                Grid.Row="4" 
+
+        <TextBlock Grid.Row="4"
+                   Grid.ColumnSpan="2"
+                   HorizontalAlignment="Left" 
+                   Margin="15,0,0,0" 
+                   Text="Извещение (необязательно)" 
+                   FontWeight="Bold" 
+                   VerticalAlignment="Bottom"/>
+        
+        <Grid Grid.Row="5" Grid.ColumnSpan="2" Margin="15,0,15,0" Height="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="70" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox DockPanel.Dock="Left" HorizontalAlignment="Stretch" Text="{Binding Notice.FullPath, Mode=OneWay}" IsReadOnly="True" />
+            <Button x:Name="noticeBrowseBtn" Content="Обзор" Grid.Column="1" Command="{Binding ChooseNoticeFileCommand}" />
+        </Grid>        
+        <Button Content="ОК" 
+                Grid.Row="6" 
                 Margin="15,5,7,5" 
-                Click="buttonOK_Click" 
+                Click="DialogOK" 
                 VerticalAlignment="Center" 
                 Height="25"/>
-        <Button x:Name="buttonCancel" 
-                Content="Отмена" 
-                Grid.Row="4" 
+        <Button Content="Отмена" 
+                Grid.Row="6" 
                 Grid.Column="1" 
                 Margin="7,5,15,5" 
-                Click="buttonCancel_Click" 
+                Click="DialogCancel" 
                 VerticalAlignment="Center" 
                 Height="25"/>
     </Grid>

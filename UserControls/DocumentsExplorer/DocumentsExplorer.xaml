@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OrganizerWpf"
              xmlns:conv="clr-namespace:OrganizerWpf.Utilities.Converters"
+             xmlns:icons="clr-namespace:OrganizerWpf.Icons"
              x:Name="rootExplorer"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -14,6 +15,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <conv:DateTimeToStringConverter x:Key="dateConverter" />
+                    <icons:IconSelector x:Key="IconSelector"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>        
@@ -55,20 +57,24 @@
                   RowHeight="22"
                   SelectionMode="Single" 
                   AutoGenerateColumns="False"
-                  CanUserAddRows="False" AllowDrop="True" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                  CanUserAddRows="False" AllowDrop="True" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" IsReadOnly="True">
                 <DataGrid.Resources>
                     <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}">
-                        <MenuItem Header="Удалить" 
+                        <MenuItem Header="Удалить"
+                                   Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Delete}"
                                   Command="{Binding DeleteCommand}"
                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
-                        <MenuItem Header="Переименовать" 
+                        <MenuItem Header="Переименовать"
+                                   Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Rename}"
                                   Command="{Binding RenameCommand}"
                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
-                        <MenuItem Header="Изменить версию" 
+                        <MenuItem Header="Изменить версию"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.ChangeVersion}"
                                   Command="{Binding ChangeVersionCommand}"
                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"
                                   Loaded="MenuItem_СhangeVersion_Loaded" />
-                        <MenuItem Header="История версий" 
+                        <MenuItem Header="История версий"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.VersionHistory}"
                                   Command="{Binding ShowVersionHistoryCommand}"
                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"
                                   Loaded="MenuItem_СhangeVersion_Loaded" />
@@ -85,12 +91,12 @@
                 </DataGrid.RowStyle>
                 
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="*" Header="Название" CellTemplateSelector="{StaticResource IconTemplateSelector}"/>
+                    <DataGridTemplateColumn Width="*" Header="Название" CellTemplateSelector="{StaticResource ExplorerCellTemplateSelector}"/>
                     <DataGridTextColumn Width="140" Header="Дата создания" 
                                         Binding="{Binding Path=CreationTime, Converter={StaticResource dateConverter}}"/>
                     <DataGridTextColumn Width="140" Header="Дата изменения" 
                                         Binding="{Binding Path=UpdateTime, Converter={StaticResource dateConverter}}"/>
-                    <DataGridTextColumn Width="140" Header="Версия" Binding="{Binding Version}"/>
+                    <DataGridTextColumn Width="140" Header="Версия" Binding="{Binding Version.Version}"/>
                 </DataGrid.Columns>
             </DataGrid>
             <Label Content="Перетащите файлы, чтобы скопировать" 

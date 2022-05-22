@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OrganizerWpf.UserControls.DocumentsExplorer"
-             x:Name="rootCell"
              mc:Ignorable="d" 
+             x:Name="rootCell"
              d:DesignHeight="20" d:DesignWidth="600
              ">
     <UserControl.Resources>
@@ -14,15 +14,23 @@
             <Setter Property="VerticalAlignment" Value="Stretch" />
             <Setter Property="Margin" Value="1" />
         </Style>
+        <Style TargetType="TextBlock" x:Key="NameBox">
+            <Setter Property="Margin" Value="3,1,0,0" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Grid.Column" Value="1" />
+        </Style>
+        <Style TargetType="Grid" x:Key="GridStyle">
+            <Setter Property="Height" Value="20" />
+        </Style>
     </UserControl.Resources>
 
-    <Grid Height="20">
+    <Grid Height="20" Style="{StaticResource GridStyle}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Image Style="{StaticResource Icon}" Source="{Binding ElementName=rootCell, Path=Image}"/>       
-        <TextBlock Grid.Column="1" Text="{Binding ElementName=rootCell, Path=DocName}" Margin="3,1,0,0"></TextBlock>
+        <Image Style="{StaticResource Icon}" Source="{Binding ElementName=rootCell, Path=Image, TargetNullValue={x:Null}}"/>
+        <TextBlock Style="{StaticResource NameBox}" Grid.Column="1" Text="{Binding ElementName=rootCell, Path=DocName}"></TextBlock>
     </Grid>
 </UserControl>

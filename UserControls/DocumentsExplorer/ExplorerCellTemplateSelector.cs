@@ -9,7 +9,7 @@ using System.Windows.Controls;
 
 namespace OrganizerWpf.UserControls.DocumentsExplorer
 {
-    public class IconTemplateSelector : DataTemplateSelector
+    public class ExplorerCellTemplateSelector : DataTemplateSelector
     {
         public DataTemplate? FolderTemplate { get; set; }
         public DataTemplate? DOCTemplate { get; set; }

@@ -5,14 +5,14 @@ namespace OrganizerWpf.Models
 {
     [Serializable]
     public class DocumentModel : SerializableModel<DocumentModel>
-    {       
-        public string? Version { get; set; }         
-        public VersionModel[]? VersionHistory { get; set; }
+    {
+        public VersionModel Version { get; set; } = new();
+        public VersionModel[] VersionHistory { get; set; } = new VersionModel[0];
 
         public override void SetDefaultValues(FileInfo file)
         {
             base.SetDefaultValues(file);
-            Version = "<Не указано>";
+            VersionHistory = new VersionModel[] { new VersionModel() { CreationTime = CreationTime } };
         }
 
         public override void SetValuesFromMetadata(DocumentModel? fileMetaData)

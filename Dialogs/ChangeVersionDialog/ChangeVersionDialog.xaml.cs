@@ -1,4 +1,5 @@
 ﻿using OrganizerWpf.Utilities;
+using OrganizerWpf.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,52 +17,32 @@ using System.Windows.Media.Imaging;
 
 namespace OrganizerWpf.Dialogs.ChangeVersionDialog
 {
-    /// <summary>
-    /// Логика взаимодействия для ChangeVersionDialog.xaml
-    /// </summary>
     public partial class ChangeVersionDialog : Window
-    {
-        public string? OldVersion { get; set; }
-        public string? NewVersion
-        {
-            get { return (string)GetValue(NewVersionProperty); }
-            set { SetValue(NewVersionProperty, value); }
-        }
-        public static readonly DependencyProperty NewVersionProperty =
-            DependencyProperty.Register("NewVersion", typeof(string), typeof(ChangeVersionDialog), new PropertyMetadata(""));
-
-        public string NoticeFilePath
-        {
-            get { return (string)GetValue(NoticeFilePathProperty); }
-            set { SetValue(NoticeFilePathProperty, value); }
-        }
-        public static readonly DependencyProperty NoticeFilePathProperty =
-            DependencyProperty.Register("NoticeFilePath", typeof(string), typeof(ChangeVersionDialog), new PropertyMetadata(string.Empty));
+    { 
+        public ChangeVersionDialogViewModel? ViewModel { get; set; }
 
         public ChangeVersionDialog()
         {
             InitializeComponent();
+            SetupViewModel();
         }
-
-        private void buttonOK_Click(object sender, RoutedEventArgs e)
+        public void SetupViewModel()
         {
-            DialogResult = true;
-        }
-
-        private void buttonCancel_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-        }
-
-        private void noticeBrowseBtn_Click(object sender, RoutedEventArgs e)
-        {
-            using var dialog = new OpenFileDialog();
-            dialog.InitialDirectory = Path.Combine(Settings.CurrentProductDirectoryPath, "Извещения");
-
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (ViewModel == null)
             {
-                NoticeFilePath = dialog.FileName;
+                ViewModel = new();
             }
+            DataContext = ViewModel;
         }
+        private void DialogOK(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel!.ApplyChanges())
+                DialogResult = true;
+        }
+        private void DialogCancel(object sender, RoutedEventArgs e) 
+        { 
+            DialogResult = false; 
+        }
+
     }
 }

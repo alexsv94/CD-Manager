@@ -45,7 +45,7 @@
                 </DataGrid.RowStyle>
 
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="*" Header="Название" CellTemplateSelector="{StaticResource IconTemplateSelector}"/>
+                    <DataGridTemplateColumn Width="*" Header="Название" CellTemplateSelector="{StaticResource ExplorerCellTemplateSelector}"/>
                     <DataGridTextColumn Width="120" Header="Дата создания" Binding="{Binding CreationTime, Converter={StaticResource dateConverter}}"/>
                     <DataGridTextColumn Width="250" Header="Суть изменений" Binding="{Binding Reason}"/>
                 </DataGrid.Columns>

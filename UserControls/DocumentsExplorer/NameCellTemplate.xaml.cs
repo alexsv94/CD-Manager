@@ -25,25 +25,20 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             get { return (string)GetValue(DocNameProperty); }
             set { SetValue(DocNameProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for DocName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DocNameProperty =
             DependencyProperty.Register("DocName", typeof(string), typeof(NameCellTemplate), new PropertyMetadata(""));
 
-        public ImageSource Image
+        public ImageSource? Image
         {
-            get { return (ImageSource)GetValue(ImageProperty); }
+            get { return (ImageSource?)GetValue(ImageProperty); }
             set { SetValue(ImageProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for Image.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ImageProperty =
             DependencyProperty.Register("Image", typeof(ImageSource), typeof(NameCellTemplate), new PropertyMetadata(null));
 
         public NameCellTemplate()
         {
             InitializeComponent();
-            DataContext = this;
         }
     }
 }

@@ -1,165 +1,61 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:s="clr-namespace:OrganizerWpf.UserControls.DocumentsExplorer"
-                    >
-
-    <Style TargetType="Image" x:Key="Icon">
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Setter Property="Margin" Value="1" />
-    </Style>
-    <Style TargetType="TextBlock" x:Key="NameBox">
-        <Setter Property="Margin" Value="3,1,0,0" />
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="Grid.Column" Value="1" />
-    </Style>
-    <Style TargetType="Grid" x:Key="GridStyle">
-        <Setter Property="Height" Value="20" />
-    </Style>
-
-    <s:IconTemplateSelector x:Key="IconTemplateSelector">        
-        <s:IconTemplateSelector.DefaultTemplate>
+                    xmlns:s="clr-namespace:OrganizerWpf.UserControls.DocumentsExplorer">
+    <s:ExplorerCellTemplateSelector x:Key="ExplorerCellTemplateSelector">
+        <s:ExplorerCellTemplateSelector.DefaultTemplate>
             <DataTemplate>
-                <Grid Style="{StaticResource GridStyle}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/unknown.png"/>
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
-                </Grid>
+                <s:NameCellTemplate DocName="{Binding Name}" Image="../../Icons/FileExtensions/unknown.png" />
             </DataTemplate>
-        </s:IconTemplateSelector.DefaultTemplate>
-        <s:IconTemplateSelector.FolderTemplate>
+        </s:ExplorerCellTemplateSelector.DefaultTemplate>
+        <s:ExplorerCellTemplateSelector.FolderTemplate>
             <DataTemplate>
-                <Grid Style="{StaticResource GridStyle}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/folder.png"/>
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
-                </Grid>
+                <s:NameCellTemplate DocName="{Binding Name}" Image="../../Icons/FileExtensions/folder.png" />
             </DataTemplate>
-        </s:IconTemplateSelector.FolderTemplate>
-        <s:IconTemplateSelector.CDRTemplate>
+        </s:ExplorerCellTemplateSelector.FolderTemplate>
+        <s:ExplorerCellTemplateSelector.CDRTemplate>
             <DataTemplate>
-                <Grid Style="{StaticResource GridStyle}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/cdr.png"/>
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
-                </Grid>
+                <s:NameCellTemplate DocName="{Binding Name}" Image="../../Icons/FileExtensions/cdr.png" />
             </DataTemplate>
-        </s:IconTemplateSelector.CDRTemplate>
-        <s:IconTemplateSelector.CDWTemplate>
+        </s:ExplorerCellTemplateSelector.CDRTemplate>
+        <s:ExplorerCellTemplateSelector.CDWTemplate>
             <DataTemplate>
-                <Grid Style="{StaticResource GridStyle}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/cdw.png"/>
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
-                </Grid>
+                <s:NameCellTemplate DocName="{Binding Name}" Image="../../Icons/FileExtensions/cdw.png" />
             </DataTemplate>
-        </s:IconTemplateSelector.CDWTemplate>
-        <s:IconTemplateSelector.DCHTemplate>
+        </s:ExplorerCellTemplateSelector.CDWTemplate>
+        <s:ExplorerCellTemplateSelector.DCHTemplate>
             <DataTemplate>
-                <Grid Style="{StaticResource GridStyle}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/dch.png"/>
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
-                </Grid>
+                <s:NameCellTemplate DocName="{Binding Name}" Image="../../Icons/FileExtensions/dch.png" />
             </DataTemplate>
-        </s:IconTemplateSelector.DCHTemplate>
-        <s:IconTemplateSelector.DOCTemplate>
+        </s:ExplorerCellTemplateSelector.DCHTemplate>
+        <s:ExplorerCellTemplateSelector.DOCTemplate>
             <DataTemplate>
-                <Grid Height="20">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/doc.png"/>
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
-                </Grid>
+                <s:NameCellTemplate DocName="{Binding Name}" Image="../../Icons/FileExtensions/doc.png" />
             </DataTemplate>
-        </s:IconTemplateSelector.DOCTemplate>
-        <s:IconTemplateSelector.DWGTemplate>
+        </s:ExplorerCellTemplateSelector.DOCTemplate>
+        <s:ExplorerCellTemplateSelector.DWGTemplate>
             <DataTemplate>
-                <Grid Style="{StaticResource GridStyle}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/dwg.png"/>
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
-                </Grid>
+                <s:NameCellTemplate DocName="{Binding Name}" Image="../../Icons/FileExtensions/dwg.png" />
             </DataTemplate>
-        </s:IconTemplateSelector.DWGTemplate>
-        <s:IconTemplateSelector.PDFTemplate>
+        </s:ExplorerCellTemplateSelector.DWGTemplate>
+        <s:ExplorerCellTemplateSelector.PDFTemplate>
             <DataTemplate>
-                <Grid Style="{StaticResource GridStyle}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/pdf.png"/>
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
-                </Grid>
+                <s:NameCellTemplate DocName="{Binding Name}" Image="../../Icons/FileExtensions/pdf.png" />
             </DataTemplate>
-        </s:IconTemplateSelector.PDFTemplate>
-        <s:IconTemplateSelector.TXTTemplate>
+        </s:ExplorerCellTemplateSelector.PDFTemplate>
+        <s:ExplorerCellTemplateSelector.TXTTemplate>
             <DataTemplate>
-                <Grid Style="{StaticResource GridStyle}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/txt.png"/>
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
-                </Grid>
+                <s:NameCellTemplate DocName="{Binding Name}" Image="../../Icons/FileExtensions/txt.png" />
             </DataTemplate>
-        </s:IconTemplateSelector.TXTTemplate>
-        <s:IconTemplateSelector.XLSTemplate>
+        </s:ExplorerCellTemplateSelector.TXTTemplate>
+        <s:ExplorerCellTemplateSelector.XLSTemplate>
             <DataTemplate>
-                <Grid Style="{StaticResource GridStyle}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/xls.png"/>
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
-                </Grid>
+                <s:NameCellTemplate DocName="{Binding Name}" Image="../../Icons/FileExtensions/xls.png" />
             </DataTemplate>
-        </s:IconTemplateSelector.XLSTemplate>
-        <s:IconTemplateSelector.ZIPTemplate>
+        </s:ExplorerCellTemplateSelector.XLSTemplate>
+        <s:ExplorerCellTemplateSelector.ZIPTemplate>
             <DataTemplate>
-                <Grid Style="{StaticResource GridStyle}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Image Style="{StaticResource Icon}" Source="../../Icons/FileExtensions/zip.png"/>
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource NameBox}"></TextBlock>
-                </Grid>
+                <s:NameCellTemplate DocName="{Binding Name}" Image="../../Icons/FileExtensions/zip.png" />
             </DataTemplate>
-        </s:IconTemplateSelector.ZIPTemplate>
-    </s:IconTemplateSelector>
+        </s:ExplorerCellTemplateSelector.ZIPTemplate>
+    </s:ExplorerCellTemplateSelector>
 </ResourceDictionary>
