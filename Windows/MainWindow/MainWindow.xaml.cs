@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using OrganizerWpf.StylizedControls;
+using System.Windows;
 
 namespace OrganizerWpf.Windows.MainWindow
 {
@@ -10,6 +11,7 @@ namespace OrganizerWpf.Windows.MainWindow
         {
             InitializeComponent();
             Loaded += SetupViewModel;
+            new SCMessageBox().Show();
         }
 
         public void SetupViewModel(object sender, RoutedEventArgs e)
@@ -18,6 +20,6 @@ namespace OrganizerWpf.Windows.MainWindow
                 ViewModel = new(this);
 
             DataContext = ViewModel;
-        }
+        }        
     }
 }
