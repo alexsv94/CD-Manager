@@ -16,6 +16,8 @@ namespace OrganizerWpf.StylizedControls
 {
     public partial class SCMessageBox : Window
     {
+        private bool _isDragBeginInTitleBar = false;
+
         public SCMessageBox()
         {
             InitializeComponent();
@@ -23,7 +25,7 @@ namespace OrganizerWpf.StylizedControls
 
         private void WindowDragMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if (e.LeftButton == MouseButtonState.Pressed && _isDragBeginInTitleBar)
             {
                 DragMove();
             }
@@ -32,6 +34,16 @@ namespace OrganizerWpf.StylizedControls
         private void CloseWindow()
         {
             Close();
+        }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _isDragBeginInTitleBar = true;
+        }
+
+        private void Border_MouseLeave(object sender, MouseEventArgs e)
+        {
+            _isDragBeginInTitleBar = false;
         }
     }
 }

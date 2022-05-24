@@ -14,4 +14,8 @@
         <Setter Property="Foreground" Value="#b5b8ba" />
     </Style>
 
+    <Style x:Key="Text_Sub" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#dedfe1" />
+    </Style>
+
 </ResourceDictionary>
