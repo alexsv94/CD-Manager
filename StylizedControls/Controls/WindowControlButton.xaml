@@ -7,16 +7,21 @@
              mc:Ignorable="d" 
              d:DesignHeight="35" d:DesignWidth="35">
     <UserControl.Resources>
-        <Style x:Key="WindowControlButton" TargetType="Border">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
+        <ResourceDictionary Source="../Themes/StyleMain.xaml">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <Style x:Key="WindowControlButton" TargetType="Border">
+                        <Setter Property="Background" Value="Transparent" />
 
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#2b343a" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2b343a" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>        
     </UserControl.Resources>
     
     <Border 

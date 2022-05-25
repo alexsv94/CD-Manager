@@ -21,6 +21,9 @@ namespace OrganizerWpf.StylizedControls
         public SCMessageBox()
         {
             InitializeComponent();
+
+            //Поиск ресурса
+            //(<Type>)Application.Current.FindResource("<Resource Name>");
         }
 
         private void WindowDragMove(object sender, MouseEventArgs e)

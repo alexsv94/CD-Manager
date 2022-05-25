@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:OrganizerWpf"
              StartupUri="Windows/MainWindow/MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary Source="StylizedControls/Themes/StyleMain.xaml" />
     </Application.Resources>
 </Application>

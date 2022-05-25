@@ -9,9 +9,6 @@
         WindowStyle="None"
         ResizeMode="NoResize"
         Title="MessageBox" Background="Transparent" AllowsTransparency="True" SizeToContent="WidthAndHeight">
-    <Window.Resources>
-        <ResourceDictionary Source="Themes/StyleMain.xaml" />
-    </Window.Resources>
     <Window.Effect>
         <DropShadowEffect BlurRadius="5" ShadowDepth="0"/>
     </Window.Effect>
@@ -33,8 +30,9 @@
             </Border>
             <StackPanel VerticalAlignment="Top">
                 <TextBlock Style="{DynamicResource Text_Sub}" Text="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." TextWrapping="Wrap" Margin="5,5,5,5" VerticalAlignment="Top"/>
-                <StackPanel x:Name="buttonsContainer" Orientation="Horizontal" VerticalAlignment="Top" Height="50">
-                    
+                <StackPanel x:Name="buttonsContainer" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Height="50">
+                    <Button Style="{DynamicResource SCButtonStyle}" Content="OK" Width="80" Height="30" Margin="0,0,10,0"/>
+                    <Button Style="{DynamicResource SCButtonStyle}" IsEnabled="False" Content="OK" Width="80" Height="30" />
                 </StackPanel>
             </StackPanel>
         </StackPanel>
