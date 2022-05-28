@@ -1,4 +1,5 @@
 ﻿using OrganizerWpf.StylizedControls;
+using OrganizerWpf.Utilities;
 using System.Windows;
 
 namespace OrganizerWpf.Windows.MainWindow
@@ -6,11 +7,18 @@ namespace OrganizerWpf.Windows.MainWindow
     public partial class MainWindow : Window, IView<MainWindowViewModel>
     {
         public MainWindowViewModel? ViewModel { get; set; } = null;
+        private WindowEventsHelper? _eventsHelper;
 
         public MainWindow()
         {
             InitializeComponent();
             Loaded += SetupViewModel;
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            _eventsHelper ??= new(this, true, true);
         }
 
         public void SetupViewModel(object sender, RoutedEventArgs e)

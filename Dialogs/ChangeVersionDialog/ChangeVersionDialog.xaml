@@ -8,7 +8,11 @@
         x:Name="dialogRoot"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Title="Изменение версии" Height="230" Width="400" Icon="/Icons/Windows/version.png">
+        Title="Изменение версии" 
+        Height="230" 
+        Width="400" 
+        Icon="/Icons/Windows/version.png"
+        Style="{DynamicResource WindowTemplateStyle}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />

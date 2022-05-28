@@ -6,7 +6,10 @@
         xmlns:docs="clr-namespace:OrganizerWpf.UserControls.DocumentsExplorer"
         xmlns:notices="clr-namespace:OrganizerWpf.UserControls.NoticeExplorer"
         mc:Ignorable="d"
-        Title="Менеджер КД" Height="800" Width="1400" Background="#FFF0F0F0" Icon="/Icons/Windows/main_32x32.png">
+        ResizeMode="CanResizeWithGrip"
+        Title="Менеджер КД" Height="800" Width="1400" MinWidth="1000" MinHeight="600" Background="#FFF0F0F0" 
+        Icon="/Icons/Windows/main_32x32.png"
+        Style="{DynamicResource WindowTemplateStyle}">
     
     <Grid>
         <Grid.ColumnDefinitions>

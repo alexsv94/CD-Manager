@@ -21,11 +21,19 @@ namespace OrganizerWpf.Dialogs.ChangeVersionDialog
     { 
         public ChangeVersionDialogViewModel? ViewModel { get; set; }
 
+        private WindowEventsHelper? _eventsHelper;
         public ChangeVersionDialog()
         {
             InitializeComponent();
             SetupViewModel();
         }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            _eventsHelper ??= new(this, false, false);
+        }
+
         public void SetupViewModel()
         {
             if (ViewModel == null)
