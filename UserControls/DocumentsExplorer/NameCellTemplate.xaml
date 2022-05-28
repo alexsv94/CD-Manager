@@ -16,7 +16,7 @@
         </Style>
         <Style TargetType="TextBlock" x:Key="NameBox">
             <Setter Property="Margin" Value="3,1,0,0" />
-            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontSize" Value="{DynamicResource Font.FontSize}" />
             <Setter Property="Grid.Column" Value="1" />
         </Style>
         <Style TargetType="Grid" x:Key="GridStyle">
@@ -31,6 +31,6 @@
         </Grid.ColumnDefinitions>
 
         <Image Style="{StaticResource Icon}" Source="{Binding ElementName=rootCell, Path=Image, TargetNullValue={x:Null}}"/>
-        <TextBlock Style="{StaticResource NameBox}" Grid.Column="1" Text="{Binding ElementName=rootCell, Path=DocName}"></TextBlock>
+        <TextBlock Style="{StaticResource NameBox}" Grid.Column="1" Text="{Binding ElementName=rootCell, Path=DocName}" Margin="5,0,0,0"></TextBlock>
     </Grid>
 </UserControl>

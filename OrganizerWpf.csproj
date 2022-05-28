@@ -136,4 +136,8 @@
     </Resource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="StylizedControls\Themes\" />
+  </ItemGroup>
+
 </Project>

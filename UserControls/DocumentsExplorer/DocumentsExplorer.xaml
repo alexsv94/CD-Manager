@@ -11,14 +11,81 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <ResourceDictionary Source="../../Styles/ExtensionIcons.xaml">
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary>
-                    <conv:DateTimeToStringConverter x:Key="dateConverter" />
-                    <icons:IconSelector x:Key="IconSelector"/>
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>        
+        <conv:DateTimeToStringConverter x:Key="dateConverter" />
+        <icons:IconSelector x:Key="IconSelector"/>
+
+        <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}">
+            <MenuItem Header="Удалить"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Delete}"
+                                  Command="{Binding DeleteCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
+            <MenuItem Header="Переименовать"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Rename}"
+                                  Command="{Binding RenameCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
+            <MenuItem Header="Изменить версию"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.ChangeVersion}"
+                                  Command="{Binding ChangeVersionCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"
+                                  Loaded="MenuItem_СhangeVersion_Loaded" />
+            <MenuItem Header="История версий"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.VersionHistory}"
+                                  Command="{Binding ShowVersionHistoryCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"
+                                  Loaded="MenuItem_СhangeVersion_Loaded" />
+        </ContextMenu>
+
+        <Style x:Key="SCDataGridRowStyle" TargetType="{x:Type DataGridRow}">
+            <Setter Property="ContextMenu" Value="{DynamicResource RowContextMenu}" />
+            <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary}" />
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridRow}">
+                        <Border x:Name="DGR_Border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                SnapsToDevicePixels="True">
+                            <SelectiveScrollingGrid>
+                                <SelectiveScrollingGrid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </SelectiveScrollingGrid.ColumnDefinitions>
+                                <SelectiveScrollingGrid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </SelectiveScrollingGrid.RowDefinitions>
+                                <DataGridCellsPresenter 
+                                    Grid.Column="1" 
+                                    ItemsPanel="{TemplateBinding ItemsPanel}" 
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                <DataGridDetailsPresenter 
+                                    Grid.Column="1" 
+                                    Grid.Row="1" 
+                                    SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding AreRowDetailsFrozen, 
+                                        ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}, 
+                                        Converter={x:Static DataGrid.RowDetailsScrollingConverter}, 
+                                        RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                    Visibility="{TemplateBinding DetailsVisibility}" />
+                                <DataGridRowHeader 
+                                    Grid.RowSpan="2" 
+                                    SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical" 
+                                    Visibility="{Binding HeadersVisibility, 
+                                        ConverterParameter={x:Static DataGridHeadersVisibility.Row}, 
+                                        Converter={x:Static DataGrid.HeadersVisibilityConverter}, 
+                                        RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                            </SelectiveScrollingGrid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick" />
+            <EventSetter Event="MouseMove" Handler="DataGridRow_MouseMove" />
+            <EventSetter Event="ContextMenuOpening" Handler="DataGridRow_ContextMenuOpening" />
+        </Style>
     </UserControl.Resources>
 
     <Border x:Name="rootContainer"
@@ -47,53 +114,17 @@
                     </Label.Style>
                 </Label>
             </StackPanel>
-            <DataGrid x:Name="dataGrid" 
+            <DataGrid CellStyle="{DynamicResource SCDataGridCellStyle}" RowStyle="{DynamicResource SCDataGridRowStyle}" 
+                  ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}" x:Name="dataGrid"
                   Grid.Row="1"
-                  Background="White" 
                   ItemsSource="{Binding Items}" 
-                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                  GridLinesVisibility="None" 
-                  HeadersVisibility="Column" 
-                  RowHeight="22"
-                  SelectionMode="Single" 
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False" AllowDrop="True" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" IsReadOnly="True">
-                <DataGrid.Resources>
-                    <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}">
-                        <MenuItem Header="Удалить"
-                                   Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Delete}"
-                                  Command="{Binding DeleteCommand}"
-                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
-                        <MenuItem Header="Переименовать"
-                                   Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Rename}"
-                                  Command="{Binding RenameCommand}"
-                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
-                        <MenuItem Header="Изменить версию"
-                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.ChangeVersion}"
-                                  Command="{Binding ChangeVersionCommand}"
-                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"
-                                  Loaded="MenuItem_СhangeVersion_Loaded" />
-                        <MenuItem Header="История версий"
-                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.VersionHistory}"
-                                  Command="{Binding ShowVersionHistoryCommand}"
-                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"
-                                  Loaded="MenuItem_СhangeVersion_Loaded" />
-                    </ContextMenu> 
-                </DataGrid.Resources>
-                <DataGrid.RowStyle>
-                    <Style TargetType="DataGridRow">
-                        <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
-                        <Setter Property="FontSize" Value="14" />
-                        <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick" />
-                        <EventSetter Event="MouseMove" Handler="DataGridRow_MouseMove" />                        
-                        <EventSetter Event="ContextMenuOpening" Handler="DataGridRow_ContextMenuOpening" />                        
-                    </Style>
-                </DataGrid.RowStyle>
+                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}" AllowDrop="True">               
                 
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="*" Header="Название" CellTemplateSelector="{StaticResource ExplorerCellTemplateSelector}"/>
+                    <DataGridTemplateColumn Width="*" Header="Название" 
+                                            CellTemplateSelector="{StaticResource ExplorerCellTemplateSelector}"/>
                     <DataGridTextColumn Width="140" Header="Дата создания" 
-                                        Binding="{Binding Path=CreationTime, Converter={StaticResource dateConverter}}"/>
+                                        Binding="{Binding Path=CreationTime, Converter={StaticResource dateConverter}}" />
                     <DataGridTextColumn Width="140" Header="Дата изменения" 
                                         Binding="{Binding Path=UpdateTime, Converter={StaticResource dateConverter}}"/>
                     <DataGridTextColumn Width="140" Header="Версия" Binding="{Binding Version.Version}"/>

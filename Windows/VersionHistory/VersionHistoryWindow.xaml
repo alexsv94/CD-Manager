@@ -18,7 +18,7 @@
         </Style>
         <Style TargetType="TextBlock" x:Key="NameBox">
             <Setter Property="Margin" Value="3,1,0,0" />
-            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontSize" Value="{DynamicResource Font.FontSize}" />
             <Setter Property="Grid.Column" Value="1" />
         </Style>
         <Style TargetType="Grid" x:Key="GridStyle">
@@ -87,7 +87,7 @@
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
-                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="FontSize" Value="{DynamicResource Font.FontSize}" />
                     <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick" />
                 </Style>
             </DataGrid.RowStyle>

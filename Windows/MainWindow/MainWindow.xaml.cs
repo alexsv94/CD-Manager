@@ -11,7 +11,6 @@ namespace OrganizerWpf.Windows.MainWindow
         {
             InitializeComponent();
             Loaded += SetupViewModel;
-            SCMessageBox.ShowMsgBox("It's my first appearance", "It's my first title", MessageBoxButton.YesNoCancel);
         }
 
         public void SetupViewModel(object sender, RoutedEventArgs e)

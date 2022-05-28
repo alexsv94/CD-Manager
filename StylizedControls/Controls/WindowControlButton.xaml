@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="35" d:DesignWidth="35">
     <UserControl.Resources>
-        <ResourceDictionary Source="../Themes/StyleMain.xaml">
+        <ResourceDictionary Source="../../Styles/StyleMain.xaml">
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <Style x:Key="WindowControlButton" TargetType="Border">

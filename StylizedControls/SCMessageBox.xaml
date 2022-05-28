@@ -13,6 +13,10 @@
         <DropShadowEffect BlurRadius="5" ShadowDepth="0"/>
     </Window.Effect>
 
+    <Window.Resources>
+        <ResourceDictionary Source="../Styles/StyleMain.xaml" />
+    </Window.Resources>
+
     <Border Style="{DynamicResource WindowBorder}" Width="450" MinHeight="70" Margin="5">
         <StackPanel>
             <Border  Height="30" VerticalAlignment="Top" Style="{DynamicResource WindowTitleBar}" MouseMove="WindowDragMove" MouseDown="Border_MouseDown" MouseLeave="Border_MouseLeave" >

@@ -8,7 +8,7 @@
         Title="Настройки" Height="450" Width="600" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="settingHeader" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontSize" Value="{DynamicResource Font.FontSize}" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Right" />
