@@ -8,10 +8,10 @@
              d:DesignHeight="30" d:DesignWidth="200">
     <UserControl.Resources>
         <Style x:Key="dirNameText" TargetType="Label">
-            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary}" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="BlueViolet" />
+                    <Setter Property="Foreground" Value="White" />
                 </Trigger>
             </Style.Triggers>
         </Style>

@@ -89,7 +89,6 @@
     </UserControl.Resources>
 
     <Border x:Name="rootContainer"
-            BorderBrush="#FFABADB3" 
             AllowDrop="True">
         <Grid>
             <Grid.RowDefinitions>
@@ -104,21 +103,22 @@
                     VerticalAlignment="Center" Cursor="Hand">
                     <Label.Style>
                         <Style TargetType="Label">
-                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary}" />
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="BlueViolet" />
+                                    <Setter Property="Foreground" Value="White" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>                        
                     </Label.Style>
                 </Label>
             </StackPanel>
-            <DataGrid CellStyle="{DynamicResource SCDataGridCellStyle}" RowStyle="{DynamicResource SCDataGridRowStyle}" 
-                  ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}" x:Name="dataGrid"
-                  Grid.Row="1"
-                  ItemsSource="{Binding Items}" 
-                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}" AllowDrop="True">               
+            <DataGrid CellStyle="{DynamicResource SCDataGridCellStyle}" 
+                      RowStyle="{DynamicResource SCDataGridRowStyle}" 
+                      ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}" x:Name="dataGrid"
+                      Grid.Row="1"
+                      ItemsSource="{Binding Items}" 
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}" AllowDrop="True">               
                 
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="*" Header="Название" 

@@ -44,12 +44,12 @@
             ItemsSource="{Binding Products}"/>
         <Label Content="Список изделий" Grid.Row="3" FontWeight="Bold"/>
 
-        <TabControl Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" Grid.RowSpan="2" Margin="5,5,5,5">
-            <TabItem Header="КД" Width="75">
+        <TabControl Style="{DynamicResource SCTabControlStyle}" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" Grid.RowSpan="2" Margin="5,5,5,5">
+            <TabItem Style="{DynamicResource SCTabItemStyle}" Header="КД" Width="75">
                 <docs:DocumentsExplorer
                     TargetDirectory="КД"/>
             </TabItem>
-            <TabItem Header="ЭМ" Width="75">
+            <TabItem Style="{DynamicResource SCTabItemStyle}" Header="ЭМ" Width="75">
                 <docs:DocumentsExplorer
                     TargetDirectory="ЭМ"/>
             </TabItem>

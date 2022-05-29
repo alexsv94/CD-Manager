@@ -8,6 +8,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/SCDataGrid.xaml" />
                 <ResourceDictionary Source="Styles/SCWindowStyle.xaml" />
+                <ResourceDictionary Source="Styles/SCTabControl.xaml" />
                 <ResourceDictionary Source="Styles/ExtensionIcons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

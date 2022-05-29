@@ -124,6 +124,7 @@
     <Style TargetType="{x:Type DataGrid}">
         <Setter Property="AutoGenerateColumns" Value="False" />
         <Setter Property="Background" Value="{DynamicResource Color.DataGrid.Background}"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="CanUserAddRows" Value="False" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="GridLinesVisibility" Value="Horizontal" />
@@ -139,7 +140,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGrid}">
-                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                    <Border Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Padding="{TemplateBinding Padding}" 
+                            CornerRadius="0,0,5,5"
+                            SnapsToDevicePixels="True">
                         <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
                             <ScrollViewer.Template>
                                 <ControlTemplate TargetType="{x:Type ScrollViewer}">

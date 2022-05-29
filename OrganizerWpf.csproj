@@ -11,6 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="StylizedControls\Themes\**" />
+    <EmbeddedResource Remove="StylizedControls\Themes\**" />
+    <None Remove="StylizedControls\Themes\**" />
+    <Page Remove="StylizedControls\Themes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Icons\Controls\arrowRight.png" />
     <None Remove="Icons\FileExtensions\cdr.png" />
     <None Remove="Icons\FileExtensions\cdw.png" />
@@ -134,10 +141,6 @@
     <Resource Include="StylizedControls\Images\restore.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="StylizedControls\Themes\" />
   </ItemGroup>
 
 </Project>
