@@ -9,6 +9,58 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <conv:DateTimeToStringConverter x:Key="dateConverter" />
+
+        <Style x:Key="SCDataGridRowStyle" TargetType="{x:Type DataGridRow}">            
+            <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary}" />
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridRow}">
+                        <Border x:Name="DGR_Border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                SnapsToDevicePixels="True">
+                            <SelectiveScrollingGrid>
+                                <SelectiveScrollingGrid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </SelectiveScrollingGrid.ColumnDefinitions>
+                                <SelectiveScrollingGrid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </SelectiveScrollingGrid.RowDefinitions>
+                                <DataGridCellsPresenter 
+                                    Grid.Column="1" 
+                                    ItemsPanel="{TemplateBinding ItemsPanel}" 
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                <DataGridDetailsPresenter 
+                                    Grid.Column="1" 
+                                    Grid.Row="1" 
+                                    SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding AreRowDetailsFrozen, 
+                                        ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}, 
+                                        Converter={x:Static DataGrid.RowDetailsScrollingConverter}, 
+                                        RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                    Visibility="{TemplateBinding DetailsVisibility}" />
+                                <DataGridRowHeader 
+                                    Grid.RowSpan="2" 
+                                    SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical" 
+                                    Visibility="{Binding HeadersVisibility, 
+                                        ConverterParameter={x:Static DataGridHeadersVisibility.Row}, 
+                                        Converter={x:Static DataGrid.HeadersVisibilityConverter}, 
+                                        RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                            </SelectiveScrollingGrid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick" />
+            <!--
+            <EventSetter Event="MouseMove" Handler="DataGridRow_MouseMove" />
+            <EventSetter Event="ContextMenuOpening" Handler="DataGridRow_ContextMenuOpening" /> -->
+        </Style>
     </UserControl.Resources>
 
     <Border x:Name="rootContainer"
@@ -16,27 +68,18 @@
             AllowDrop="True">
         <Grid>
             <DataGrid x:Name="dataGrid"
-                  Background="White" 
+                  CellStyle="{DynamicResource SCDataGridCellStyle}" 
+                  RowStyle="{DynamicResource SCDataGridRowStyle}" 
+                  ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}"
                   ItemsSource="{Binding Items}" 
                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                  GridLinesVisibility="None" 
-                  HeadersVisibility="Column" 
-                  RowHeight="22"
-                  SelectionMode="Single" 
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False" AllowDrop="True" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                  AllowDrop="True">
                 <DataGrid.Resources>
                     <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}">
                         <MenuItem Header="Удалить" Command="{Binding DeleteCommand}" />
                         <MenuItem Header="Переименовать" Command="{Binding RenameCommand}" />
                     </ContextMenu>
                 </DataGrid.Resources>
-                <DataGrid.RowStyle>
-                    <Style TargetType="DataGridRow">
-                        <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
-                        <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick" />
-                    </Style>
-                </DataGrid.RowStyle>
 
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="*" Header="Название" CellTemplateSelector="{StaticResource ExplorerCellTemplateSelector}"/>

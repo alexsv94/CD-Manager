@@ -135,7 +135,7 @@
                    Visibility="Hidden"
                    Grid.Row="1"
                    VerticalContentAlignment="Center" 
-                   HorizontalAlignment="Center" Height="50" IsHitTestVisible="False" Background="#FF5BAAAA" BorderBrush="#FF545454"/>
+                   HorizontalAlignment="Center" Height="50" IsHitTestVisible="False" Background="#FF5BAAAA" BorderBrush="#FF545454"/>            
         </Grid>
     </Border>
 </UserControl>
