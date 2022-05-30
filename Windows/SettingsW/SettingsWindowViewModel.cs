@@ -51,7 +51,7 @@ namespace OrganizerWpf.Windows.SettingsW
             }
         }
 
-        private void ChangeWorkDirectory()
+        public void ChangeWorkDirectory()
         {
             using var dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)

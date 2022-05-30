@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OrganizerWpf.Windows.SettingsW"
+        xmlns:local="clr-namespace:OrganizerWpf.Windows.SettingsW" xmlns:controls="clr-namespace:OrganizerWpf.StylizedControls.Controls"
         mc:Ignorable="d"
+        x:Name="rootWindow"
         ResizeMode="NoResize"
         Title="Настройки" Height="450" Width="800" WindowStartupLocation="CenterScreen" Style="{DynamicResource WindowTemplateStyle}">
     <Window.Resources>
@@ -44,15 +45,11 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Путь к корневой папке" Style="{StaticResource settingHeader}"/>
-                        <Grid Grid.Column="1" Margin="5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="70" />
-                            </Grid.ColumnDefinitions>
-
-                            <TextBox HorizontalAlignment="Stretch" Text="{Binding WorkingDirectoryPath, Mode=TwoWay}" VerticalContentAlignment="Center"/>
-                            <Button Content="Обзор" Grid.Column="1" Command="{Binding WorkDirChooseDialogOpenCommand}"/>
-                        </Grid>                        
+                        <controls:SCBrowseTextBox DataContext="{Binding}" 
+                                                  Path="{Binding WorkingDirectoryPath}" 
+                                                  Grid.Column="1" 
+                                                  Margin="5" 
+                                                  BrowseButtonClick="{Binding WorkDirChooseDialogOpenCommand}"/>
                     </Grid>
                 </ScrollViewer>
             </TabItem>
