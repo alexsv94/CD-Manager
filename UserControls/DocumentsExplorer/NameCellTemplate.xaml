@@ -31,6 +31,6 @@
         </Grid.ColumnDefinitions>
 
         <Image Style="{StaticResource Icon}" Source="{Binding ElementName=rootCell, Path=Image, TargetNullValue={x:Null}}"/>
-        <TextBlock Style="{StaticResource NameBox}" Grid.Column="1" Text="{Binding ElementName=rootCell, Path=DocName}" Margin="5,0,0,0"></TextBlock>
+        <TextBlock Style="{StaticResource NameBox}" Grid.Column="1" Text="{Binding ElementName=rootCell, Path=DocName}" Margin="5,0,0,0" VerticalAlignment="Center"></TextBlock>
     </Grid>
 </UserControl>

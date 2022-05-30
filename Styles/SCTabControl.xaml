@@ -16,7 +16,9 @@
     <SolidColorBrush x:Key="TabItem.Disabled.Background" Color="#383838"/>
     <Style x:Key="SCTabItemStyle" TargetType="{x:Type TabItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-        <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Color.Text.Primary}"/>
+        <Setter Property="FontFamily" Value="{StaticResource Roboto-Medium}" />
+        <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Headers}" />
         <Setter Property="Background" Value="#272829"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Padding" Value="8,5,8,5"/>

@@ -7,17 +7,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="200">
     <UserControl.Resources>
-        <Style x:Key="dirNameText" TargetType="Label">
-            <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary}" />
+        <Style x:Key="dirNameText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary1}" />
+            <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
+            <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content.Small}" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="White" />
+                    <Setter Property="TextDecorations" Value="Underline"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <StackPanel Orientation="Horizontal">
-        <Image Source="../../Icons/Controls/arrowRight.png" Width="12" Height="12" VerticalAlignment="Center" />
-        <Label Content="{Binding Text}" Style="{StaticResource dirNameText}" Cursor="Hand" MouseUp="Label_MouseUp" VerticalAlignment="Center"/>
+    <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
+        <Image Source="../../Icons/Controls/arrowRight.png" Width="{StaticResource Font.FontSize.Content.Small}" Height="{StaticResource Font.FontSize.Content.Small}" VerticalAlignment="Center" />
+        <TextBlock Text="{Binding Text}" Style="{StaticResource dirNameText}" Cursor="Hand" MouseUp="Label_MouseUp" VerticalAlignment="Center" Margin="5,0,0,0"/>
     </StackPanel>
 </UserControl>

@@ -1,5 +1,6 @@
 ﻿using OrganizerWpf.Dialogs.RenameDialog;
 using OrganizerWpf.Models;
+using OrganizerWpf.StylizedControls;
 using OrganizerWpf.UserControls.DirLink;
 using OrganizerWpf.Utilities;
 using System.Collections.Generic;
@@ -189,11 +190,11 @@ namespace OrganizerWpf.ViewModels
 
             string typeOfItem = item is DirectoryModel ? "папку" : "файл";
 
-            if (MessageBox.Show($"Удалить {typeOfItem} {item.Name} без возможности восстановления?",
-                    "Удаление",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning,
-                    MessageBoxResult.No) == MessageBoxResult.Yes)
+            var result = SCMessageBox.ShowMsgBox($"Удалить {typeOfItem} {item.Name} без возможности восстановления?",
+                                                "Удаление",
+                                                MessageBoxButton.YesNo);
+            
+            if (result == SCMessageBoxResult.Yes)
             {
                 if (item is DirectoryModel)
                     Directory.Delete(item.FullPath!, true);
@@ -201,7 +202,7 @@ namespace OrganizerWpf.ViewModels
                     File.Delete(item.FullPath!);
 
                 UpdateFileList();
-            }            
+            }           
         }
 
         protected void RenameFile(IFileSystemItem? item)

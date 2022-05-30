@@ -36,7 +36,7 @@ namespace OrganizerWpf.StylizedControls
         #endregion
 
         private bool _isDragBeginInTitleBar = false;
-        public MessageBoxResult Result = MessageBoxResult.None;
+        public SCMessageBoxResult Result = SCMessageBoxResult.None;
 
         public SCMessageBox()
         {
@@ -54,7 +54,7 @@ namespace OrganizerWpf.StylizedControls
 
         private void CloseWindow()
         {
-            Result = MessageBoxResult.None;
+            Result = SCMessageBoxResult.None;
             Close();
         }
 
@@ -109,32 +109,32 @@ namespace OrganizerWpf.StylizedControls
             return buttons;
         }
 
-        public static MessageBoxResult ShowMsgBox(string text)
+        public static SCMessageBoxResult ShowMsgBox(string text)
         {
             var window = new SCMessageBox();
             window.Text = text;
             
-            Button buttonOK = GetButton(window, new ButtonConfig("OK", MessageBoxResult.OK));             
+            Button buttonOK = GetButton(window, new ButtonConfig("OK", SCMessageBoxResult.OK));             
             window.buttonsContainer.Children.Add(buttonOK);
 
             window.ShowDialog();
             return window.Result;
         }
 
-        public static MessageBoxResult ShowMsgBox(string text, string caption)
+        public static SCMessageBoxResult ShowMsgBox(string text, string caption)
         {
             var window = new SCMessageBox();
             window.Text = text;
             window.Caption = caption;
 
-            Button buttonOK = GetButton(window, new ButtonConfig("OK", MessageBoxResult.OK));
+            Button buttonOK = GetButton(window, new ButtonConfig("OK", SCMessageBoxResult.OK));
             window.buttonsContainer.Children.Add(buttonOK);
 
             window.ShowDialog();
             return window.Result;
         }
 
-        public static MessageBoxResult ShowMsgBox(string text, string caption, MessageBoxButton buttons, MessageBoxResult defaultResult = MessageBoxResult.None)
+        public static SCMessageBoxResult ShowMsgBox(string text, string caption, MessageBoxButton buttons, SCMessageBoxResult defaultResult = SCMessageBoxResult.None)
         {            
             if (buttons == MessageBoxButton.OK)
                 return ShowMsgBox(text, caption);
@@ -149,8 +149,8 @@ namespace OrganizerWpf.StylizedControls
                 case MessageBoxButton.YesNo:
                     {
                         foreach (var btn in GetButtons(window, 
-                            new ButtonConfig("Да", MessageBoxResult.Yes), 
-                            new ButtonConfig("Нет", MessageBoxResult.No)))
+                            new ButtonConfig("Да", SCMessageBoxResult.Yes), 
+                            new ButtonConfig("Нет", SCMessageBoxResult.No)))
                         {
                             window.buttonsContainer.Children.Add(btn);
                         }
@@ -159,9 +159,9 @@ namespace OrganizerWpf.StylizedControls
                 case MessageBoxButton.YesNoCancel:
                     {
                         foreach (var btn in GetButtons(window,
-                            new ButtonConfig("Да", MessageBoxResult.Yes),
-                            new ButtonConfig("Нет", MessageBoxResult.No),
-                            new ButtonConfig("Отмена", MessageBoxResult.Cancel)))
+                            new ButtonConfig("Да", SCMessageBoxResult.Yes),
+                            new ButtonConfig("Нет", SCMessageBoxResult.No),
+                            new ButtonConfig("Отмена", SCMessageBoxResult.Cancel)))
                         {
                             window.buttonsContainer.Children.Add(btn);
                         }
@@ -170,8 +170,8 @@ namespace OrganizerWpf.StylizedControls
                 case MessageBoxButton.OKCancel:
                     {
                         foreach (var btn in GetButtons(window,
-                            new ButtonConfig("ОК", MessageBoxResult.Yes),
-                            new ButtonConfig("Отмена", MessageBoxResult.Cancel)))
+                            new ButtonConfig("ОК", SCMessageBoxResult.Yes),
+                            new ButtonConfig("Отмена", SCMessageBoxResult.Cancel)))
                         {
                             window.buttonsContainer.Children.Add(btn);
                         }
@@ -185,8 +185,8 @@ namespace OrganizerWpf.StylizedControls
         #endregion
     }
 
-    record ButtonConfig(string Content, MessageBoxResult Result);
-    public enum MessageBoxResult
+    record ButtonConfig(string Content, SCMessageBoxResult Result);
+    public enum SCMessageBoxResult
     {
         OK,
         Cancel,

@@ -83,8 +83,8 @@
 
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="*" Header="Название" CellTemplateSelector="{StaticResource ExplorerCellTemplateSelector}"/>
-                    <DataGridTextColumn Width="120" Header="Дата создания" Binding="{Binding CreationTime, Converter={StaticResource dateConverter}}"/>
-                    <DataGridTextColumn Width="250" Header="Суть изменений" Binding="{Binding Reason}"/>
+                    <DataGridTextColumn Width="150" Header="Дата создания" Binding="{Binding CreationTime, Converter={StaticResource dateConverter}}"/>
+                    <DataGridTextColumn Width="350" Header="Суть изменений" Binding="{Binding Reason}"/>
                 </DataGrid.Columns>
             </DataGrid>
             <Label Content="Перетащите файлы, чтобы скопировать" 

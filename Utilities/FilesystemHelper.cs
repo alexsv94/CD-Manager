@@ -1,4 +1,5 @@
 ﻿using OrganizerWpf.Models;
+using OrganizerWpf.StylizedControls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -69,11 +70,11 @@ namespace OrganizerWpf.Utilities
 
             if (!dirToCheck.Exists)
             {
-                if(MessageBox.Show($"Каталога\n{path}\nне существует. Создать?", 
+                var result = SCMessageBox.ShowMsgBox($"Каталога\n{path}\nне существует. Создать?",
                     "Каталог не найден",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question,
-                    MessageBoxResult.No) == MessageBoxResult.Yes)
+                    MessageBoxButton.YesNo);
+                
+                if(result == SCMessageBoxResult.Yes)
                 {
                     checkedDir = Directory.CreateDirectory(path);
                     return true;
@@ -221,13 +222,11 @@ namespace OrganizerWpf.Utilities
             {
                 string typeOfElement = item is FileInfo ? "Файл" : "Папка";
                 
-                var result = MessageBox.Show($"{typeOfElement} {item.Name} уже существует. Заменить?",
+                var result = SCMessageBox.ShowMsgBox($"{typeOfElement} {item.Name} уже существует. Заменить?",
                 "Копирование",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning,
-                MessageBoxResult.No);
+                MessageBoxButton.YesNo);
 
-                if (result == MessageBoxResult.Yes)
+                if (result == SCMessageBoxResult.Yes)
                 {
                     if (item is DirectoryInfo dir)
                         dir.Delete(true);
@@ -259,12 +258,10 @@ namespace OrganizerWpf.Utilities
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Файл занят другим процессом",
-                        "Ошибка переименования",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                    SCMessageBox.ShowMsgBox("Файл занят другим процессом",
+                        "Ошибка переименования");
                     return oldPath;
-                }                
+                }
 
                 return newPath;
             }
@@ -287,10 +284,8 @@ namespace OrganizerWpf.Utilities
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Папка занята другим процессом",
-                        "Ошибка переименования",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                    SCMessageBox.ShowMsgBox("Папка занята другим процессом",
+                        "Ошибка переименования");
                     return oldPath;
                 }
                 

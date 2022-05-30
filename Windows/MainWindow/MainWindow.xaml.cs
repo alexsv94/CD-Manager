@@ -1,6 +1,8 @@
 ﻿using OrganizerWpf.StylizedControls;
 using OrganizerWpf.Utilities;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace OrganizerWpf.Windows.MainWindow
 {
@@ -27,6 +29,11 @@ namespace OrganizerWpf.Windows.MainWindow
                 ViewModel = new(this);
 
             DataContext = ViewModel;
-        }        
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ViewModel!.OnFilterValueChanged(sender);
+        }
     }
 }

@@ -11,6 +11,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace OrganizerWpf.Windows.MainWindow
 {
@@ -29,16 +31,18 @@ namespace OrganizerWpf.Windows.MainWindow
             }
         }
 
-        private List<ProductModel>? _products = null;
-        public List<ProductModel>? Products 
+        private List<ProductModel>? _filteredProducts = null;
+        public List<ProductModel>? FilteredProducts
         {
-            get => _products;
+            get => _filteredProducts;
             set
             {
-                _products = value;
-                OnPropertyChanged(nameof(Products));
+                _filteredProducts = value;
+                OnPropertyChanged(nameof(FilteredProducts));
             }
         }
+
+        private List<ProductModel>? _products = null;
         #endregion
 
         #region Commands
@@ -117,7 +121,20 @@ namespace OrganizerWpf.Windows.MainWindow
                 productsList.Add(product);
             }
 
-            Products = productsList;
+            _products = productsList;
+            FilteredProducts = productsList;
+        }
+
+        public void OnFilterValueChanged(object sender)
+        {
+            if (!string.IsNullOrEmpty((sender as TextBox)!.Text))
+            {
+                FilteredProducts = _products!.Where(x => x.ProductName!.ToLower().Contains((sender as TextBox)!.Text.ToLower())).ToList();
+            }
+            else
+            {
+                FilteredProducts = _products;
+            }            
         }
         #endregion
     }

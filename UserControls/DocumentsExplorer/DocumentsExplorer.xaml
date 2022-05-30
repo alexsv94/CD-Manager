@@ -92,26 +92,29 @@
             AllowDrop="True">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30" />
+                <RowDefinition Height="50" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal" x:Name="adressPanel">
-                <Label x:Name="rootDirectoryLink"
-                    Content="{Binding ElementName=rootExplorer, Path=TargetDirectory}" 
-                    FontWeight="Bold" 
+                <TextBlock x:Name="rootDirectoryLink"
+                    Text="{Binding ElementName=rootExplorer, Path=TargetDirectory}" 
+                    FontFamily="{StaticResource Roboto-Light}"
+                    FontSize="{DynamicResource Font.FontSize.Content.Small}"
+                    Margin="10,0,5,0"
                     VerticalAlignment="Center" Cursor="Hand">
-                    <Label.Style>
-                        <Style TargetType="Label">
-                            <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary}" />
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary1}" />
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="TextDecorations" Value="Underline"/>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>                        
-                    </Label.Style>
-                </Label>
+                    </TextBlock.Style>
+                </TextBlock>
             </StackPanel>
             <DataGrid CellStyle="{DynamicResource SCDataGridCellStyle}" 
                       RowStyle="{DynamicResource SCDataGridRowStyle}" 

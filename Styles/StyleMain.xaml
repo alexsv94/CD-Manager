@@ -18,8 +18,24 @@
     <SolidColorBrush x:Key="Color.Button.Foreground" Color="#333333" />
     
     <!--Font Settings-->
-    <sys:Double x:Key="Font.FontSize">14</sys:Double>
-
+    <sys:Double x:Key="Font.FontSize.Content.Small">12</sys:Double>
+    <sys:Double x:Key="Font.FontSize.Content">14</sys:Double>
+    <sys:Double x:Key="Font.FontSize.Headers">16</sys:Double>
+    
+    <FontFamily x:Key="Roboto-Black">../Fonts/Roboto-Black.ttf#Roboto Black</FontFamily>
+    <FontFamily x:Key="Roboto-BlackItalic">../Fonts/Roboto-BlackItalic.ttf#Roboto Black</FontFamily>
+    <FontFamily x:Key="Roboto-Bold">../Fonts/Roboto-Bold.ttf#Roboto</FontFamily>
+    <FontFamily x:Key="Roboto-BoldItalic">../Fonts/Roboto-BoldItalic.ttf#Roboto</FontFamily>
+    <FontFamily x:Key="Roboto-Italic">../Fonts/Roboto-Italic.ttf#Roboto</FontFamily>
+    <FontFamily x:Key="Roboto-Light">../Fonts/Roboto-Light.ttf#Roboto Light</FontFamily>
+    <FontFamily x:Key="Roboto-LightItalic">../Fonts/Roboto-LightItalic.ttf#Roboto Light</FontFamily>
+    <FontFamily x:Key="Roboto-Medium">../Fonts/Roboto-Medium.ttf#Roboto Medium</FontFamily>
+    <FontFamily x:Key="Roboto-MediumItalic">../Fonts/Roboto-MediumItalic.ttf#Roboto Medium</FontFamily>
+    <FontFamily x:Key="Roboto-Regular">../Fonts/Roboto-Regular.ttf#Roboto</FontFamily>
+    <FontFamily x:Key="Roboto-Thin">../Fonts/Roboto-Thin.ttf#Roboto Thin</FontFamily>
+    <FontFamily x:Key="Roboto-ThinItalic">../Fonts/Roboto-ThinItalic.ttf#Roboto Thin</FontFamily>
+    
+    <!--Styles-->
     <Style x:Key="WindowBorder" TargetType="Border">
         <Setter Property="CornerRadius" Value="5" />
         <Setter Property="Background" Value="{DynamicResource Color.Primary}" />
@@ -37,10 +53,14 @@
 
     <Style x:Key="Text_Main" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource Color.Text.Primary}" />
+        <Setter Property="FontFamily" Value="{StaticResource Roboto-Medium}" />
+        <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Headers}" />
     </Style>
 
     <Style x:Key="Text_Sub" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary}" />
+        <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary1}" />
+        <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
+        <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
     </Style>
     
     
@@ -65,6 +85,8 @@
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
         <Setter Property="Foreground" Value="{DynamicResource Color.Button.Foreground}"/>
+        <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
+        <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="1"/>
@@ -74,7 +96,7 @@
                     <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="5" SnapsToDevicePixels="true">
                         <ContentPresenter 
                             x:Name="contentPresenter" 
-                            Focusable="False" 
+                            Focusable="False"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                             Margin="{TemplateBinding Padding}" 
                             RecognizesAccessKey="True" 

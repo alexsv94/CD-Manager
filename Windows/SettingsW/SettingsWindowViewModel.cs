@@ -1,4 +1,5 @@
-﻿using OrganizerWpf.Utilities;
+﻿using OrganizerWpf.StylizedControls;
+using OrganizerWpf.Utilities;
 using OrganizerWpf.ViewModels;
 using System.ComponentModel;
 using System.Linq;
@@ -63,22 +64,19 @@ namespace OrganizerWpf.Windows.SettingsW
         #region Handlers
         public void OnClose(CancelEventArgs e)
         {
-            var result = System.Windows.MessageBox.Show("Сохранить изменения? " +
+            var result = SCMessageBox.ShowMsgBox("Сохранить изменения? " +
                 "Если вы нажмете 'Нет', все изменения откатятся.",
                 "Менеджер КД",
-                MessageBoxButton.YesNoCancel,
-                MessageBoxImage.Question,
-                MessageBoxResult.Cancel);
-
+                MessageBoxButton.YesNoCancel);
 
             switch (result)
             {
-                case MessageBoxResult.Yes:
+                case SCMessageBoxResult.Yes:
                     {
                         _settingsLoader!.Save();
                     }
                     break;
-                case MessageBoxResult.Cancel:
+                case SCMessageBoxResult.Cancel:
                     {
                         e.Cancel = true;
                     }

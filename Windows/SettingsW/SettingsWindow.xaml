@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OrganizerWpf.Windows.SettingsW"
         mc:Ignorable="d"
-        Title="Настройки" Height="450" Width="600" WindowStartupLocation="CenterScreen">
+        ResizeMode="NoResize"
+        Title="Настройки" Height="450" Width="800" WindowStartupLocation="CenterScreen" Style="{DynamicResource WindowTemplateStyle}">
     <Window.Resources>
         <Style x:Key="settingHeader" TargetType="TextBlock">
             <Setter Property="FontSize" Value="{DynamicResource Font.FontSize}" />
@@ -17,29 +18,29 @@
     </Window.Resources>
     
     <Grid>
-        <TabControl>
-            <TabItem Header="Сведения о сотрудниках">
+        <TabControl Style="{DynamicResource SCTabControlStyle}">
+            <TabItem Header="Сведения о сотрудниках" Style="{DynamicResource SCTabItemStyle}">
                 <ScrollViewer Background="#FFE5E5E5">
                     <StackPanel>
                         
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Работа с файлами">
-                <ScrollViewer Background="#FFE5E5E5">
+            <TabItem Header="Работа с файлами" Style="{DynamicResource SCTabItemStyle}">
+                <ScrollViewer Template="{DynamicResource SCScrollViewerTemplate}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="250"/>
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="30" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Путь к корневой папке" Style="{StaticResource settingHeader}"/>
@@ -49,7 +50,7 @@
                                 <ColumnDefinition Width="70" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBox DockPanel.Dock="Left" HorizontalAlignment="Stretch" Text="{Binding WorkingDirectoryPath, Mode=TwoWay}"/>
+                            <TextBox HorizontalAlignment="Stretch" Text="{Binding WorkingDirectoryPath, Mode=TwoWay}" VerticalContentAlignment="Center"/>
                             <Button Content="Обзор" Grid.Column="1" Command="{Binding WorkDirChooseDialogOpenCommand}"/>
                         </Grid>                        
                     </Grid>

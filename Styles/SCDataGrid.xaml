@@ -62,8 +62,9 @@
     <Style x:Key="SCDataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary1}" />        
-        <Setter Property="FontSize" Value="{DynamicResource Font.FontSize}" />
-        
+        <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
+        <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
@@ -91,15 +92,16 @@
     <Style x:Key="SCDataGridCellStyle" TargetType="{x:Type DataGridCell}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary1}" />
-        <Setter Property="FontSize" Value="{DynamicResource Font.FontSize}" />
+        <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
+        <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridCell}">
                     <Border 
                         Background="{TemplateBinding Background}"
                         SnapsToDevicePixels="True"
-                        Padding="7,7,7,7">
-                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        Padding="4,4,4,4">
+                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -195,6 +197,7 @@
         <Setter Property="Background" Value="{StaticResource ScrollBar.Static.Background}"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="0,0,-3,0" />
         <Setter Property="Width" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"/>
         <Setter Property="MinWidth" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"/>
         <Setter Property="Template">
