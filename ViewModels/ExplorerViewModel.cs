@@ -192,7 +192,7 @@ namespace OrganizerWpf.ViewModels
 
             var result = SCMessageBox.ShowMsgBox($"Удалить {typeOfItem} {item.Name} без возможности восстановления?",
                                                 "Удаление",
-                                                MessageBoxButton.YesNo);
+                                                MessageBoxButton.YesNo, MessageBoxImage.Question);
             
             if (result == SCMessageBoxResult.Yes)
             {

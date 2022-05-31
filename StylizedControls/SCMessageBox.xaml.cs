@@ -129,8 +129,7 @@ namespace OrganizerWpf.StylizedControls
 
         public static SCMessageBoxResult ShowMsgBox(string text)
         {
-            var window = new SCMessageBox();
-            window.Text = text;
+            var window = CreateInstance(text);
             window.MsgIcon = ResourceHelper.GetImageFromResource("Icons\\Windows\\MessageBox\\info.png");
 
             Button buttonOK = GetButton(window, new ButtonConfig("OK", SCMessageBoxResult.OK));             
@@ -142,9 +141,7 @@ namespace OrganizerWpf.StylizedControls
 
         public static SCMessageBoxResult ShowMsgBox(string text, string caption)
         {
-            var window = new SCMessageBox();
-            window.Text = text;
-            window.Caption = caption;
+            var window = CreateInstance(text, caption);
             window.MsgIcon = ResourceHelper.GetImageFromResource("Icons\\Windows\\MessageBox\\info.png");
 
             Button buttonOK = GetButton(window, new ButtonConfig("OK", SCMessageBoxResult.OK));
@@ -160,30 +157,30 @@ namespace OrganizerWpf.StylizedControls
             MessageBoxImage icon = MessageBoxImage.Information, 
             SCMessageBoxResult defaultResult = SCMessageBoxResult.None)
         {
-            
-            if (buttons == MessageBoxButton.OK)
-                return ShowMsgBox(text, caption);
-
-            var window = new SCMessageBox();
-            window.Text = text;
-            window.Caption = caption;
+            var window = CreateInstance(text, caption);
             window.Result = defaultResult;
 
             switch (icon)
             {
                 case MessageBoxImage.Question:
-                    window.MsgIcon = ResourceHelper.GetImageFromResource("Icons//Windows//MessageBox//question.png");
+                    window.MsgIcon = ResourceHelper.GetImageFromResource("Icons\\Windows\\MessageBox\\question.png");
                     break;
                 case MessageBoxImage.Warning:
-                    window.MsgIcon = ResourceHelper.GetImageFromResource("Icons//Windows//MessageBox//warning.png");
+                    window.MsgIcon = ResourceHelper.GetImageFromResource("Icons\\Windows\\MessageBox\\warning.png");
                     break;
                 case MessageBoxImage.Error:
-                    window.MsgIcon = ResourceHelper.GetImageFromResource("Icons//Windows//MessageBox//error.png");
+                    window.MsgIcon = ResourceHelper.GetImageFromResource("Icons\\Windows\\MessageBox\\error.png");
                     break;
             }
 
             switch (buttons)
             {
+                case MessageBoxButton.OK: 
+                    {
+                        Button buttonOK = GetButton(window, new ButtonConfig("OK", SCMessageBoxResult.OK));
+                        window.buttonsContainer.Children.Add(buttonOK);
+                    }
+                    break;
                 case MessageBoxButton.YesNo:
                     {
                         foreach (var btn in GetButtons(window, 
@@ -220,6 +217,13 @@ namespace OrganizerWpf.StylizedControls
             window.ShowDialog();
             return window.Result;
         }
+
+        private static SCMessageBox CreateInstance(string text, string caption = "") => new SCMessageBox()
+        {
+            Text = text,
+            Caption = caption,
+            Result = SCMessageBoxResult.None
+        };
         #endregion
     }
 

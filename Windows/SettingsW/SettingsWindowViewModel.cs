@@ -67,7 +67,7 @@ namespace OrganizerWpf.Windows.SettingsW
             var result = SCMessageBox.ShowMsgBox("Сохранить изменения? " +
                 "Если вы нажмете 'Нет', все изменения откатятся.",
                 "Менеджер КД",
-                MessageBoxButton.YesNoCancel);
+                MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
 
             switch (result)
             {

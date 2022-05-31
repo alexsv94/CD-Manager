@@ -23,17 +23,18 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Window">
-                    <Border
+                    <Border x:Name="outerBorder"
                             Width="{TemplateBinding Width}"
                             Height="{TemplateBinding Height}"
                             MinWidth="{TemplateBinding MinWidth}"
                             MinHeight="{TemplateBinding MinHeight}"
+                            VerticalAlignment="Top"
                             Padding="5" Background="Transparent">
-                        <Border Style="{DynamicResource WindowBorder}" VerticalAlignment="Top">
+                        <Border Style="{DynamicResource WindowBorder}" x:Name="windowBorder" VerticalAlignment="Top">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="5" ShadowDepth="0"/>
                             </Border.Effect>
-                            <Grid>
+                            <Grid x:Name="rootGrid" Height="{Binding ElementName=windowBorder, Path=Height}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="30"/>
                                     <RowDefinition Height="*" />
@@ -41,9 +42,9 @@
                                 </Grid.RowDefinitions>
 
                                 <Border Name="TitleBar"
-                                Grid.Row="0"
-                                VerticalAlignment="Stretch" 
-                                Style="{DynamicResource WindowTitleBar}">
+                                        Grid.Row="0"
+                                        VerticalAlignment="Stretch" 
+                                        Style="{DynamicResource WindowTitleBar}">
                                     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="30" />
@@ -81,9 +82,7 @@
                                             Grid.Column="4"/>
                                     </Grid>
                                 </Border>
-                                <AdornerDecorator Grid.Row="1">                                    
-                                    <ContentPresenter  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                </AdornerDecorator>
+                                <ContentPresenter Grid.Row="1" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                                 <ResizeGrip x:Name="WindowResizeGrip"
                                         Grid.Row="2"
                                         HorizontalAlignment="Right"
@@ -93,10 +92,6 @@
                             </Grid>
                         </Border>
                     </Border>
-
-                    <ControlTemplate.Resources>
-                        <system:Double x:Key="gripRowHeight">25</system:Double>
-                    </ControlTemplate.Resources>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="ResizeMode"
@@ -114,6 +109,12 @@
                             <Setter TargetName="MaximizeButton" 
                                     Property="Image" 
                                     Value="../StylizedControls/Images/restore.png" />
+                        </Trigger>
+                        <Trigger Property="SizeToContent" Value="Manual">
+                            <Setter TargetName="windowBorder" Property="VerticalAlignment" Value="Stretch" />
+                        </Trigger>
+                        <Trigger Property="SizeToContent" Value="Height">
+                            <Setter TargetName="outerBorder" Property="Height" Value="auto" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

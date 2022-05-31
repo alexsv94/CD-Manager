@@ -7,7 +7,7 @@
         xmlns:notices="clr-namespace:OrganizerWpf.UserControls.NoticeExplorer" 
         xmlns:icons="clr-namespace:OrganizerWpf.Icons"
         Style="{DynamicResource WindowTemplateStyle}"
-        ResizeMode="CanResizeWithGrip"
+        ResizeMode="CanResizeWithGrip" SizeToContent="Manual"
         Title="Менеджер КД" Height="800" Width="1400" MinWidth="1000" MinHeight="600"
         Icon="/Icons/Windows/main_32x32.png" WindowStyle="None" TextOptions.TextFormattingMode="Display">
     <Window.Resources>

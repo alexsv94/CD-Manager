@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OrganizerWpf.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,11 +30,18 @@ namespace OrganizerWpf.Dialogs.RenameDialog
         public static readonly DependencyProperty NewFileNameProperty =
             DependencyProperty.Register("NewFileName", typeof(string), typeof(RenameDialog), new PropertyMetadata(""));
 
+        private WindowEventsHelper _eventsHelper;
 
         public RenameDialog()
         {
             InitializeComponent();
             nameTextBox.Focus();
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            _eventsHelper = new(this, false, false);
         }
 
         private void buttonOK_Click(object sender, RoutedEventArgs e)

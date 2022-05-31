@@ -181,7 +181,8 @@ namespace OrganizerWpf.Dialogs.ChangeVersionDialog
         private void ShowErrorMessage(string text, string caption)
         {
             SCMessageBox.ShowMsgBox(text, caption,
-                        MessageBoxButton.OK);
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
         }
 
         #region Handlers

@@ -9,10 +9,11 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Title="Изменение версии"
-        Width="400" 
+        Width="400"
+        SizeToContent="Height"
         Icon="/Icons/Windows/version.png"
         Style="{DynamicResource WindowTemplateStyle}">
-    <StackPanel>        
+    <StackPanel VerticalAlignment="Top">        
         <TextBlock Style="{DynamicResource Text_Sub}"
             HorizontalAlignment="Left" 
             Margin="15,15,0,0" 

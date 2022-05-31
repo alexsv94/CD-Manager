@@ -14,6 +14,7 @@ namespace OrganizerWpf.Windows.MainWindow
         public MainWindow()
         {
             InitializeComponent();
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             Loaded += SetupViewModel;
         }
 

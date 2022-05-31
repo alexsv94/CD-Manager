@@ -224,7 +224,7 @@ namespace OrganizerWpf.Utilities
                 
                 var result = SCMessageBox.ShowMsgBox($"{typeOfElement} {item.Name} уже существует. Заменить?",
                 "Копирование",
-                MessageBoxButton.YesNo);
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (result == SCMessageBoxResult.Yes)
                 {
@@ -251,15 +251,14 @@ namespace OrganizerWpf.Utilities
                 FileInfo file = new FileInfo(oldPath);
 
                 newPath = Path.Combine(file.Directory!.FullName, newItemName);
-
                 try
                 {
                     File.Move(oldPath, newPath);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     SCMessageBox.ShowMsgBox("Файл занят другим процессом",
-                        "Ошибка переименования");
+                        "Ошибка переименования", MessageBoxButton.OK, MessageBoxImage.Error);
                     return oldPath;
                 }
 
@@ -285,7 +284,7 @@ namespace OrganizerWpf.Utilities
                 catch (Exception ex)
                 {
                     SCMessageBox.ShowMsgBox("Папка занята другим процессом",
-                        "Ошибка переименования");
+                        "Ошибка переименования", MessageBoxButton.OK, MessageBoxImage.Error);
                     return oldPath;
                 }
                 

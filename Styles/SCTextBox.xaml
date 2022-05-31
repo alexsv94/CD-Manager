@@ -20,6 +20,7 @@
         <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Padding" Value="3" />
+        <Setter Property="CaretBrush" Value="{DynamicResource Color.Text.Primary}" />
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
@@ -79,6 +80,7 @@
     <Style x:Key="SCTextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="{DynamicResource TextBox.Border}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource Color.Text.Primary}" />
         <Setter Property="Foreground" Value="{DynamicResource TextBox.Text}"/>
         <Setter Property="FontFamily" Value="{DynamicResource Roboto-Light}" />
         <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />

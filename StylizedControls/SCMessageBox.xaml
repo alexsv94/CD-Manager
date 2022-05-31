@@ -8,17 +8,9 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Icon="{Binding MsgIcon}"
+        Icon="{Binding MsgIcon.Source}"
         Title="{Binding Caption}"
         Style="{DynamicResource WindowTemplateStyle}" SizeToContent="Height" Width="450">
-    <Window.RenderTransform>
-        <TransformGroup>
-            <ScaleTransform/>
-            <SkewTransform/>
-            <RotateTransform/>
-            <TranslateTransform X="0" Y="0"/>
-        </TransformGroup>
-    </Window.RenderTransform>
 
     <StackPanel VerticalAlignment="Top" Height="auto">
         <TextBlock Style="{DynamicResource Text_Sub}" Text="{Binding Text}" TextWrapping="Wrap" Margin="15,15,15,5" VerticalAlignment="Top"/>
