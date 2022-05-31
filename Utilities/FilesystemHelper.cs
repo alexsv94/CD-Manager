@@ -72,7 +72,7 @@ namespace OrganizerWpf.Utilities
             {
                 var result = SCMessageBox.ShowMsgBox($"Каталога\n{path}\nне существует. Создать?",
                     "Каталог не найден",
-                    MessageBoxButton.YesNo);
+                    MessageBoxButton.YesNo, MessageBoxImage.Question);
                 
                 if(result == SCMessageBoxResult.Yes)
                 {

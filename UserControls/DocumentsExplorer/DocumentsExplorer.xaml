@@ -14,7 +14,7 @@
         <conv:DateTimeToStringConverter x:Key="dateConverter" />
         <icons:IconSelector x:Key="IconSelector"/>
 
-        <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}">
+        <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}" Style="{DynamicResource SCContextMenuStyle}">
             <MenuItem Header="Удалить"
                                   Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Delete}"
                                   Command="{Binding DeleteCommand}"

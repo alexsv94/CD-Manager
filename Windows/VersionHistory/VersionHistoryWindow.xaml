@@ -8,8 +8,8 @@
         xmlns:s="clr-namespace:OrganizerWpf.UserControls.DocumentsExplorer"
         xmlns:icons="clr-namespace:OrganizerWpf.Icons"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen"
-        Title="Исторя версий" Height="225" MinHeight="225" Width="900" MinWidth="900" Icon="/Icons/Windows/version.png">
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
+        Title="Исторя версий" Height="225" MinHeight="225" Width="900" MinWidth="900" Icon="/Icons/Windows/version.png" Style="{DynamicResource WindowTemplateStyle}">
     <Window.Resources>
         <Style TargetType="Image" x:Key="Icon">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -23,6 +23,70 @@
         </Style>
         <Style TargetType="Grid" x:Key="GridStyle">
             <Setter Property="Height" Value="20" />
+        </Style>
+        
+        <icons:IconSelector x:Key="IconSelector"/>
+
+        <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=ViewModel}">
+            <MenuItem Header="Удалить" 
+                            Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Delete}"
+                            Command="{Binding DeleteVersionCommand}"                              
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
+            <MenuItem Header="Изменить" 
+                            Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Edit}"
+                            Command="{Binding EditVersionCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
+        </ContextMenu>
+
+        <Style x:Key="SCDataGridRowStyle" TargetType="{x:Type DataGridRow}">
+            <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary}" />
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
+            <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridRow}">
+                        <Border x:Name="DGR_Border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                SnapsToDevicePixels="True">
+                            <SelectiveScrollingGrid>
+                                <SelectiveScrollingGrid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </SelectiveScrollingGrid.ColumnDefinitions>
+                                <SelectiveScrollingGrid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </SelectiveScrollingGrid.RowDefinitions>
+                                <DataGridCellsPresenter 
+                                    Grid.Column="1" 
+                                    ItemsPanel="{TemplateBinding ItemsPanel}" 
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                <DataGridDetailsPresenter 
+                                    Grid.Column="1" 
+                                    Grid.Row="1" 
+                                    SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding AreRowDetailsFrozen, 
+                                        ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}, 
+                                        Converter={x:Static DataGrid.RowDetailsScrollingConverter}, 
+                                        RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                    Visibility="{TemplateBinding DetailsVisibility}" />
+                                <DataGridRowHeader 
+                                    Grid.RowSpan="2" 
+                                    SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical" 
+                                    Visibility="{Binding HeadersVisibility, 
+                                        ConverterParameter={x:Static DataGridHeadersVisibility.Row}, 
+                                        Converter={x:Static DataGrid.HeadersVisibilityConverter}, 
+                                        RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                            </SelectiveScrollingGrid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick" />
         </Style>
 
         <local:NoticeCellTemplateSelector x:Key="cellTemplateSelector">
@@ -38,59 +102,30 @@
             </local:NoticeCellTemplateSelector.EmptyTemplate>
         </local:NoticeCellTemplateSelector>
         <conv:DateTimeToStringConverter x:Key="dateConverter" />
-        <icons:IconSelector x:Key="IconSelector"/>
     </Window.Resources>
 
-    <StackPanel>
+    <StackPanel Background="Transparent">
         
-        <Menu Margin="0,0,0,5">
+        <Menu Margin="0,0,0,5" Style="{DynamicResource SCMainMenuStyle}">
             <MenuItem Header="Файл">
                 <MenuItem Header="Добавить версию" Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.ChangeVersion}" Command="{Binding AddNewVersionCommand}"/>
             </MenuItem>
         </Menu>
         <DataGrid x:Name="dataGrid"
-        Background="White" 
-        ItemsSource="{Binding Items}" 
-        SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-        GridLinesVisibility="All" 
-        HeadersVisibility="Column" 
-        RowHeight="22"
-        SelectionMode="Single" 
-        AutoGenerateColumns="False"
-        CanUserAddRows="False" IsReadOnly="True" Foreground="Black">
+            VerticalGridLinesBrush="{DynamicResource Color.DataGrid.GridLines}"
+            CellStyle="{DynamicResource SCDataGridCellStyle}" 
+            RowStyle="{DynamicResource SCDataGridRowStyle}" 
+            ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}"
+            ItemsSource="{Binding Items}" 
+            SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+            GridLinesVisibility="All">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Версия" Width="220" Binding="{Binding Version}"/>
                 <DataGridTextColumn Header="Дата создания" Width="140" Binding="{Binding CreationTime, Converter={StaticResource dateConverter}}"/>
-                <DataGridTemplateColumn Header="Файл извещения" Width="*" CellTemplateSelector="{StaticResource cellTemplateSelector}"/>
-                <DataGridTextColumn Header="Суть изменений" Width="300" Binding="{Binding NoticeFile.Reason}"/>
+                <DataGridTemplateColumn Header="Файл извещения" Width="230" CellTemplateSelector="{StaticResource cellTemplateSelector}"/>
+                <DataGridTextColumn Header="Суть изменений" Width="*" Binding="{Binding NoticeFile.Reason}"/>
             </DataGrid.Columns>
-
-            <DataGrid.Resources>
-                <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=ViewModel}">
-                    <MenuItem Header="Удалить" 
-                            Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Delete}"
-                            Command="{Binding DeleteVersionCommand}"                              
-                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
-                    <MenuItem Header="Изменить" 
-                            Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Edit}"
-                            Command="{Binding EditVersionCommand}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
-                </ContextMenu>
-            </DataGrid.Resources>
-            <DataGrid.VerticalGridLinesBrush>
-                <SolidColorBrush Color="Black" Opacity="0.2"/>
-            </DataGrid.VerticalGridLinesBrush>
-            <DataGrid.HorizontalGridLinesBrush>
-                <SolidColorBrush Color="Black" Opacity="0.2"/>
-            </DataGrid.HorizontalGridLinesBrush>
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
-                    <Setter Property="FontSize" Value="{DynamicResource Font.FontSize}" />
-                    <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick" />
-                </Style>
-            </DataGrid.RowStyle>
         </DataGrid>
     </StackPanel>    
 </Window>

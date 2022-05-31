@@ -1,4 +1,5 @@
 ﻿using OrganizerWpf.Models;
+using OrganizerWpf.StylizedControls;
 using OrganizerWpf.Utilities;
 using OrganizerWpf.ViewModels;
 using System;
@@ -179,9 +180,8 @@ namespace OrganizerWpf.Dialogs.ChangeVersionDialog
 
         private void ShowErrorMessage(string text, string caption)
         {
-            MessageBox.Show(text, caption,
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+            SCMessageBox.ShowMsgBox(text, caption,
+                        MessageBoxButton.OK);
         }
 
         #region Handlers

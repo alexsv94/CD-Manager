@@ -3,91 +3,70 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OrganizerWpf.Dialogs.ChangeVersionDialog"
+        xmlns:local="clr-namespace:OrganizerWpf.Dialogs.ChangeVersionDialog" xmlns:controls="clr-namespace:OrganizerWpf.StylizedControls.Controls"
         mc:Ignorable="d"
         x:Name="dialogRoot"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Title="Изменение версии" 
-        Height="230" 
+        Title="Изменение версии"
         Width="400" 
         Icon="/Icons/Windows/version.png"
         Style="{DynamicResource WindowTemplateStyle}">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="6*"/>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="6*"/>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="6*"/>
-            <RowDefinition Height="10*" />
-        </Grid.RowDefinitions>
-        <TextBlock HorizontalAlignment="Left" 
-                   Margin="15,0,0,0" 
-                   Text="Новая версия" 
-                   FontWeight="Bold" 
-                   VerticalAlignment="Bottom"/>
+    <StackPanel>        
+        <TextBlock Style="{DynamicResource Text_Sub}"
+            HorizontalAlignment="Left" 
+            Margin="15,15,0,0" 
+            Text="Новая версия"/>
         <TextBox 
-            Grid.Row="1"
-            Grid.ColumnSpan="2" 
+            Style="{DynamicResource SCTextBoxStyle}"
             Text="{Binding NewVersion, Mode=TwoWay}" 
             VerticalAlignment="Center" 
-            Margin="15,0,15,0"
+            Margin="15,5,15,0"
             VerticalContentAlignment="Center"
-            HorizontalContentAlignment="Left" Height="20"/>
+            HorizontalContentAlignment="Left"/>
 
-        <TextBlock Grid.Row="2"
-                   Grid.ColumnSpan="2"
-                   HorizontalAlignment="Left" 
-                   Margin="15,0,0,0" 
-                   Text="Документ" 
-                   FontWeight="Bold" 
-                   VerticalAlignment="Bottom"/>
+        <TextBlock Style="{DynamicResource Text_Sub}" 
+            HorizontalAlignment="Left" 
+            Margin="15,10,0,0" 
+            Text="Документ"/>
 
-        <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="15,0,15,0" Height="20" x:Name="documentPathRegion" AllowDrop="True">
+        <controls:SCBrowseTextBox Margin="15,5,15,0" Height="25"
+                                  AllowDrop="True" 
+                                  x:Name="documentPathRegion"
+                                  DataContext="{Binding}"
+                                  Path="{Binding NewDocument.FullName, Mode=OneWay}" 
+                                  BrowseButtonClick="{Binding ChooseDocumentFileCommand}" />
+
+        <TextBlock Style="{DynamicResource Text_Sub}" 
+            HorizontalAlignment="Left" 
+            Margin="15,10,0,0" 
+            Text="Извещение (необязательно)" 
+            FontWeight="Bold" 
+            VerticalAlignment="Bottom"/>
+
+        <controls:SCBrowseTextBox Grid.Row="5" Grid.ColumnSpan="2" Margin="15,5,15,0" Height="25"
+                                  DataContext="{Binding}"
+                                  Path="{Binding Notice.FullPath, Mode=OneWay}" 
+                                  BrowseButtonClick="{Binding ChooseNoticeFileCommand}" />
+        <Grid Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="70" />
-            </Grid.ColumnDefinitions>
-            
-            <TextBox HorizontalAlignment="Stretch" Text="{Binding NewDocument.FullName, Mode=OneWay}" IsReadOnly="True"/>
-            <Button Content="Обзор" Grid.Column="1" Command="{Binding ChooseDocumentFileCommand}" />
-        </Grid>
-
-        <TextBlock Grid.Row="4"
-                   Grid.ColumnSpan="2"
-                   HorizontalAlignment="Left" 
-                   Margin="15,0,0,0" 
-                   Text="Извещение (необязательно)" 
-                   FontWeight="Bold" 
-                   VerticalAlignment="Bottom"/>
-        
-        <Grid Grid.Row="5" Grid.ColumnSpan="2" Margin="15,0,15,0" Height="20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="70" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBox DockPanel.Dock="Left" HorizontalAlignment="Stretch" Text="{Binding Notice.FullPath, Mode=OneWay}" IsReadOnly="True" />
-            <Button x:Name="noticeBrowseBtn" Content="Обзор" Grid.Column="1" Command="{Binding ChooseNoticeFileCommand}" />
-        </Grid>        
-        <Button Content="ОК" 
-                Grid.Row="6" 
-                Margin="15,5,7,5" 
+            <Button Content="ОК"
+                Style="{DynamicResource SCButtonStyle}"
+                Margin="15,5,7,0" 
                 Click="DialogOK" 
                 VerticalAlignment="Center" 
                 Height="25"/>
-        <Button Content="Отмена" 
-                Grid.Row="6" 
-                Grid.Column="1" 
-                Margin="7,5,15,5" 
+            <Button Content="Отмена" 
+                Grid.Column="1"
+                Style="{DynamicResource SCButtonStyle}"
+                Margin="7,5,15,0" 
                 Click="DialogCancel" 
                 VerticalAlignment="Center" 
                 Height="25"/>
-    </Grid>
+        </Grid>        
+    </StackPanel>
 </Window>

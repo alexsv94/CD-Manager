@@ -9,9 +9,9 @@
     
     <SolidColorBrush x:Key="Color.Text.Primary" Color="#b5b8ba" />
     <SolidColorBrush x:Key="Color.Text.Secondary" Color="#dedfe1" />
-    <SolidColorBrush x:Key="Color.Text.Secondary1" Color="#aaaeb0" />    
-    <SolidColorBrush x:Key="Color.Button.Default" Color="#d8dada" />
+    <SolidColorBrush x:Key="Color.Text.Secondary1" Color="#aaaeb0" />
     
+    <SolidColorBrush x:Key="Color.Button.Default" Color="#aaaeb0" />    
     <SolidColorBrush x:Key="Color.Button.MouseOver" Color="#ffdada" />
     <SolidColorBrush x:Key="Color.Button.Pressed" Color="#7aa8ae" />
     <SolidColorBrush x:Key="Color.Button.Disabled" Color="#00dada" />
@@ -83,7 +83,7 @@
     
     <Style x:Key="SCButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-        <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+        <Setter Property="Background" Value="{DynamicResource Color.Button.Default}"/>
         <Setter Property="Foreground" Value="{DynamicResource Color.Button.Foreground}"/>
         <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
         <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />

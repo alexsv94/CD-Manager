@@ -6,41 +6,24 @@
         xmlns:local="clr-namespace:OrganizerWpf.StylizedControls"
         xmlns:c="clr-namespace:OrganizerWpf.StylizedControls.Controls"
         mc:Ignorable="d"
-        WindowStyle="None"
-        WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Title="MessageBox" 
-        Background="Transparent" 
-        AllowsTransparency="True" 
-        SizeToContent="WidthAndHeight">
-    <Window.Effect>
-        <DropShadowEffect BlurRadius="5" ShadowDepth="0"/>
-    </Window.Effect>
+        WindowStartupLocation="CenterScreen"
+        Icon="{Binding MsgIcon}"
+        Title="{Binding Caption}"
+        Style="{DynamicResource WindowTemplateStyle}" SizeToContent="Height" Width="450">
+    <Window.RenderTransform>
+        <TransformGroup>
+            <ScaleTransform/>
+            <SkewTransform/>
+            <RotateTransform/>
+            <TranslateTransform X="0" Y="0"/>
+        </TransformGroup>
+    </Window.RenderTransform>
 
-    <Border Style="{DynamicResource WindowBorder}" Width="450" MinHeight="70" Margin="5">
-        <StackPanel>
-            <Border  Height="30" VerticalAlignment="Top" Style="{DynamicResource WindowTitleBar}" 
-                     MouseMove="WindowDragMove" 
-                     MouseDown="Border_MouseDown" 
-                     MouseLeave="Border_MouseLeave" >
-                <Grid Height="30" VerticalAlignment="Top">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="35" />
-                        <ColumnDefinition Width="35" />
-                        <ColumnDefinition Width="35" />
-                    </Grid.ColumnDefinitions>
+    <StackPanel VerticalAlignment="Top" Height="auto">
+        <TextBlock Style="{DynamicResource Text_Sub}" Text="{Binding Text}" TextWrapping="Wrap" Margin="15,15,15,5" VerticalAlignment="Top"/>
+        <StackPanel x:Name="buttonsContainer" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,15,0">
 
-                    <TextBlock Text="{Binding Caption}" VerticalAlignment="Center" Margin="5,0,0,0" Style="{DynamicResource Text_Main}"/>
-                    <c:WindowControlButton Image="Images/close.png" CornerRadius="0,5,0,0" Click="CloseWindow" Grid.Column="3" />
-                </Grid>
-            </Border>
-            <StackPanel VerticalAlignment="Top">
-                <TextBlock Style="{DynamicResource Text_Sub}" Text="{Binding Text}" TextWrapping="Wrap" Margin="5,5,5,5" VerticalAlignment="Top"/>
-                <StackPanel x:Name="buttonsContainer" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Height="50">
-                    
-                </StackPanel>
-            </StackPanel>
         </StackPanel>
-    </Border>
+    </StackPanel>
 </Window>

@@ -89,7 +89,7 @@
                      VerticalContentAlignment="Center" 
                      Padding="3,0,0,0" 
                      DataContext="{Binding}" 
-                     Text="{Binding Path}" TextChanged="TextBox_TextChanged"/>
+                     Text="{Binding Path}" TextChanged="TextBox_TextChanged" IsReadOnly="True"/>
             <Button Style="{DynamicResource BrowseButtonStyle}" 
                     Grid.Column="1" 
                     Content="Обзор" 

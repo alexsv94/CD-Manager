@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OrganizerWpf.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,8 +34,19 @@ namespace OrganizerWpf.StylizedControls
         }
         public static readonly DependencyProperty CaptionProperty =
             DependencyProperty.Register("Caption", typeof(string), typeof(SCMessageBox), new PropertyMetadata(""));
+
+        public Image MsgIcon
+        {
+            get { return (Image)GetValue(MsgIconProperty); }
+            set { SetValue(MsgIconProperty, value); }
+        }
+        public static readonly DependencyProperty MsgIconProperty =
+            DependencyProperty.Register("MsgIcon", typeof(Image), typeof(SCMessageBox), new PropertyMetadata(null));
+
+
         #endregion
 
+        private WindowEventsHelper _eventsHelper;
         private bool _isDragBeginInTitleBar = false;
         public SCMessageBoxResult Result = SCMessageBoxResult.None;
 
@@ -42,6 +54,12 @@ namespace OrganizerWpf.StylizedControls
         {
             InitializeComponent();
             DataContext = this;
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            _eventsHelper = new(this, false, false);
         }
 
         private void WindowDragMove(object sender, MouseEventArgs e)
@@ -113,7 +131,8 @@ namespace OrganizerWpf.StylizedControls
         {
             var window = new SCMessageBox();
             window.Text = text;
-            
+            window.MsgIcon = ResourceHelper.GetImageFromResource("Icons\\Windows\\MessageBox\\info.png");
+
             Button buttonOK = GetButton(window, new ButtonConfig("OK", SCMessageBoxResult.OK));             
             window.buttonsContainer.Children.Add(buttonOK);
 
@@ -126,6 +145,7 @@ namespace OrganizerWpf.StylizedControls
             var window = new SCMessageBox();
             window.Text = text;
             window.Caption = caption;
+            window.MsgIcon = ResourceHelper.GetImageFromResource("Icons\\Windows\\MessageBox\\info.png");
 
             Button buttonOK = GetButton(window, new ButtonConfig("OK", SCMessageBoxResult.OK));
             window.buttonsContainer.Children.Add(buttonOK);
@@ -134,8 +154,13 @@ namespace OrganizerWpf.StylizedControls
             return window.Result;
         }
 
-        public static SCMessageBoxResult ShowMsgBox(string text, string caption, MessageBoxButton buttons, SCMessageBoxResult defaultResult = SCMessageBoxResult.None)
-        {            
+        public static SCMessageBoxResult ShowMsgBox(string text, 
+            string caption, 
+            MessageBoxButton buttons, 
+            MessageBoxImage icon = MessageBoxImage.Information, 
+            SCMessageBoxResult defaultResult = SCMessageBoxResult.None)
+        {
+            
             if (buttons == MessageBoxButton.OK)
                 return ShowMsgBox(text, caption);
 
@@ -143,6 +168,19 @@ namespace OrganizerWpf.StylizedControls
             window.Text = text;
             window.Caption = caption;
             window.Result = defaultResult;
+
+            switch (icon)
+            {
+                case MessageBoxImage.Question:
+                    window.MsgIcon = ResourceHelper.GetImageFromResource("Icons//Windows//MessageBox//question.png");
+                    break;
+                case MessageBoxImage.Warning:
+                    window.MsgIcon = ResourceHelper.GetImageFromResource("Icons//Windows//MessageBox//warning.png");
+                    break;
+                case MessageBoxImage.Error:
+                    window.MsgIcon = ResourceHelper.GetImageFromResource("Icons//Windows//MessageBox//error.png");
+                    break;
+            }
 
             switch (buttons)
             {

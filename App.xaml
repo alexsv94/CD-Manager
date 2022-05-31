@@ -7,6 +7,7 @@
         <ResourceDictionary Source="Styles/StyleMain.xaml">
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/SCDataGrid.xaml" />
+                <ResourceDictionary Source="Styles/SCContextMenu.xaml" />
                 <ResourceDictionary Source="Styles/SCWindowStyle.xaml" />
                 <ResourceDictionary Source="Styles/SCTabControl.xaml" />
                 <ResourceDictionary Source="Styles/SCMainMenu.xaml" />

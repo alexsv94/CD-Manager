@@ -10,7 +10,8 @@
         Title="Настройки" Height="450" Width="800" WindowStartupLocation="CenterScreen" Style="{DynamicResource WindowTemplateStyle}">
     <Window.Resources>
         <Style x:Key="settingHeader" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="{DynamicResource Font.FontSize}" />
+            <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
+            <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Right" />

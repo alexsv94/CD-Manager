@@ -53,6 +53,10 @@
     <None Remove="Icons\MenuItems\versionHistory.png" />
     <None Remove="Icons\Windows\main_128x128.png" />
     <None Remove="Icons\Windows\main_32x32.png" />
+    <None Remove="Icons\Windows\MessageBox\error.png" />
+    <None Remove="Icons\Windows\MessageBox\info.png" />
+    <None Remove="Icons\Windows\MessageBox\question.png" />
+    <None Remove="Icons\Windows\MessageBox\warning.png" />
     <None Remove="Icons\Windows\rename.png" />
     <None Remove="Icons\Windows\version.png" />
     <None Remove="StylizedControls\Images\close.png" />
@@ -173,6 +177,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Icons\Windows\main_32x32.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\Windows\MessageBox\error.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\Windows\MessageBox\info.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\Windows\MessageBox\question.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\Windows\MessageBox\warning.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Icons\Windows\rename.png">

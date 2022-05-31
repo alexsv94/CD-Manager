@@ -1,4 +1,5 @@
 ﻿using OrganizerWpf.Models;
+using OrganizerWpf.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +21,18 @@ namespace OrganizerWpf.Windows.VersionHistory
         public DocumentModel? Document { get; set; }
         public VersionHistoryWindowViewModel? ViewModel { get; set; }
 
+        private WindowEventsHelper _eventsHelper;
+
         public VersionHistoryWindow()
         {
             InitializeComponent();
             Loaded += SetupViewModel;
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            _eventsHelper = new(this, false, false);
         }
 
         public void SetupViewModel(object sender, RoutedEventArgs e)
