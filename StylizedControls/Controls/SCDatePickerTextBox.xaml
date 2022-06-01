@@ -91,7 +91,7 @@
                      VerticalContentAlignment="Center" 
                      Padding="3,0,0,0" 
                      DataContext="{Binding}" 
-                     Text="{Binding Date, Converter={StaticResource DateConverter}, Mode=TwoWay}"/>
+                     Text="{Binding Date, Converter={StaticResource DateConverter}, ConverterParameter=Short, Mode=TwoWay}"/>
             <Button Style="{DynamicResource BrowseButtonStyle}" 
                     Grid.Column="1" 
                     DataContext="{Binding}"
@@ -104,7 +104,7 @@
                            Height="18"/>
                 </Button.Content>
             </Button>
-            <Popup x:Name="CalendarPopup" Placement="Top" IsOpen="false" AllowsTransparency="True" DataContext="{Binding}" StaysOpen="False">
+            <Popup x:Name="CalendarPopup" Placement="Bottom" IsOpen="false" AllowsTransparency="True" DataContext="{Binding}" StaysOpen="False">
                 <Calendar x:Name="DateCalendar" DataContext="{Binding}" SelectedDate="{Binding Date, Mode=TwoWay}" SelectedDatesChanged="DateCalendar_SelectedDatesChanged"/>
             </Popup>
         </Grid>

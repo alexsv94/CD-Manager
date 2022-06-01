@@ -125,30 +125,7 @@ namespace OrganizerWpf.Windows.MainWindow
         private void UpdateProductList()
         {
             if (string.IsNullOrEmpty(_workingDir)) return;
-            
-            string[] paths = Directory.GetDirectories(_workingDir);
-
-            DirectoryInfo[] dirs = new DirectoryInfo[paths.Length];
-
-            for (int i = 0; i < paths.Length; i++)
-            {
-                dirs[i] = new DirectoryInfo(paths[i]);
-            }
-
-            var productsList = new List<ProductModel>();
-
-            foreach (var dir in dirs)
-            {
-                ProductModel product = new ProductModel()
-                {
-                    Name = dir.Name,
-                    FullPath = dir.FullName,
-                };
-                productsList.Add(product);
-            }
-
-            _products = productsList;
-            FilteredProducts = productsList;
+            _products = FilteredProducts = FileSystemHelper.GetSerializedDirs<ProductModel>(_workingDir);
         }
 
         public void OnFilterValueChanged(object sender)

@@ -1,0 +1,47 @@
+﻿<Window x:Class="OrganizerWpf.Dialogs.RecentDocumentsDialog.RecentDocumentsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OrganizerWpf.Dialogs.RecentDocumentsDialog" xmlns:models="clr-namespace:OrganizerWpf.Models"
+        mc:Ignorable="d" Icon="../../Icons/MenuItems/versionHistory.png"
+        Title="Последние измененные документы" Height="420" Width="800" Style="{DynamicResource WindowTemplateStyle}"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+    <Window.Resources>
+        <DataTemplate x:Key="ListItemTemplate">
+            <Border Padding="3" BorderThickness="1" HorizontalAlignment="Stretch" Width="760">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="350" />                     
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding Name}" Style="{DynamicResource Text_Sub}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Version.Version}" Style="{DynamicResource Text_Sub}" Margin="0,0,10,0"/>
+                        <TextBlock Text="►" Style="{DynamicResource Text_Sub}" Margin="0,0,10,0"/>
+                        <TextBlock Text="{Binding PreviousVersion.Version}" Style="{DynamicResource Text_Sub}"/>
+                    </StackPanel>                    
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Background="{DynamicResource Color.Secondary}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="300" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ListBox Style="{DynamicResource SCListBoxStyle}" 
+                 ItemContainerStyle="{DynamicResource SCListBoxItemContainerStyle}" 
+                 ItemTemplate="{DynamicResource ListItemTemplate}"
+                 ItemsSource="{Binding RecentDocs}"
+                 BorderBrush="{DynamicResource Color.DataGrid.GridLines}"
+                 BorderThickness="0,1,0,0" SelectionMode="Multiple" ScrollViewer.VerticalScrollBarVisibility="Visible">            
+        </ListBox>
+        <Border BorderBrush="{DynamicResource Color.DataGrid.GridLines}" BorderThickness="0,1,0,0" Grid.Row="1">
+            <Button Style="{StaticResource SCButtonStyle}" Content="Готово" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="5" Margin="0,0,15,0" Width="80"/>
+        </Border>
+    </Grid>
+    
+</Window>

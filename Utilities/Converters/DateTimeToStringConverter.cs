@@ -9,7 +9,14 @@ namespace OrganizerWpf.Utilities.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value != null ? ((DateTime)value).ToString("dd.MM.yyyy HH:mm") : string.Empty;
+            if ((string)parameter == "Short")
+            {
+                return value != null ? ((DateTime)value).ToString("dd.MM.yyyy") : string.Empty;
+            }
+            else
+            {
+                return value != null ? ((DateTime)value).ToString("dd.MM.yyyy HH:mm") : string.Empty;
+            }            
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

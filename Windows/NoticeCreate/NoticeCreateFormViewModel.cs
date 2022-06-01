@@ -77,20 +77,66 @@ namespace OrganizerWpf.Windows.NoticeCreate
                 OnPropertyChanged(nameof(ExtendToList));
             }
         }
+
+        private string _author = "Савчук А.";
+        public string Author
+        {
+            get => _author;
+            set
+            {
+                _author = value;
+                OnPropertyChanged(nameof(Author));
+            }
+        }
+
+        private int _filesCount = 0;
+        public int FilesCount
+        {
+            get => _filesCount;
+            set
+            {
+                _filesCount = value;
+                OnPropertyChanged(nameof(FilesCount));
+            }
+        }
+
+        private string _changesSummary = "Корректировка КД";
+        public string ChangesSummary
+        {
+            get => _changesSummary;
+            set
+            {
+                _changesSummary = value;
+                OnPropertyChanged(nameof(ChangesSummary));
+            }
+        }
+
+        private List<DocumentModel> _changesList = new();
+        public List<DocumentModel> ChangesList
+        {
+            get => _changesList;
+            set
+            {
+                _changesList = value;
+                OnPropertyChanged(nameof(ChangesList));
+            }
+        }
         #endregion
 
         public NoticeCreateFormViewModel()
         {
-            ExtendToList.Add(new ProductModel() { Name = "TestProduct1" });
+            ExtendToList.Add(new ProductModel() { Name = "TestProduct1", DecNumber = "ФИАШ.789456.587" });
             ExtendToList.Add(new ProductModel() { Name = "TestProduct2" });
             ExtendToList.Add(new ProductModel() { Name = "TestProduct3" });
             ExtendToList.Add(new ProductModel() { Name = "TestProduct4" });
             ExtendToList.Add(new ProductModel() { Name = "TestProduct5" });
             ExtendToList.Add(new ProductModel() { Name = "TestProduct6" });
             ExtendToList.Add(new ProductModel() { Name = "TestProduct7" });
+
+            ChangesList.Add(new DocumentModel() { Name = "TestDoc1", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01")});
         }
 
-        public void OnExtendToItemMouseDown(object sender)
+        public void OnExtendToItemMouseDoubleClick(object sender)
         {
             var item = (ProductModel)(sender as DataGridRow)!.DataContext;
             var list = new List<ProductModel>();

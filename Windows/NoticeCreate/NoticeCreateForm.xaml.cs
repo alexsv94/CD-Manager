@@ -1,4 +1,5 @@
-﻿using OrganizerWpf.Utilities;
+﻿using OrganizerWpf.Dialogs.RecentDocumentsDialog;
+using OrganizerWpf.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,9 +50,14 @@ namespace OrganizerWpf.Windows.NoticeCreate
             Title = "Извещение " + (sender as TextBox)!.Text;
         }
 
-        private void ExtendToItem_MouseDown(object sender, MouseButtonEventArgs e)
+        private void ExtendToItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            ViewModel!.OnExtendToItemMouseDown(sender);
+            ViewModel!.OnExtendToItemMouseDoubleClick(sender);
+        }
+
+        private void AddCHangeRowButton_Click(object sender, RoutedEventArgs e)
+        {
+            new RecentDocumentsDialog().ShowDialog();
         }
     }
 }

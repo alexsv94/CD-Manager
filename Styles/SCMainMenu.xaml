@@ -127,7 +127,7 @@
                        IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" 
                        Placement="Bottom" 
                        PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" 
-                       PlacementTarget="{Binding ElementName=templateRoot}">
+                       PlacementTarget="{Binding ElementName=templateRoot}" RenderOptions.ClearTypeHint="Enabled">
                     <Border x:Name="SubMenuBorder" 
                             Background="{StaticResource Menu.Static.Background}" 
                             BorderBrush="{StaticResource Menu.Static.Border}" 
@@ -240,7 +240,7 @@
                        IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" 
                        Placement="Right" 
                        PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" 
-                       VerticalOffset="-3">
+                       VerticalOffset="-3" RenderOptions.ClearTypeHint="Enabled">
                     <Border x:Name="SubMenuBorder" 
                             Background="{StaticResource Menu.Static.Background}" 
                             BorderBrush="{StaticResource Menu.Static.Border}" 

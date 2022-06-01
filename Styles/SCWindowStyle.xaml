@@ -19,6 +19,10 @@
         <Setter Property="WindowStyle" Value="None"/>
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="AllowsTransparency" Value="True" />
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+        <Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />
+        <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
 
         <Setter Property="Template">
             <Setter.Value>
@@ -65,7 +69,7 @@
                                                Grid.Column="1"
                                                VerticalAlignment="Center" 
                                                Margin="5,0,0,0" 
-                                               Style="{DynamicResource Text_Main}"/>
+                                               Style="{DynamicResource Text_Main}" SnapsToDevicePixels="True"/>
                                         <c:WindowControlButton 
                                             x:Name="MinimizeButton"
                                             Image="../StylizedControls/Images/minimize.png"

@@ -49,10 +49,10 @@ namespace OrganizerWpf.Utilities
 
             return itemsList;
         }
-        public static List<SerializableModel<T>> GetSerializedDirs<T>(string workDirectory)
+        public static List<T> GetSerializedDirs<T>(string workDirectory)
             where T : SerializableModel<T>, new()
         {
-            List<SerializableModel<T>> itemsList = new();
+            List<T> itemsList = new();
 
             if (!CheckDirectory(workDirectory, out DirectoryInfo? currentDir))
                 return itemsList;
@@ -61,9 +61,16 @@ namespace OrganizerWpf.Utilities
 
             foreach (var dir in dirs)
             {
-                var dirInfo = new T();
+                T dirInfo = new T();
+                dirInfo.SetDefaultValues(dir);
+
+                T? dirMetaData = GetDirMetadata<T>(dir.FullName);
+                dirInfo.SetValuesFromMetadata(dirMetaData);
+
                 itemsList.Add(dirInfo);
             }
+
+            return itemsList;
         }
 
         public static T? GetFile<T>(string path)
@@ -142,6 +149,39 @@ namespace OrganizerWpf.Utilities
             {
                 return SerializableModel<T>.FromJson(File.ReadAllText(metaData.FullName));
             }            
+        }
+
+        public static T? GetDirMetadata<T>(string dirPath)
+            where T : SerializableModel<T>
+        {
+            if (string.IsNullOrEmpty(dirPath)) return null;
+
+            DirectoryInfo dir = new(dirPath);
+            DirectoryInfo? parentDir = dir.Parent;
+
+            FileInfo[] metaFiles = parentDir!.GetFiles("*.json");
+
+            FileInfo? metaData = null;
+
+            foreach (var metaFile in metaFiles)
+            {
+                string metaFileName = metaFile.Name.Replace(".meta.json", "");
+
+                if (dir.Name == metaFileName)
+                {
+                    metaData = metaFile;
+                    break;
+                }
+            }
+
+            if (metaData == null)
+            {
+                return null;
+            }
+            else
+            {
+                return SerializableModel<T>.FromJson(File.ReadAllText(metaData.FullName));
+            }
         }
 
         public static void SaveFileMetadata<T>(T modelInfo) 

@@ -130,8 +130,15 @@ namespace OrganizerWpf.Dialogs.ChangeVersionDialog
                 };
 
                 var list = OldDocument!.VersionHistory.ToList();
-                list.Add(versionObj);
+                list.Insert(0, versionObj);
                 OldDocument.VersionHistory = list.ToArray();
+                
+                if (OldDocument.VersionHistory.Length > 1)
+                {
+                    OldDocument.PreviousVersion = OldDocument.VersionHistory[1];
+                }
+
+                RecentDocumentsStorage.AddDocument(OldDocument);
             }
 
             OldDocument!.Version.Version = NewVersion;

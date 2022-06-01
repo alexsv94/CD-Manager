@@ -13,7 +13,7 @@
 
     <DataTemplate x:Key="SCListBoxItemTemplate">
         <Border Padding="3" BorderThickness="1">
-            <TextBlock Text="{Binding ProductName}" FontFamily="{StaticResource Roboto-Regular}" FontSize="{DynamicResource Font.FontSize.Content}"/>
+            <TextBlock Text="{Binding Name}" FontFamily="{StaticResource Roboto-Regular}" FontSize="{DynamicResource Font.FontSize.Content}"/>
         </Border>
     </DataTemplate>
 

@@ -7,7 +7,8 @@ namespace OrganizerWpf.Models
     public class DocumentModel : SerializableModel<DocumentModel>
     {
         public VersionModel Version { get; set; } = new();
-        public VersionModel[] VersionHistory { get; set; } = new VersionModel[0];
+        public VersionModel? PreviousVersion { get; set; } = null;
+        public VersionModel[] VersionHistory { get; set; } = Array.Empty<VersionModel>();
 
         public override void SetDefaultValues(FileInfo file)
         {
@@ -21,6 +22,11 @@ namespace OrganizerWpf.Models
             {
                 Version = fileMetaData.Version;
                 VersionHistory = fileMetaData.VersionHistory;
+
+                if (VersionHistory.Length > 1)
+                {
+                    PreviousVersion = VersionHistory[1];
+                }
             }
         }
     }

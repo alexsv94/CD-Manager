@@ -64,6 +64,7 @@
         <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary1}" />        
         <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
         <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
 
         <Setter Property="Template">
             <Setter.Value>

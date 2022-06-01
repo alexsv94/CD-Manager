@@ -8,9 +8,7 @@ namespace OrganizerWpf.Models
 {
     public class ProductModel : SerializableModel<ProductModel>
     {
-        public string DecNumber { get; set; } = string.Empty;
-
-        
+        public string DecNumber { get; set; } = string.Empty;        
         
         public override void SetValuesFromMetadata(ProductModel? fileMetaData)
         {
