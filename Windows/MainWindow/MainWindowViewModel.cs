@@ -1,6 +1,7 @@
 ﻿using OrganizerWpf.Models;
 using OrganizerWpf.Utilities;
 using OrganizerWpf.ViewModels;
+using OrganizerWpf.Windows.NoticeCreate;
 using OrganizerWpf.Windows.SettingsW;
 using System;
 using System.Collections.Generic;
@@ -65,6 +66,27 @@ namespace OrganizerWpf.Windows.MainWindow
                     new RelayCommand(obj => _window!.Close());
             }
         }
+
+        private RelayCommand? _createNoticeCommand = null;
+        public RelayCommand CreateNoticeCommand
+        {
+            get
+            {
+                return _createNoticeCommand ??=
+                    new RelayCommand(obj => OpenCreateNoticeWindow());
+            }
+        }
+
+
+        private RelayCommand? _createActCommand = null;
+        public RelayCommand CreateActCommand
+        {
+            get
+            {
+                return _createActCommand ??=
+                    new RelayCommand(obj => _window!.Close());
+            }
+        }
         #endregion
 
         private string _workingDir = string.Empty;
@@ -81,6 +103,10 @@ namespace OrganizerWpf.Windows.MainWindow
             if (!string.IsNullOrEmpty(Settings.WorkingDirectoryPath))
                 OnWorkingDirectoryChanged(Settings.WorkingDirectoryPath);
         }
+        private void OpenCreateNoticeWindow()
+        {
+            new NoticeCreateForm().Show();
+        }
 
         private void OnWorkingDirectoryChanged(string newPath)
         {
@@ -93,7 +119,7 @@ namespace OrganizerWpf.Windows.MainWindow
         {
             if (SelectedProduct == null) return;
 
-            string selectedProductDirectoryPath = SelectedProduct.ProductDirectoryPath!;
+            string selectedProductDirectoryPath = SelectedProduct.FullPath!;
             Settings.CurrentProductDirectoryPath = selectedProductDirectoryPath;
         }
         private void UpdateProductList()
@@ -115,8 +141,8 @@ namespace OrganizerWpf.Windows.MainWindow
             {
                 ProductModel product = new ProductModel()
                 {
-                    ProductName = dir.Name,
-                    ProductDirectoryPath = dir.FullName,
+                    Name = dir.Name,
+                    FullPath = dir.FullName,
                 };
                 productsList.Add(product);
             }
@@ -129,7 +155,7 @@ namespace OrganizerWpf.Windows.MainWindow
         {
             if (!string.IsNullOrEmpty((sender as TextBox)!.Text))
             {
-                FilteredProducts = _products!.Where(x => x.ProductName!.ToLower().Contains((sender as TextBox)!.Text.ToLower())).ToList();
+                FilteredProducts = _products!.Where(x => x.Name!.ToLower().Contains((sender as TextBox)!.Text.ToLower())).ToList();
             }
             else
             {

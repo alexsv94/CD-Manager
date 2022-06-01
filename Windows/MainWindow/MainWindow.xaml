@@ -33,11 +33,11 @@
         <Menu Style="{DynamicResource SCMainMenuStyle}" Margin="19,0,0,0" VerticalAlignment="Center">
             <MenuItem Style="{DynamicResource SCMenuItemStyle}" Header="Файл">
                 <MenuItem Header="Настройки" Command="{Binding OpenSettingsWindowCommand}" Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Settings}"/>
-                <MenuItem Header="Выход"  Command="{Binding CloseWindowCommand}" Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Exit}"/>
+                <MenuItem Header="Выход" Command="{Binding CloseWindowCommand}" Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Exit}"/>
             </MenuItem>
             <MenuItem Style="{DynamicResource SCMenuItemStyle}" Header="Сформировать">
-                <MenuItem Header="Извещение" />
-                <MenuItem Header="Акт завершения" />
+                <MenuItem Header="Извещение" Command="{Binding CreateNoticeCommand}" Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Notice}"/>
+                <MenuItem Header="Акт завершения" Command="{Binding CreateActCommand}" Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Act}"/>
             </MenuItem>
             <MenuItem Style="{DynamicResource SCMenuItemStyle}" Header="Выгрузить">
                 <MenuItem Header="Файлы ЭМ" />

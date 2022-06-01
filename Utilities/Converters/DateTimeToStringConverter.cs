@@ -14,7 +14,8 @@ namespace OrganizerWpf.Utilities.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return DependencyProperty.UnsetValue;
+            DateTime.TryParse(value.ToString(), out DateTime result);
+            return result;
         }
     }
 }

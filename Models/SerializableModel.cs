@@ -21,6 +21,14 @@ namespace OrganizerWpf.Models
             UpdateTime = file.LastWriteTime;            
         }
 
+        public virtual void SetDefaultValues(DirectoryInfo dir)
+        {
+            FullPath = dir.FullName;
+            Name = dir.Name;
+            CreationTime = dir.CreationTime;
+            UpdateTime = dir.LastWriteTime;
+        }
+
         public virtual void SetValuesFromMetadata(T? fileMetaData)
         {
             throw new NotImplementedException("Method 'SetValuesFromMetadata()' is not implemented");

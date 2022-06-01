@@ -6,14 +6,25 @@ using System.Threading.Tasks;
 
 namespace OrganizerWpf.Models
 {
-    public class ProductModel
+    public class ProductModel : SerializableModel<ProductModel>
     {
-        public string? ProductName { get; set; }
-        public string? ProductDirectoryPath { get; set; }
+        public string DecNumber { get; set; } = string.Empty;
+
+        
+        
+        public override void SetValuesFromMetadata(ProductModel? fileMetaData)
+        {
+            if (fileMetaData != null)
+            {
+                FullPath = fileMetaData.FullPath;
+                Name = fileMetaData.Name;
+                DecNumber = fileMetaData.DecNumber;
+            }
+        }
 
         public override string? ToString()
         {
-            return ProductName;
+            return Name;
         }
     }
 }

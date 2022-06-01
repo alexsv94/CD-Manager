@@ -1,0 +1,82 @@
+﻿<Window x:Class="OrganizerWpf.Windows.NoticeCreate.NoticeCreateForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OrganizerWpf.Windows.NoticeCreate" xmlns:system="clr-namespace:System;assembly=netstandard" xmlns:controls="clr-namespace:OrganizerWpf.StylizedControls.Controls"
+        mc:Ignorable="d" ResizeMode="CanResizeWithGrip" Icon="../../Icons/Windows/notice.png" SizeToContent="Height"
+        Title="Извещение ФИАШ." Width="800" Style="{DynamicResource WindowTemplateStyle}">
+    <Window.Resources>
+        <system:Double x:Key="HeadersColumnWidth">250</system:Double>
+
+        <Style x:Key="RowStyle" TargetType="DataGridRow" BasedOn="{StaticResource SCDataGridRowStyle}">
+            <EventSetter Event="MouseDoubleClick" Handler="ExtendToItem_MouseDown" />
+        </Style>
+    </Window.Resources>
+    
+    <StackPanel VerticalAlignment="Top" Margin="10,15,15,0">
+        <Grid Height="30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding Source={StaticResource HeadersColumnWidth}}"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Децимальный номер" Style="{DynamicResource Text_Sub}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0"/>
+            <TextBox Text="{Binding DecNumber, Mode=TwoWay}" Style="{DynamicResource SCTextBoxStyle}" Grid.Column="1" TextChanged="TextBox_TextChanged"/>
+        </Grid>
+        <Grid Height="30" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding Source={StaticResource HeadersColumnWidth}}"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Дата создания" Style="{DynamicResource Text_Sub}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0"/>
+            <controls:SCDatePickerTextBox Grid.Column="1" DataContext="{Binding}" Date="{Binding CreationDate, Mode=TwoWay}"/>
+        </Grid>
+        <Grid Height="30" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding Source={StaticResource HeadersColumnWidth}}"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Причина изменений" Style="{DynamicResource Text_Sub}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0"/>
+            <TextBox Text="{Binding ChangeReason, Mode=TwoWay}" Style="{DynamicResource SCTextBoxStyle}" Grid.Column="1" />
+        </Grid>
+        <Grid Height="30" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding Source={StaticResource HeadersColumnWidth}}"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Основание для выпуска" Style="{DynamicResource Text_Sub}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0"/>
+            <TextBox Text="{Binding BasisForRelease, Mode=TwoWay}" Style="{DynamicResource SCTextBoxStyle}" Grid.Column="1" />
+        </Grid>
+        <Grid Height="30" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding Source={StaticResource HeadersColumnWidth}}"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Сведения о заделе" Style="{DynamicResource Text_Sub}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0"/>
+            <TextBox Text="{Binding Backlog, Mode=TwoWay}" Style="{DynamicResource SCTextBoxStyle}" Grid.Column="1" />
+        </Grid>
+        <Grid Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding Source={StaticResource HeadersColumnWidth}}"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="120" />
+            </Grid.RowDefinitions>
+            
+            <TextBlock Text="Распространить на" Style="{DynamicResource Text_Sub}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0"/>
+            <Button Grid.Column="1" Content="Добавить" Style="{DynamicResource SCButtonStyle}" Width="auto" Padding="8,3,8,3" HorizontalAlignment="Left"/>
+            <DataGrid Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" 
+                      CellStyle="{DynamicResource SCDataGridCellStyle}" 
+                      RowStyle="{DynamicResource RowStyle}" 
+                      ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}"
+                      ItemsSource="{Binding ExtendToList}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Название изделия" Width="*" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Децимальный номер" Width="160" Binding="{Binding DecNumber}"/>
+                </DataGrid.Columns>                
+            </DataGrid>
+        </Grid>
+    </StackPanel>
+</Window>

@@ -11,7 +11,7 @@ namespace OrganizerWpf.Utilities
 {
     public static class FileSystemHelper
     {
-        public static List<IFileSystemItem> GetItems<T>(string workDirectory) 
+        public static List<IFileSystemItem> GetItems<T>(string workDirectory, bool includeDirs = true) 
             where T : SerializableModel<T>, new()
         {
             List<IFileSystemItem> itemsList = new();
@@ -19,14 +19,17 @@ namespace OrganizerWpf.Utilities
             if (!CheckDirectory(workDirectory, out DirectoryInfo? currentDir))
                 return itemsList;
 
-            var dirs = currentDir!.GetDirectories();
-
-            foreach (var dir in dirs)
+            if (includeDirs)
             {
-                var dirInfo = new DirectoryModel();
-                dirInfo.SetAllValues(dir);
-                itemsList.Add(dirInfo);
-            }
+                var dirs = currentDir!.GetDirectories();
+
+                foreach (var dir in dirs)
+                {
+                    var dirInfo = new DirectoryModel();
+                    dirInfo.SetAllValues(dir);
+                    itemsList.Add(dirInfo);
+                }
+            }            
 
             var files = currentDir!.GetFiles();
 
@@ -45,6 +48,22 @@ namespace OrganizerWpf.Utilities
             }
 
             return itemsList;
+        }
+        public static List<SerializableModel<T>> GetSerializedDirs<T>(string workDirectory)
+            where T : SerializableModel<T>, new()
+        {
+            List<SerializableModel<T>> itemsList = new();
+
+            if (!CheckDirectory(workDirectory, out DirectoryInfo? currentDir))
+                return itemsList;
+
+            var dirs = currentDir!.GetDirectories();
+
+            foreach (var dir in dirs)
+            {
+                var dirInfo = new T();
+                itemsList.Add(dirInfo);
+            }
         }
 
         public static T? GetFile<T>(string path)

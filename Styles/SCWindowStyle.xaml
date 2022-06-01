@@ -29,10 +29,10 @@
                             MinWidth="{TemplateBinding MinWidth}"
                             MinHeight="{TemplateBinding MinHeight}"
                             VerticalAlignment="Top"
-                            Padding="5" Background="Transparent">
+                            Padding="10" Background="Transparent">
                         <Border Style="{DynamicResource WindowBorder}" x:Name="windowBorder" VerticalAlignment="Top">
                             <Border.Effect>
-                                <DropShadowEffect BlurRadius="5" ShadowDepth="0"/>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="5" Direction="315"/>
                             </Border.Effect>
                             <Grid x:Name="rootGrid" Height="{Binding ElementName=windowBorder, Path=Height}">
                                 <Grid.RowDefinitions>
