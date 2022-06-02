@@ -14,7 +14,7 @@
         <icons:IconSelector x:Key="IconSelector"/>
     </Window.Resources>
     
-    <Grid>
+    <Grid Margin="0,0,0,15">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*"/>

@@ -87,17 +87,21 @@
                                     </Grid>
                                 </Border>
                                 <ContentPresenter Grid.Row="1" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                <ResizeGrip x:Name="WindowResizeGrip"
-                                        Grid.Row="2"
+                                <Border Grid.Row="2" Background="{DynamicResource Color.Accent}">
+                                    <ResizeGrip x:Name="WindowResizeGrip"                                        
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Bottom"
                                         Visibility="Collapsed"
                                         IsTabStop="false" />
+                                </Border>                                
                             </Grid>
                         </Border>
                     </Border>
 
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsActive" Value="False">
+                            <Setter TargetName="TitleBar" Property="Background" Value="#2e3b42"/>
+                        </Trigger>
                         <Trigger Property="ResizeMode"
                                  Value="CanResizeWithGrip">
                             <Setter TargetName="WindowResizeGrip"
@@ -113,6 +117,7 @@
                             <Setter TargetName="MaximizeButton" 
                                     Property="Image" 
                                     Value="../StylizedControls/Images/restore.png" />
+                            <Setter TargetName="outerBorder" Property="Padding" Value="5" />
                         </Trigger>
                         <Trigger Property="SizeToContent" Value="Manual">
                             <Setter TargetName="windowBorder" Property="VerticalAlignment" Value="Stretch" />

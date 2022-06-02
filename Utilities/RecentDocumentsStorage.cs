@@ -25,6 +25,13 @@ namespace OrganizerWpf.Utilities
             Save();
         }
 
+        public static void ChangeDocumentParameters(DocumentModel doc)
+        {
+            var docFromListIndex = Instance.RecentDocuments.IndexOf(Instance.RecentDocuments.FirstOrDefault(x => x.Name == doc.Name)!);
+            Instance.RecentDocuments.RemoveAt(docFromListIndex);
+            Instance.RecentDocuments.Insert(docFromListIndex, doc);
+        }
+
         public static void Load()
         {
             if (!File.Exists("RecentDocuments.json"))

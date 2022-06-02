@@ -121,6 +121,9 @@ namespace OrganizerWpf.Windows.VersionHistory
 
             _document.VersionHistory = versionsList.ToArray();
             _document.Version = GetLatestVersion(versionsList);
+            
+            if (_document.VersionHistory.Length > 1)
+                _document.PreviousVersion = _document.VersionHistory[1];
 
             FileSystemHelper.SaveFileMetadata(_document);
             UpdateVersionsList();

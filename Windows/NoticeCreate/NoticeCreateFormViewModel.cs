@@ -1,5 +1,8 @@
-﻿using OrganizerWpf.Dialogs.RecentDocumentsDialog;
+﻿using OrganizerWpf.Dialogs.AddExtendToRowDialog;
+using OrganizerWpf.Dialogs.ProductsChooseDialog;
+using OrganizerWpf.Dialogs.RecentDocumentsDialog;
 using OrganizerWpf.Models;
+using OrganizerWpf.StylizedControls;
 using OrganizerWpf.Utilities;
 using OrganizerWpf.ViewModels;
 using System;
@@ -7,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace OrganizerWpf.Windows.NoticeCreate
@@ -129,16 +133,18 @@ namespace OrganizerWpf.Windows.NoticeCreate
         private RelayCommand? _openRecentDocsCommand = null;
         public RelayCommand OpenRecentDocsCommand =>
             _openRecentDocsCommand ??= new RelayCommand(obj => OpenRecentDocs());
+
+        private RelayCommand? _addExtendToRowCommand = null;
+        public RelayCommand AddExtendToRowCommand =>
+            _addExtendToRowCommand ??= new RelayCommand(obj => AddExtendToRow());
+
+        private RelayCommand? _openProductsChooseDialogCommand = null;
+        public RelayCommand OpenProductsChooseDialogCommand =>
+            _openProductsChooseDialogCommand ?? new RelayCommand(obj => OpenProductsChooseDialog());
         #endregion
         public NoticeCreateFormViewModel()
         {
             ExtendToList.Add(new ProductModel() { Name = "TestProduct1", DecNumber = "ФИАШ.789456.587" });
-            ExtendToList.Add(new ProductModel() { Name = "TestProduct2" });
-            ExtendToList.Add(new ProductModel() { Name = "TestProduct3" });
-            ExtendToList.Add(new ProductModel() { Name = "TestProduct4" });
-            ExtendToList.Add(new ProductModel() { Name = "TestProduct5" });
-            ExtendToList.Add(new ProductModel() { Name = "TestProduct6" });
-            ExtendToList.Add(new ProductModel() { Name = "TestProduct7" });
 
             ChangesList.Add(new DocumentModel() { Name = "TestDoc1", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01")});
         }
@@ -155,6 +161,29 @@ namespace OrganizerWpf.Windows.NoticeCreate
             ChangesList = ChangesList.Where(x => x != item).ToList();
         }
 
+        private void AddExtendToRow()
+        {
+            var dialog = new AddExtendToRowDialog();
+
+            if ((bool)dialog.ShowDialog()!)
+            {
+                var newProductRow = new ProductModel() 
+                { 
+                    Name = dialog.ProductName, 
+                    DecNumber = dialog.DecNumber 
+                };
+
+                if (ExtendToList.Any(x => x.Name == dialog.ProductName))
+                {
+                    SCMessageBox.ShowMsgBox("Изделие уже есть в списке", "Строка не добавлена");
+                }
+                else
+                {
+                    ExtendToList = AddItemToList<ProductModel>(ExtendToList, newProductRow);
+                }
+            }
+        }
+
         private void OpenRecentDocs()
         {
             var dialog = new RecentDocumentsDialog();
@@ -162,11 +191,36 @@ namespace OrganizerWpf.Windows.NoticeCreate
 
             if ((bool)dialog.ShowDialog()!)
             {
-                List<DocumentModel> list = new();
-                list.AddRange(ChangesList);
-                list.AddRange(dialog.ChosenRecentDocs);
-                ChangesList = list;
+                ChangesList = AddItemCollectionToList<DocumentModel>(ChangesList, dialog.ChosenRecentDocs);
             }
+        }
+
+        private void OpenProductsChooseDialog()
+        {
+            var dialog = new ProductsChooseDialog();
+            dialog.ExcludedProducts.AddRange(ExtendToList);
+
+            if ((bool)dialog.ShowDialog()!)
+            {
+                ExtendToList = AddItemCollectionToList<ProductModel>(ExtendToList, dialog.ChosenProducts);
+            }
+        }
+
+        private List<T> AddItemToList<T>(List<T> targetList, T item)
+        {
+            var list = new List<T>();
+            list.AddRange(targetList);
+            list.Add(item);
+            return list;
+        }
+
+        private List<T> AddItemCollectionToList<T>(List<T> targetList, IEnumerable<T> items)
+            where T : class, new()
+        {
+            var list = new List<T>();
+            list.AddRange(targetList);
+            list.AddRange(items);
+            return list;
         }
     }
 }

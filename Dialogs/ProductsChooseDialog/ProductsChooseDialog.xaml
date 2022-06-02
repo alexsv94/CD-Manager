@@ -1,0 +1,36 @@
+﻿<Window x:Class="OrganizerWpf.Dialogs.ProductsChooseDialog.ProductsChooseDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OrganizerWpf.Dialogs.ProductsChooseDialog"
+        mc:Ignorable="d" SizeToContent="Height" Icon="../../Icons/MenuItems/addFile.png"
+        Title="Выбор изделий" Width="320" Style="{DynamicResource WindowTemplateStyle}" DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid Background="{DynamicResource Color.Secondary}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <TextBox Style="{DynamicResource SCSearchTextBoxStyle}" VerticalContentAlignment="Center" Margin="5" TextChanged="TextBox_TextChanged"/>
+        <DataGrid x:Name="ProductsDataGrid" CellStyle="{DynamicResource SCDataGridCellStyle}"
+                  ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}"
+                  RowStyle="{DynamicResource SCDataGridRowStyle}"
+                  ItemsSource="{Binding FilteredProducts}" SelectionMode="Extended" MinHeight="350" MaxHeight="500" Grid.Row="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Изделие" Width="*" Binding="{Binding Name}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Border BorderBrush="{DynamicResource Color.DataGrid.GridLines}" BorderThickness="0,1,0,0" Grid.Row="2">
+            <Button x:Name="ButtonApply" 
+                    Style="{StaticResource SCButtonStyle}" 
+                    Content="Готово" 
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Center" 
+                    Padding="5" 
+                    Margin="0,0,15,0" 
+                    Width="80"
+                    Click="ButtonApply_Click"/>
+        </Border>
+    </Grid>
+</Window>

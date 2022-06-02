@@ -42,8 +42,6 @@ namespace OrganizerWpf.Windows.MainWindow
                 OnPropertyChanged(nameof(FilteredProducts));
             }
         }
-
-        private List<ProductModel>? _products = null;
         #endregion
 
         #region Commands
@@ -89,6 +87,7 @@ namespace OrganizerWpf.Windows.MainWindow
         }
         #endregion
 
+        private List<ProductModel>? _products = null;
         private string _workingDir = string.Empty;
         private readonly Window? _window = null;
 
@@ -130,7 +129,7 @@ namespace OrganizerWpf.Windows.MainWindow
 
         public void OnFilterValueChanged(object sender)
         {
-            if (!string.IsNullOrEmpty((sender as TextBox)!.Text))
+            if (!string.IsNullOrWhiteSpace((sender as TextBox)!.Text))
             {
                 FilteredProducts = _products!.Where(x => x.Name!.ToLower().Contains((sender as TextBox)!.Text.ToLower())).ToList();
             }

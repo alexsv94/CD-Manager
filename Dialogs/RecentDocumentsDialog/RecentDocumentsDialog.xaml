@@ -7,26 +7,6 @@
         mc:Ignorable="d" Icon="../../Icons/MenuItems/versionHistory.png"
         Title="Последние измененные документы" Height="420" Width="800" Style="{DynamicResource WindowTemplateStyle}"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-    <Window.Resources>
-        <DataTemplate x:Key="ListItemTemplate">
-            <Border Padding="3" BorderThickness="1" HorizontalAlignment="Stretch">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />                     
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding Name}" Style="{DynamicResource Text_Sub}" VerticalAlignment="Center" TextWrapping="Wrap"/>
-
-                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" Margin="40,0,0,0">
-                        <TextBlock Text="Изменение версии:" Style="{DynamicResource Text_Sub}" Margin="0,0,10,0"/>
-                        <TextBlock Text="{Binding PreviousVersion.Version}" Style="{DynamicResource Text_Sub}" Margin="0,0,10,0"/>
-                        <TextBlock Text="►" Style="{DynamicResource Text_Sub}" Margin="0,0,10,0"/>
-                        <TextBlock Text="{Binding Version.Version}" Style="{DynamicResource Text_Sub}"/>
-                    </StackPanel>                    
-                </Grid>
-            </Border>
-        </DataTemplate>
-    </Window.Resources>
 
     <Grid Background="{DynamicResource Color.Secondary}">
         <Grid.RowDefinitions>
@@ -40,8 +20,8 @@
                   ItemsSource="{Binding RecentDocs}" SelectionMode="Extended">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Документ" Width="*" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Старая версия" Width="160" Binding="{Binding Version.Version}"/>
-                <DataGridTextColumn Header="Новая версия" Width="160" Binding="{Binding PreviousVersion.Version}"/>
+                <DataGridTextColumn Header="Старая версия" Width="160" Binding="{Binding PreviousVersion.Version}"/>
+                <DataGridTextColumn Header="Новая версия" Width="160" Binding="{Binding Version.Version}"/>
             </DataGrid.Columns>
         </DataGrid>
         <Border BorderBrush="{DynamicResource Color.DataGrid.GridLines}" BorderThickness="0,1,0,0" Grid.Row="1">
