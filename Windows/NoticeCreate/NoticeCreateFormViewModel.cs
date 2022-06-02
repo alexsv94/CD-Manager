@@ -1,4 +1,6 @@
-﻿using OrganizerWpf.Models;
+﻿using OrganizerWpf.Dialogs.RecentDocumentsDialog;
+using OrganizerWpf.Models;
+using OrganizerWpf.Utilities;
 using OrganizerWpf.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -123,6 +125,11 @@ namespace OrganizerWpf.Windows.NoticeCreate
         }
         #endregion
 
+        #region Commands
+        private RelayCommand? _openRecentDocsCommand = null;
+        public RelayCommand OpenRecentDocsCommand =>
+            _openRecentDocsCommand ??= new RelayCommand(obj => OpenRecentDocs());
+        #endregion
         public NoticeCreateFormViewModel()
         {
             ExtendToList.Add(new ProductModel() { Name = "TestProduct1", DecNumber = "ФИАШ.789456.587" });
@@ -139,10 +146,27 @@ namespace OrganizerWpf.Windows.NoticeCreate
         public void OnExtendToItemMouseDoubleClick(object sender)
         {
             var item = (ProductModel)(sender as DataGridRow)!.DataContext;
-            var list = new List<ProductModel>();
-            list.AddRange(ExtendToList);
-            list.Remove(item);
-            ExtendToList = list;
+            ExtendToList = ExtendToList.Where(x => x != item).ToList();
+        }
+
+        public void OnChangesListItemMouseDoubleClick(object sender)
+        {
+            var item = (DocumentModel)(sender as DataGridRow)!.DataContext;
+            ChangesList = ChangesList.Where(x => x != item).ToList();
+        }
+
+        private void OpenRecentDocs()
+        {
+            var dialog = new RecentDocumentsDialog();
+            dialog.ExcludeList.AddRange(ChangesList);
+
+            if ((bool)dialog.ShowDialog()!)
+            {
+                List<DocumentModel> list = new();
+                list.AddRange(ChangesList);
+                list.AddRange(dialog.ChosenRecentDocs);
+                ChangesList = list;
+            }
         }
     }
 }

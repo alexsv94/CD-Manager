@@ -55,9 +55,9 @@ namespace OrganizerWpf.Windows.NoticeCreate
             ViewModel!.OnExtendToItemMouseDoubleClick(sender);
         }
 
-        private void AddCHangeRowButton_Click(object sender, RoutedEventArgs e)
+        private void ChangesListItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            new RecentDocumentsDialog().ShowDialog();
+            ViewModel!.OnChangesListItemMouseDoubleClick(sender);
         }
     }
 }

@@ -138,10 +138,10 @@ namespace OrganizerWpf.Dialogs.ChangeVersionDialog
                     OldDocument.PreviousVersion = OldDocument.VersionHistory[1];
                 }
 
-                RecentDocumentsStorage.AddDocument(OldDocument);
-            }
+                OldDocument!.Version.Version = NewVersion;
 
-            OldDocument!.Version.Version = NewVersion;
+                RecentDocumentsStorage.AddDocument(OldDocument);
+            }           
 
             FileSystemHelper.SaveFileMetadata(OldDocument);
 

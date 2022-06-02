@@ -70,7 +70,7 @@
         <DataGrid x:Name="dataGrid"
             VerticalGridLinesBrush="{DynamicResource Color.DataGrid.GridLines}"
             CellStyle="{DynamicResource SCDataGridCellStyle}" 
-            RowStyle="{DynamicResource SCDataGridRowStyle}" 
+            RowStyle="{DynamicResource RowStyle}" 
             ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}"
             ItemsSource="{Binding Items}" 
             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"

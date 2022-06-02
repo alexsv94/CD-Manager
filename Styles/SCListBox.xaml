@@ -92,7 +92,7 @@
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
-        </Setter>
+        </Setter>        
     </Style>
     <Style x:Key="SCListBoxStyle" TargetType="{x:Type ListBox}">
         <Setter Property="Background" Value="{StaticResource ListBox.Static.Background}"/>

@@ -132,14 +132,13 @@
                             VerticalAlignment="Center" 
                             Padding="5"
                             Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.AddFile}">
-                            <MenuItem Header="Выбрать из истории" Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.VersionHistory}"/>
+                            <MenuItem Header="Выбрать из истории" Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.VersionHistory}" Command="{Binding OpenRecentDocsCommand}"/>
                             <MenuItem Header="Добавить строку" Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.AddFile}"/>
                         </MenuItem>
                     </Menu>
                 </StackPanel>
                 <DataGrid  Grid.Row="1"
                       CellStyle="{DynamicResource SCDataGridCellStyle}"
-                      RowStyle="{DynamicResource RowStyle}" 
                       ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}"
                       ItemsSource="{Binding ChangesList}">
                     <DataGrid.Columns>
@@ -147,9 +146,13 @@
                         <DataGridTextColumn Header="Старая версия" Width="160" Binding="{Binding Version.Version}"/>
                         <DataGridTextColumn Header="Новая версия" Width="160" Binding="{Binding PreviousVersion.Version}"/>
                     </DataGrid.Columns>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow" BasedOn="{StaticResource SCDataGridRowStyle}">
+                            <EventSetter Event="MouseDoubleClick" Handler="ChangesListItem_MouseDoubleClick" />
+                        </Style>
+                    </DataGrid.RowStyle>
                 </DataGrid>
             </Grid>
         </Border>
-        <Button Content="Test" Click="AddCHangeRowButton_Click" />
     </StackPanel>
 </Window>

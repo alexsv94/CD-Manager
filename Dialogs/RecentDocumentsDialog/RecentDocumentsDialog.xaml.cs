@@ -29,33 +29,40 @@ namespace OrganizerWpf.Dialogs.RecentDocumentsDialog
         public static readonly DependencyProperty RecentDocsProperty =
             DependencyProperty.Register("RecentDocs", typeof(List<DocumentModel>), typeof(RecentDocumentsDialog), new PropertyMetadata(new List<DocumentModel>()));
 
+        public List<DocumentModel> ExcludeList = new();
+        public List<DocumentModel> ChosenRecentDocs = new();
+
         private WindowEventsHelper _eventsHelper;
 
         public RecentDocumentsDialog()
         {
             InitializeComponent();
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc1", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc2", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc3", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc4", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc1", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc2", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc3", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc4", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc1", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc2", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc3", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc4", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc1", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc2", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc3", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
-            RecentDocs.Add(new DocumentModel() { Name = "TestDoc4", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01") });
+            RecentDocumentsStorage.Load();
+        }
+
+        private void FilterDocList()
+        {
+            RecentDocs.Clear();
+            RecentDocs.AddRange(RecentDocumentsStorage.Instance.RecentDocuments);
+            RecentDocs = RecentDocs.Where(x => !ExcludeList.Any(y => y.Name == x.Name)).ToList();
+            ExcludeList.Clear();
         }
 
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
             _eventsHelper = new(this, false, false);
+            FilterDocList();
+        }
+
+        private void ButtonApply_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in RecentDocsDataGrid.SelectedItems)
+            {
+                ChosenRecentDocs.Add((DocumentModel)item);
+            }
+            DialogResult = true;
+            Close();
         }
     }
 }

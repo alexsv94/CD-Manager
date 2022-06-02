@@ -13,20 +13,17 @@ namespace OrganizerWpf.Utilities
     public sealed class RecentDocumentsStorage
     {
         public static RecentDocumentsStorage Instance { get; private set; } = new();
-
-        private List<DocumentModel> _recentDocuments { get; set; } = new();
+        public List<DocumentModel> RecentDocuments { get; private set; } = new();
 
         public static void AddDocument(DocumentModel doc)
         {
-            if (Instance._recentDocuments.Count >= 100)
+            if (Instance.RecentDocuments.Count >= 100)
             {
-                Instance._recentDocuments.RemoveAt(Instance._recentDocuments.Count - 1);
+                Instance.RecentDocuments.Remove(Instance.RecentDocuments.Last());                
             }
-            Instance._recentDocuments.Insert(0, doc);
+            Instance.RecentDocuments.Insert(0, doc);
             Save();
         }
-
-        public static List<DocumentModel> GetDocuments() => Instance._recentDocuments;
 
         public static void Load()
         {

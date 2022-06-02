@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 
 namespace OrganizerWpf.Utilities
@@ -180,7 +181,7 @@ namespace OrganizerWpf.Utilities
             }
             else
             {
-                return SerializableModel<T>.FromJson(File.ReadAllText(metaData.FullName));
+                return SerializableModel<T>.FromJson(File.ReadAllText(metaData.FullName, Encoding.UTF8));
             }
         }
 

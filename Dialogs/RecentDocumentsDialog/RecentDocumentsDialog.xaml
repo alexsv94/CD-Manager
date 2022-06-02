@@ -9,18 +9,19 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Window.Resources>
         <DataTemplate x:Key="ListItemTemplate">
-            <Border Padding="3" BorderThickness="1" HorizontalAlignment="Stretch" Width="760">
+            <Border Padding="3" BorderThickness="1" HorizontalAlignment="Stretch">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="350" />                     
+                        <ColumnDefinition Width="*" />                     
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="{Binding Name}" Style="{DynamicResource Text_Sub}" VerticalAlignment="Center" TextWrapping="Wrap"/>
 
-                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Version.Version}" Style="{DynamicResource Text_Sub}" Margin="0,0,10,0"/>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" Margin="40,0,0,0">
+                        <TextBlock Text="Изменение версии:" Style="{DynamicResource Text_Sub}" Margin="0,0,10,0"/>
+                        <TextBlock Text="{Binding PreviousVersion.Version}" Style="{DynamicResource Text_Sub}" Margin="0,0,10,0"/>
                         <TextBlock Text="►" Style="{DynamicResource Text_Sub}" Margin="0,0,10,0"/>
-                        <TextBlock Text="{Binding PreviousVersion.Version}" Style="{DynamicResource Text_Sub}"/>
+                        <TextBlock Text="{Binding Version.Version}" Style="{DynamicResource Text_Sub}"/>
                     </StackPanel>                    
                 </Grid>
             </Border>
@@ -29,19 +30,30 @@
 
     <Grid Background="{DynamicResource Color.Secondary}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="300" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <ListBox Style="{DynamicResource SCListBoxStyle}" 
-                 ItemContainerStyle="{DynamicResource SCListBoxItemContainerStyle}" 
-                 ItemTemplate="{DynamicResource ListItemTemplate}"
-                 ItemsSource="{Binding RecentDocs}"
-                 BorderBrush="{DynamicResource Color.DataGrid.GridLines}"
-                 BorderThickness="0,1,0,0" SelectionMode="Multiple" ScrollViewer.VerticalScrollBarVisibility="Visible">            
-        </ListBox>
+
+        <DataGrid x:Name="RecentDocsDataGrid" CellStyle="{DynamicResource SCDataGridCellStyle}"
+                  ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}"
+                  RowStyle="{DynamicResource SCDataGridRowStyle}"
+                  ItemsSource="{Binding RecentDocs}" SelectionMode="Extended">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Документ" Width="*" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Старая версия" Width="160" Binding="{Binding Version.Version}"/>
+                <DataGridTextColumn Header="Новая версия" Width="160" Binding="{Binding PreviousVersion.Version}"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <Border BorderBrush="{DynamicResource Color.DataGrid.GridLines}" BorderThickness="0,1,0,0" Grid.Row="1">
-            <Button Style="{StaticResource SCButtonStyle}" Content="Готово" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="5" Margin="0,0,15,0" Width="80"/>
+            <Button x:Name="ButtonApply" 
+                    Style="{StaticResource SCButtonStyle}" 
+                    Content="Готово" 
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Center" 
+                    Padding="5" 
+                    Margin="0,0,15,0" 
+                    Width="80"
+                    Click="ButtonApply_Click"/>
         </Border>
-    </Grid>
-    
+    </Grid>    
 </Window>
