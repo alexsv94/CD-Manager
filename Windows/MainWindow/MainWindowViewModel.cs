@@ -1,10 +1,12 @@
 ﻿using OrganizerWpf.Models;
 using OrganizerWpf.Utilities;
+using OrganizerWpf.Utilities.Extensions;
 using OrganizerWpf.ViewModels;
 using OrganizerWpf.Windows.NoticeCreate;
 using OrganizerWpf.Windows.SettingsW;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -32,8 +34,8 @@ namespace OrganizerWpf.Windows.MainWindow
             }
         }
 
-        private List<ProductModel>? _filteredProducts = null;
-        public List<ProductModel>? FilteredProducts
+        private ObservableCollection<ProductModel> _filteredProducts = new();
+        public ObservableCollection<ProductModel> FilteredProducts
         {
             get => _filteredProducts;
             set
@@ -87,7 +89,7 @@ namespace OrganizerWpf.Windows.MainWindow
         }
         #endregion
 
-        private List<ProductModel>? _products = null;
+        private List<ProductModel> _products = new();
         private string _workingDir = string.Empty;
         private readonly Window? _window = null;
 
@@ -124,18 +126,19 @@ namespace OrganizerWpf.Windows.MainWindow
         private void UpdateProductList()
         {
             if (string.IsNullOrEmpty(_workingDir)) return;
-            _products = FilteredProducts = FileSystemHelper.GetSerializedDirs<ProductModel>(_workingDir);
+            _products = FileSystemHelper.GetSerializedDirs<ProductModel>(_workingDir);
+            FilteredProducts.ReplaceItems(_products);
         }
 
         public void OnFilterValueChanged(object sender)
         {
             if (!string.IsNullOrWhiteSpace((sender as TextBox)!.Text))
             {
-                FilteredProducts = _products!.Where(x => x.Name!.ToLower().Contains((sender as TextBox)!.Text.ToLower())).ToList();
+                FilteredProducts.ReplaceItems(_products!.Where(x => x.ShortName.ToLower().Contains((sender as TextBox)!.Text.ToLower())));
             }
             else
             {
-                FilteredProducts = _products;
+                FilteredProducts.ReplaceItems(_products);
             }            
         }
         #endregion

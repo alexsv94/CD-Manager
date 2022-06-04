@@ -1,5 +1,6 @@
 ﻿using OrganizerWpf.Models;
 using OrganizerWpf.Utilities;
+using OrganizerWpf.Utilities.Extensions;
 using OrganizerWpf.ViewModels;
 
 namespace OrganizerWpf.UserControls.NoticeExplorer
@@ -10,7 +11,7 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
 
         protected override void UpdateFileList()
         {
-            Items = FileSystemHelper.GetItems<NoticeModel>(_currentDirectory.FullName);
+            Items.ReplaceItems(FileSystemHelper.GetItems<NoticeModel>(_currentDirectory.FullName));
         }
     }
 }

@@ -19,7 +19,7 @@
                   RowStyle="{DynamicResource SCDataGridRowStyle}"
                   ItemsSource="{Binding RecentDocs}" SelectionMode="Extended">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Документ" Width="*" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Документ" Width="*" Binding="{Binding ShortName}"/>
                 <DataGridTextColumn Header="Старая версия" Width="160" Binding="{Binding PreviousVersion.Version}"/>
                 <DataGridTextColumn Header="Новая версия" Width="160" Binding="{Binding Version.Version}"/>
             </DataGrid.Columns>

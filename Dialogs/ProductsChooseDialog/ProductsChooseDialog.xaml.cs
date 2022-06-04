@@ -1,7 +1,9 @@
 ﻿using OrganizerWpf.Models;
 using OrganizerWpf.Utilities;
+using OrganizerWpf.Utilities.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,18 +23,21 @@ namespace OrganizerWpf.Dialogs.ProductsChooseDialog
     /// </summary>
     public partial class ProductsChooseDialog : Window
     {
-        public List<ProductModel>? FilteredProducts
+        public ObservableCollection<ProductModel> FilteredProducts
         {
-            get { return (List<ProductModel>)GetValue(FilteredProductsProperty); }
+            get { return (ObservableCollection<ProductModel>)GetValue(FilteredProductsProperty); }
             set { SetValue(FilteredProductsProperty, value); }
         }
         public static readonly DependencyProperty FilteredProductsProperty =
-            DependencyProperty.Register("FilteredProducts", typeof(List<ProductModel>), typeof(ProductsChooseDialog), new PropertyMetadata(null));
+            DependencyProperty.Register("FilteredProducts", 
+                typeof(ObservableCollection<ProductModel>), 
+                typeof(ProductsChooseDialog), 
+                new PropertyMetadata(new ObservableCollection<ProductModel>()));
 
         public List<ProductModel> ExcludedProducts = new();
         public List<ProductModel> ChosenProducts = new();
 
-        private List<ProductModel>? _products = null;
+        private List<ProductModel> _allProducts = new();
         private WindowEventsHelper _eventsHelper;
 
         public ProductsChooseDialog()
@@ -51,19 +56,21 @@ namespace OrganizerWpf.Dialogs.ProductsChooseDialog
         {
             if (!string.IsNullOrWhiteSpace((sender as TextBox)!.Text))
             {
-                FilteredProducts = _products!.Where(x => x.Name!.ToLower().Contains((sender as TextBox)!.Text.ToLower())).ToList();
+                FilteredProducts.ReplaceItems(_allProducts!.Where(x => x.ShortName.ToLower().Contains((sender as TextBox)!.Text.ToLower())));
             }
             else
             {
-                FilteredProducts = _products;
+                FilteredProducts.ReplaceItems(_allProducts);
             }
         }
 
         private void GetProducts()
         {
-            _products = FilteredProducts = FileSystemHelper.GetSerializedDirs<ProductModel>(Settings.WorkingDirectoryPath);
+            _allProducts = FileSystemHelper.GetSerializedDirs<ProductModel>(Settings.WorkingDirectoryPath);
+            _allProducts = _allProducts.Where(x => !ExcludedProducts.Any(y => y.ShortName == x.ShortName)).ToList();
 
-            _products = FilteredProducts = _products.Where(x => !ExcludedProducts.Any(y => y.Name == x.Name)).ToList();
+            FilteredProducts.ReplaceItems(_allProducts);
+
             ExcludedProducts.Clear();
         }
 

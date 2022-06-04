@@ -1,17 +1,22 @@
-﻿using OrganizerWpf.Dialogs.AddExtendToRowDialog;
+﻿using OrganizerWpf.Dialogs.AddChangesRowDialog;
+using OrganizerWpf.Dialogs.AddExtendToRowDialog;
 using OrganizerWpf.Dialogs.ProductsChooseDialog;
 using OrganizerWpf.Dialogs.RecentDocumentsDialog;
 using OrganizerWpf.Models;
 using OrganizerWpf.StylizedControls;
 using OrganizerWpf.Utilities;
+using OrganizerWpf.Utilities.Extensions;
 using OrganizerWpf.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 
 namespace OrganizerWpf.Windows.NoticeCreate
 {
@@ -73,8 +78,8 @@ namespace OrganizerWpf.Windows.NoticeCreate
             }
         }
 
-        private List<ProductModel> _extendToList = new();
-        public List<ProductModel> ExtendToList
+        private ObservableCollection<ProductModel> _extendToList = new();
+        public ObservableCollection<ProductModel> ExtendToList
         {
             get => _extendToList;
             set
@@ -117,8 +122,8 @@ namespace OrganizerWpf.Windows.NoticeCreate
             }
         }
 
-        private List<DocumentModel> _changesList = new();
-        public List<DocumentModel> ChangesList
+        private ObservableCollection<DocumentModel> _changesList = new();
+        public ObservableCollection<DocumentModel> ChangesList
         {
             get => _changesList;
             set
@@ -141,24 +146,30 @@ namespace OrganizerWpf.Windows.NoticeCreate
         private RelayCommand? _openProductsChooseDialogCommand = null;
         public RelayCommand OpenProductsChooseDialogCommand =>
             _openProductsChooseDialogCommand ?? new RelayCommand(obj => OpenProductsChooseDialog());
+
+        private RelayCommand? _addChangesRowCommand = null;
+        public RelayCommand AddChangesRowCommand =>
+            _addChangesRowCommand ?? new RelayCommand(obj => AddChangesRow());
+
+        private RelayCommand? _createNoticeCommand = null;
+        public RelayCommand? CreateNoticeCommand =>
+            _createNoticeCommand ??= new RelayCommand(obj => CreateNotice());
         #endregion
         public NoticeCreateFormViewModel()
         {
-            ExtendToList.Add(new ProductModel() { Name = "TestProduct1", DecNumber = "ФИАШ.789456.587" });
 
-            ChangesList.Add(new DocumentModel() { Name = "TestDoc1", Version = new("ФИАШ.789456.123"), PreviousVersion = new("ФИАШ.789456.123.01")});
         }
 
         public void OnExtendToItemMouseDoubleClick(object sender)
         {
             var item = (ProductModel)(sender as DataGridRow)!.DataContext;
-            ExtendToList = ExtendToList.Where(x => x != item).ToList();
+            ExtendToList.Remove(item);
         }
 
         public void OnChangesListItemMouseDoubleClick(object sender)
         {
             var item = (DocumentModel)(sender as DataGridRow)!.DataContext;
-            ChangesList = ChangesList.Where(x => x != item).ToList();
+            ChangesList.Remove(item);
         }
 
         private void AddExtendToRow()
@@ -179,7 +190,34 @@ namespace OrganizerWpf.Windows.NoticeCreate
                 }
                 else
                 {
-                    ExtendToList = AddItemToList<ProductModel>(ExtendToList, newProductRow);
+                    ExtendToList.Add(newProductRow);
+                }
+            }
+        }
+
+        private void AddChangesRow()
+        {
+            var dialog = new AddChangesRowDialog();
+
+            if ((bool)dialog.ShowDialog()!)
+            {
+                var newChangesRow = new DocumentModel()
+                {
+                    Name = dialog.DocName,
+                    VersionHistory = new()
+                    {
+                        new VersionModel() { Version = dialog.NewVersion },
+                        new VersionModel() { Version = dialog.OldVersion }
+                    }
+                };
+
+                if (ChangesList.Any(x => x.Name == dialog.DocName))
+                {
+                    SCMessageBox.ShowMsgBox("Документ уже есть в списке", "Строка не добавлена");
+                }
+                else
+                {
+                    ChangesList.Add(newChangesRow);
                 }
             }
         }
@@ -191,7 +229,7 @@ namespace OrganizerWpf.Windows.NoticeCreate
 
             if ((bool)dialog.ShowDialog()!)
             {
-                ChangesList = AddItemCollectionToList<DocumentModel>(ChangesList, dialog.ChosenRecentDocs);
+                ChangesList.AddRange(dialog.ChosenRecentDocs);
             }
         }
 
@@ -202,25 +240,72 @@ namespace OrganizerWpf.Windows.NoticeCreate
 
             if ((bool)dialog.ShowDialog()!)
             {
-                ExtendToList = AddItemCollectionToList<ProductModel>(ExtendToList, dialog.ChosenProducts);
+                ExtendToList.AddRange(dialog.ChosenProducts);
             }
         }
 
-        private List<T> AddItemToList<T>(List<T> targetList, T item)
+        private void CreateNotice()
         {
-            var list = new List<T>();
-            list.AddRange(targetList);
-            list.Add(item);
-            return list;
+            using var dialog = new SaveFileDialog();
+            dialog.Filter = "Документы Word (*.doc, *.docx)|*.doc, *.docx|Все файлы (*.*)|*.*";
+            dialog.DefaultExt = ".docx";
+            dialog.SupportMultiDottedExtensions = true;
+
+            string fileName = $"Извещение {DecNumber}.docx";
+            
+            if (!string.IsNullOrWhiteSpace(Settings.CurrentProductDirectoryPath))
+            {
+                dialog.FileName = Path.Combine(Settings.CurrentProductDirectoryPath, fileName);
+            }
+            else
+            {
+                dialog.FileName = Path.Combine("C:", "Users", Environment.UserName, "Desktop", fileName);
+            }
+
+            if (dialog.ShowDialog() != DialogResult.OK) return;
+
+            string path = dialog.FileName;
+
+            var items = new Dictionary<string, string>
+            {
+                { "<DEC_NUM>", DecNumber },
+                { "<CREATION_DATE>", CreationDate.ToShortDateString()},
+                { "<CHANGE_REASON>", ChangeReason},
+                { "<BASIS_FOR_RELEASE>", BasisForRelease},
+                { "<BACKLOG_NOTICE>", Backlog},
+                { "<CHANGES_SUMMARY>", ChangesSummary},
+                { "<CHANGES>", CombineChanges()},
+                { "<EXTEND_TO>", CombineEtendTo()},
+                { "<AUTHOR>", Author},
+                { "<FILES_COUNT>", ChangesList.Count.ToString()}
+            };
+
+            var helper = new WordHelper(Environment.CurrentDirectory + "\\Templates\\notice_template.docx");
+            helper.Process(items, path);
         }
 
-        private List<T> AddItemCollectionToList<T>(List<T> targetList, IEnumerable<T> items)
-            where T : class, new()
+        private string CombineChanges()
         {
-            var list = new List<T>();
-            list.AddRange(targetList);
-            list.AddRange(items);
-            return list;
+            string result = string.Empty;
+
+            foreach (var item in ChangesList)
+            {
+                result += $"Документ {item.ShortName} версии {item.PreviousVersion!.Version} заменить на версию {item.Version.Version}.\r";
+            }
+
+            return result;
+        }
+
+        private string CombineEtendTo()
+        {
+            var result = string.Empty;
+
+            foreach (var item in ExtendToList)
+            {
+                result += item.Name + " " + item.DecNumber + "\r";
+            }
+
+            return result;
         }
     }
 }

@@ -89,7 +89,7 @@ namespace OrganizerWpf.Dialogs.ChangeVersionDialog
 
             if (IsEditMode)
             {
-                if (OldDocument!.VersionHistory.Length > 0 && 
+                if (OldDocument!.VersionHistory.Count > 0 && 
                     OldDocument!.VersionHistory.Any(x => x.Version == NewVersion) && 
                     NewVersion != OldVersion)
                 {
@@ -98,7 +98,7 @@ namespace OrganizerWpf.Dialogs.ChangeVersionDialog
                     return false;
                 }
             }
-            else if (OldDocument!.VersionHistory.Length > 0 && 
+            else if (OldDocument!.VersionHistory.Count > 0 && 
                      OldDocument!.VersionHistory.Any(x => x.Version == NewVersion))
             {
                 ShowErrorMessage("Версия уже существует",
@@ -120,25 +120,19 @@ namespace OrganizerWpf.Dialogs.ChangeVersionDialog
                 versionObj.Version = NewVersion;
                 versionObj.CreationTime = Notice == null ? DateTime.Now : Notice.CreationTime;
                 versionObj.NoticeFile = Notice;
+
+                RecentDocumentsStorage.ChangeDocumentParameters(OldDocument);
             }
             else
             {
                 versionObj = new VersionModel(NewVersion)
                 {
+                    Version = NewVersion,
                     CreationTime = Notice == null ? DateTime.Now : Notice.CreationTime,
                     NoticeFile = Notice,
                 };
 
-                var list = OldDocument!.VersionHistory.ToList();
-                list.Insert(0, versionObj);
-                OldDocument.VersionHistory = list.ToArray();
-                
-                if (OldDocument.VersionHistory.Length > 1)
-                {
-                    OldDocument.PreviousVersion = OldDocument.VersionHistory[1];
-                }
-
-                OldDocument!.Version.Version = NewVersion;
+                OldDocument!.VersionHistory.Insert(0, versionObj);
 
                 RecentDocumentsStorage.AddDocument(OldDocument);
             }           

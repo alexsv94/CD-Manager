@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OrganizerWpf.Dialogs.ProductsChooseDialog"
-        mc:Ignorable="d" SizeToContent="Height" Icon="../../Icons/MenuItems/addFile.png"
-        Title="Выбор изделий" Width="320" Style="{DynamicResource WindowTemplateStyle}" DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        mc:Ignorable="d" SizeToContent="Height" Icon="../../Icons/MenuItems/addFile.png" ResizeMode="CanResizeWithGrip" MinHeight="435" MinWidth="350"
+        Title="Выбор изделий" Width="350" Style="{DynamicResource WindowTemplateStyle}" DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid Background="{DynamicResource Color.Secondary}">
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
@@ -16,7 +16,7 @@
         <DataGrid x:Name="ProductsDataGrid" CellStyle="{DynamicResource SCDataGridCellStyle}"
                   ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}"
                   RowStyle="{DynamicResource SCDataGridRowStyle}"
-                  ItemsSource="{Binding FilteredProducts}" SelectionMode="Extended" MinHeight="350" MaxHeight="500" Grid.Row="1">
+                  ItemsSource="{Binding FilteredProducts}" SelectionMode="Extended" MinHeight="350" Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Изделие" Width="*" Binding="{Binding Name}"/>
             </DataGrid.Columns>

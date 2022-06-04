@@ -1,6 +1,7 @@
 ﻿using OrganizerWpf.Dialogs.ChangeVersionDialog;
 using OrganizerWpf.Models;
 using OrganizerWpf.Utilities;
+using OrganizerWpf.Utilities.Extensions;
 using OrganizerWpf.ViewModels;
 using OrganizerWpf.Windows.VersionHistory;
 using System;
@@ -27,7 +28,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 
         protected override void UpdateFileList()
         {
-            Items = FileSystemHelper.GetItems<DocumentModel>(_currentDirectory.FullName);
+            Items.ReplaceItems(FileSystemHelper.GetItems<DocumentModel>(_currentDirectory.FullName));
             base.UpdateFileList();
         }        
 

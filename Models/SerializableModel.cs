@@ -7,7 +7,15 @@ namespace OrganizerWpf.Models
     public class SerializableModel<T> : IFileSystemItem
     {
         public string? Extension { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string ShortName
+        {
+            get
+            {
+                int extSplitter = Name.LastIndexOf('.');
+                return extSplitter > 0 ? Name[..extSplitter] : Name;
+            }
+        }
         public DateTime? CreationTime { get; set; }
         public DateTime? UpdateTime { get; set; }
         public string? FullPath { get; set; }
@@ -41,7 +49,7 @@ namespace OrganizerWpf.Models
 
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
     }
 }

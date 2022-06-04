@@ -13,7 +13,7 @@
 
     <DataTemplate x:Key="SCListBoxItemTemplate">
         <Border Padding="3" BorderThickness="1">
-            <TextBlock Text="{Binding Name}" FontFamily="{StaticResource Roboto-Regular}" FontSize="{DynamicResource Font.FontSize.Content}"/>
+            <TextBlock Text="{Binding Name}" FontFamily="{StaticResource Roboto-Regular}" FontSize="{DynamicResource Font.FontSize.Content}" TextWrapping="WrapWithOverflow"/>
         </Border>
     </DataTemplate>
 
@@ -59,7 +59,13 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                    <Border x:Name="Bd" 
+                            Width="{Binding RelativeSource={RelativeSource AncestorType=ItemsPresenter}, Path=ActualWidth}"
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Padding="{TemplateBinding Padding}" 
+                            SnapsToDevicePixels="true">
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>

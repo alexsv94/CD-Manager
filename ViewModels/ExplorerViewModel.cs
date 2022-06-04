@@ -4,6 +4,7 @@ using OrganizerWpf.StylizedControls;
 using OrganizerWpf.UserControls.DirLink;
 using OrganizerWpf.Utilities;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -21,12 +22,12 @@ namespace OrganizerWpf.ViewModels
 
         private RelayCommand? _renameCommand = null;
         public RelayCommand RenameCommand =>
-            _renameCommand ??= new RelayCommand(obj => RenameFile(obj as IFileSystemItem));
+            _renameCommand ??= new RelayCommand(obj => RenameItem(obj as IFileSystemItem));
         #endregion
 
         #region Binding Props
-        protected List<IFileSystemItem>? _items = null;
-        public List<IFileSystemItem>? Items
+        protected ObservableCollection<IFileSystemItem> _items = new();
+        public ObservableCollection<IFileSystemItem> Items
         {
             get => _items;
             set
@@ -87,13 +88,8 @@ namespace OrganizerWpf.ViewModels
                     FullPath = _currentDirectory.Parent!.FullName,
                     Extension = "folder"
                 };
-
-                var list = new List<IFileSystemItem>
-                {
-                    backDirItem
-                };
-                list.AddRange(Items!);
-                Items = list;
+                
+                Items.Insert(0, backDirItem);
             }
         }
 
@@ -205,7 +201,7 @@ namespace OrganizerWpf.ViewModels
             }           
         }
 
-        protected void RenameFile(IFileSystemItem? item)
+        protected void RenameItem(IFileSystemItem? item)
         {
             if (item == null) return;
 
@@ -221,6 +217,11 @@ namespace OrganizerWpf.ViewModels
             {
                 item.Name = renameDialog.NewFileName;
                 item.FullPath = FileSystemHelper.RenameItem(item.FullPath!, item.Name);
+
+                if (item is DocumentModel model)
+                {
+                    RecentDocumentsStorage.ChangeDocumentParameters(model);
+                }
 
                 UpdateFileList();
             }

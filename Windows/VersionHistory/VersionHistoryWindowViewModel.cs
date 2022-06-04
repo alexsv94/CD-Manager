@@ -2,9 +2,11 @@
 using OrganizerWpf.Icons;
 using OrganizerWpf.Models;
 using OrganizerWpf.Utilities;
+using OrganizerWpf.Utilities.Extensions;
 using OrganizerWpf.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,8 +31,8 @@ namespace OrganizerWpf.Windows.VersionHistory
         #endregion
 
         #region Binding Props
-        protected List<VersionModel>? _items = null;
-        public List<VersionModel>? Items
+        protected ObservableCollection<VersionModel>? _items = new();
+        public ObservableCollection<VersionModel> Items
         {
             get => _items;
             set
@@ -62,7 +64,7 @@ namespace OrganizerWpf.Windows.VersionHistory
 
         private void UpdateVersionsList()
         {
-            Items = _document.VersionHistory.ToList();
+            Items.ReplaceItems(_document.VersionHistory);
         }
 
         #region Handlers
@@ -105,6 +107,7 @@ namespace OrganizerWpf.Windows.VersionHistory
 
             if (!(bool)result!) return;
 
+            RecentDocumentsStorage.ChangeDocumentParameters(_document);
             FileSystemHelper.SaveFileMetadata(_document);
 
             UpdateVersionsList();
@@ -112,47 +115,15 @@ namespace OrganizerWpf.Windows.VersionHistory
 
         private void DeleteVersion(VersionModel version)
         {
-            List<VersionModel> versionsList = _document.VersionHistory.ToList();
+            _document.VersionHistory.Remove(version);
 
-            versionsList.Remove(version);
+            if (_document.VersionHistory.Count == 0)
+                _document.VersionHistory.Add(new VersionModel() { CreationTime = _document.CreationTime });
 
-            if (versionsList.Count == 0)
-                versionsList.Add(new VersionModel() { CreationTime = _document.CreationTime });
-
-            _document.VersionHistory = versionsList.ToArray();
-            _document.Version = GetLatestVersion(versionsList);
-            
-            if (_document.VersionHistory.Length > 1)
-                _document.PreviousVersion = _document.VersionHistory[1];
+            RecentDocumentsStorage.ChangeDocumentParameters(_document);
 
             FileSystemHelper.SaveFileMetadata(_document);
             UpdateVersionsList();
-        }
-
-        private VersionModel GetLatestVersion(List<VersionModel> versionsList)
-        {
-            if (versionsList.Count == 0)
-            {
-                var newVersionObj = new VersionModel();
-                versionsList.Add(newVersionObj);
-            };
-            
-            List<DateTime?> dateTimeList = new();
-
-            foreach (var v in versionsList)
-            {
-                dateTimeList.Add(v.CreationTime);
-            }
-
-            DateTime? latestDate = dateTimeList.First();
-
-            foreach (var dateTime in dateTimeList)
-            {
-                if (dateTime > latestDate)
-                    latestDate = dateTime;
-            }
-
-            return versionsList.FirstOrDefault(x => x.CreationTime! == latestDate)!;
         }
     }
 }

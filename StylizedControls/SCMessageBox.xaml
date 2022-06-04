@@ -14,7 +14,7 @@
 
     <StackPanel VerticalAlignment="Top" Height="auto">
         <TextBlock Style="{DynamicResource Text_Sub}" Text="{Binding Text}" TextWrapping="Wrap" Margin="15,15,15,5" VerticalAlignment="Top"/>
-        <StackPanel x:Name="buttonsContainer" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,15,0">
+        <StackPanel x:Name="buttonsContainer" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,15,10">
 
         </StackPanel>
     </StackPanel>

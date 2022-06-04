@@ -21,15 +21,47 @@ namespace OrganizerWpf.Utilities
             {
                 Instance.RecentDocuments.Remove(Instance.RecentDocuments.Last());                
             }
-            Instance.RecentDocuments.Insert(0, doc);
+            
+            if (Instance.RecentDocuments.Count > 0)
+            {
+                var candidate = Instance.RecentDocuments.FirstOrDefault(x => x.ShortName == doc.ShortName);
+
+                if (candidate != null)
+                {
+                    candidate = doc;
+                }
+                else
+                {
+                    Instance.RecentDocuments.Insert(0, doc);
+                }
+            }
+            else
+            {
+                Instance.RecentDocuments.Insert(0, doc);
+            } 
+
+            Save();
+        }
+
+        public static void RemoveDocument(DocumentModel doc)
+        {
+            if (Instance.RecentDocuments.Count == 0) return;
+
+            var docFromList = Instance.RecentDocuments.FirstOrDefault(x => x.ShortName == doc.ShortName);
+            if (docFromList != null) 
+                Instance.RecentDocuments.Remove(docFromList);
+
             Save();
         }
 
         public static void ChangeDocumentParameters(DocumentModel doc)
         {
-            var docFromListIndex = Instance.RecentDocuments.IndexOf(Instance.RecentDocuments.FirstOrDefault(x => x.Name == doc.Name)!);
-            Instance.RecentDocuments.RemoveAt(docFromListIndex);
-            Instance.RecentDocuments.Insert(docFromListIndex, doc);
+            if (Instance.RecentDocuments.Count == 0) return;
+
+            var docFromList = Instance.RecentDocuments.FirstOrDefault(x => x.ShortName == doc.ShortName);
+            docFromList ??= doc;
+
+            Save();
         }
 
         public static void Load()
@@ -41,7 +73,7 @@ namespace OrganizerWpf.Utilities
             }                
 
             string jsonString = File.ReadAllText("RecentDocuments.json");
-            Instance = JsonConvert.DeserializeObject<RecentDocumentsStorage>(jsonString);
+            Instance = JsonConvert.DeserializeObject<RecentDocumentsStorage>(jsonString) ?? new();
         }
 
         public static void Save()
@@ -51,7 +83,7 @@ namespace OrganizerWpf.Utilities
                 File.Delete("RecentDocuments.json");
             }
 
-            File.WriteAllText("RecentDocuments.json", JsonConvert.SerializeObject(Instance));
+            File.WriteAllText("RecentDocuments.json", JsonConvert.SerializeObject(Instance, Formatting.Indented));
         }
     }
 }

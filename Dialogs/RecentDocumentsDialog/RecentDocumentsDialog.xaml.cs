@@ -44,7 +44,7 @@ namespace OrganizerWpf.Dialogs.RecentDocumentsDialog
         {
             RecentDocs.Clear();
             RecentDocs.AddRange(RecentDocumentsStorage.Instance.RecentDocuments);
-            RecentDocs = RecentDocs.Where(x => !ExcludeList.Any(y => y.Name == x.Name)).ToList();
+            RecentDocs = RecentDocs.Where(x => !ExcludeList.Any(y => y.ShortName == x.ShortName)).ToList();
             ExcludeList.Clear();
         }
 
