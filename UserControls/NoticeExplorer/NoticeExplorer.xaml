@@ -44,7 +44,10 @@
                    x:Name="dropLabel"
                    Visibility="Hidden"
                    VerticalContentAlignment="Center" 
-                   HorizontalAlignment="Center" Height="50" IsHitTestVisible="False" Background="#FF5BAAAA" BorderBrush="#FF545454"/>
+                   HorizontalAlignment="Center" Height="50" IsHitTestVisible="False" 
+                   Foreground="{DynamicResource Brush.Text.Secondary}"
+                   Background="{DynamicResource Brush.Accent}" 
+                   BorderBrush="{DynamicResource Brush.Text.Secondary}"/>
         </Grid>
     </Border>
 </UserControl>

@@ -60,15 +60,14 @@
         <conv:DateTimeToStringConverter x:Key="dateConverter" />
     </Window.Resources>
 
-    <StackPanel Background="Transparent">
-        
+    <StackPanel Background="Transparent">        
         <Menu Margin="0,0,0,5" Style="{DynamicResource SCMainMenuStyle}">
             <MenuItem Header="Файл">
                 <MenuItem Header="Добавить версию" Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.ChangeVersion}" Command="{Binding AddNewVersionCommand}"/>
             </MenuItem>
         </Menu>
         <DataGrid x:Name="dataGrid"
-            VerticalGridLinesBrush="{DynamicResource Color.DataGrid.GridLines}"
+            VerticalGridLinesBrush="{DynamicResource Brush.DataGrid.GridLines}"
             CellStyle="{DynamicResource SCDataGridCellStyle}" 
             RowStyle="{DynamicResource RowStyle}" 
             ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}"

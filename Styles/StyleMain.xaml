@@ -2,21 +2,59 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--Color Theme-->
-    <SolidColorBrush x:Key="Color.Primary" Color="#222c32" />
-    <SolidColorBrush x:Key="Color.Accent" Color="#1e262b" />
-    <SolidColorBrush x:Key="Color.Secondary" Color="#2b343a" />   
+    <Color x:Key="Color.Primary">#222c32</Color>
+    <Color x:Key="Color.Accent">#1e262b</Color>
+    <Color x:Key="Color.Secondary">#2b343a</Color>
+    <Color x:Key="Color.Text.Primary">#b5b8ba</Color>
+    <Color x:Key="Color.Text.Secondary">#dedfe1</Color>
+
+    <Color x:Key="Color.Button.Default">#aaaeb0</Color>
+    <Color x:Key="Color.Button.MouseOver">#ffdada</Color>
+    <Color x:Key="Color.Button.Pressed">#7aa8ae</Color>
+    <Color x:Key="Color.Button.Disabled">#00dada</Color>
+    <Color x:Key="Color.Button.Foreground">#333333</Color>
+
+    <Color x:Key="Color.DataGrid.GridLines">#333c42</Color>
+    <Color x:Key="Color.DataGrid.Headers">#333c42</Color>
+    <Color x:Key="Color.DataGrid.Headers.MouseOver">#2b6473</Color>
+    <Color x:Key="Color.DataGrid.Background">#2b343a</Color>
+    <Color x:Key="Color.DataGrid.Cell.Selected">#2b6473</Color>
+    <Color x:Key="Color.DataGrid.Cell.Selected.InActive">#2b6473</Color>
+
+    <Color x:Key="Color.ProgressBar.Progress">#aaaeb0</Color>
+    <Color x:Key="Color.ProgressBar.Borger">#aaaeb0</Color>
+
+    <!--Brushes-->
+    <SolidColorBrush x:Key="Brush.Primary" Color="{DynamicResource Color.Primary}" />
+    <SolidColorBrush x:Key="Brush.Accent" Color="{DynamicResource Color.Accent}" />
+    <SolidColorBrush x:Key="Brush.Secondary" Color="{DynamicResource Color.Secondary}" />
+
+    <SolidColorBrush x:Key="Brush.Text.Primary" Color="{DynamicResource Color.Text.Primary}" />
+    <SolidColorBrush x:Key="Brush.Text.Secondary" Color="{DynamicResource Color.Text.Secondary}" />
     
-    
-    <SolidColorBrush x:Key="Color.Text.Primary" Color="#b5b8ba" />
-    <SolidColorBrush x:Key="Color.Text.Secondary" Color="#dedfe1" />
-    <SolidColorBrush x:Key="Color.Text.Secondary1" Color="#aaaeb0" />
-    
-    <SolidColorBrush x:Key="Color.Button.Default" Color="#aaaeb0" />    
-    <SolidColorBrush x:Key="Color.Button.MouseOver" Color="#ffdada" />
-    <SolidColorBrush x:Key="Color.Button.Pressed" Color="#7aa8ae" />
-    <SolidColorBrush x:Key="Color.Button.Disabled" Color="#00dada" />
-    <SolidColorBrush x:Key="Color.Button.Foreground" Color="#333333" />
-    
+    <SolidColorBrush x:Key="Brush.Button.Default" Color="{DynamicResource Color.Button.Default}" />    
+    <SolidColorBrush x:Key="Brush.Button.MouseOver" Color="{DynamicResource Color.Button.MouseOver}" />
+    <SolidColorBrush x:Key="Brush.Button.Pressed" Color="{DynamicResource Color.Button.Pressed}" />
+    <SolidColorBrush x:Key="Brush.Button.Disabled" Color="{DynamicResource Color.Button.Disabled}" Opacity="0.5"/>
+    <SolidColorBrush x:Key="Brush.Button.Foreground" Color="{DynamicResource Color.Button.Foreground}" />
+
+    <SolidColorBrush x:Key="Brush.DataGrid.GridLines" Color="{DynamicResource Color.DataGrid.GridLines}" />
+    <SolidColorBrush x:Key="Brush.DataGrid.Headers" Color="{DynamicResource Color.DataGrid.Headers}" />
+    <SolidColorBrush x:Key="Brush.DataGrid.Headers.MouseOver" Color="{DynamicResource Color.DataGrid.Headers.MouseOver}" />
+    <SolidColorBrush x:Key="Brush.DataGrid.Background" Color="{DynamicResource Color.DataGrid.Background}" />
+    <SolidColorBrush x:Key="Brush.DataGrid.Cell.Selected" Color="{DynamicResource Color.DataGrid.Cell.Selected}" Opacity="0.5"/>
+    <SolidColorBrush x:Key="Brush.DataGrid.Cell.Selected.InActive" Color="{DynamicResource Color.DataGrid.Cell.Selected.InActive}" Opacity="0.2"/>
+
+    <SolidColorBrush x:Key="Brush.ProgressBar.Progress" Color="{DynamicResource Color.ProgressBar.Progress}"/>
+    <SolidColorBrush x:Key="Brush.ProgressBar.Background" Color="Transparent"/>
+    <SolidColorBrush x:Key="Brush.ProgressBar.Border" Color="{DynamicResource Color.ProgressBar.Borger}"/>
+
+    <SolidColorBrush x:Key="Brush.TextBox.Border" Color="#aaaeb0" Opacity="0.5"/>
+    <SolidColorBrush x:Key="Brush.TextBox.Border.MouseOver" Color="#dedfe1" Opacity="0.5"/>
+    <SolidColorBrush x:Key="Brush.TextBox.Border.Focus" Color="#dedfe1" Opacity="0.8"/>
+    <SolidColorBrush x:Key="Brush.TextBox.Placeholder.Foreground" Color="#aaaeb0" Opacity="0.5"/>
+
+
     <!--Font Settings-->
     <sys:Double x:Key="Font.FontSize.Content.Small">12</sys:Double>
     <sys:Double x:Key="Font.FontSize.Content">14</sys:Double>
@@ -38,12 +76,12 @@
     <!--Styles-->
     <Style x:Key="WindowBorder" TargetType="Border">
         <Setter Property="CornerRadius" Value="5" />
-        <Setter Property="Background" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="Background" Value="{DynamicResource Brush.Primary}" />
     </Style>
 
     <Style x:Key="WindowTitleBar" TargetType="Border">
         <Setter Property="CornerRadius" Value="5,5,0,0" />
-        <Setter Property="Background" Value="{DynamicResource Color.Accent}" />
+        <Setter Property="Background" Value="{DynamicResource Brush.Accent}" />
         <Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect BlurRadius="3" Direction="270" Opacity="0.3" ShadowDepth="2"/>
@@ -52,13 +90,13 @@
     </Style>
 
     <Style x:Key="Text_Main" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource Color.Text.Primary}" />
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Primary}" />
         <Setter Property="FontFamily" Value="{StaticResource Roboto-Medium}" />
         <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Headers}" />
     </Style>
 
     <Style x:Key="Text_Sub" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary1}" />
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Secondary}" />
         <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
         <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
     </Style>
@@ -76,15 +114,14 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <SolidColorBrush x:Key="Button.Static.Background" Color="#d8dada"/>
-    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#ffdada"/>
-    <SolidColorBrush x:Key="Button.Pressed.Background" Color="#7aa8ae"/>
-    <SolidColorBrush x:Key="Button.Disabled.Background" Color="#00837a"/>
+    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{DynamicResource Color.Button.MouseOver}"/>
+    <SolidColorBrush x:Key="Button.Pressed.Background" Color="{DynamicResource Color.Button.Pressed}"/>
+    <SolidColorBrush x:Key="Button.Disabled.Background" Color="{DynamicResource Color.Button.Disabled}" Opacity="0.5"/>
     
     <Style x:Key="SCButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-        <Setter Property="Background" Value="{DynamicResource Color.Button.Default}"/>
-        <Setter Property="Foreground" Value="{DynamicResource Color.Button.Foreground}"/>
+        <Setter Property="Background" Value="{DynamicResource Brush.Button.Default}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Button.Foreground}"/>
         <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
         <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
         <Setter Property="HorizontalContentAlignment" Value="Center"/>

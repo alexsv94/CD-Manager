@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OrganizerWpf.Windows.NoticeCreate" xmlns:system="clr-namespace:System;assembly=netstandard" xmlns:controls="clr-namespace:OrganizerWpf.StylizedControls.Controls" xmlns:icons="clr-namespace:OrganizerWpf.Icons"
         mc:Ignorable="d" ResizeMode="CanResizeWithGrip" Icon="../../Icons/Windows/notice.png" SizeToContent="Height"
-        Title="Извещение ФИАШ." MinWidth="800" Width="800" MinHeight="750" Style="{DynamicResource WindowTemplateStyle}">
+        Title="Извещение ФИАШ." MinWidth="800" Width="900" MinHeight="900" Style="{DynamicResource WindowTemplateStyle}" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <system:Double x:Key="HeadersColumnWidth">250</system:Double>
 
@@ -117,7 +117,7 @@
             <TextBlock Text="Суть изменений" Style="{DynamicResource Text_Sub}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0"/>
             <TextBox Text="{Binding ChangesSummary, Mode=TwoWay}" Style="{DynamicResource SCTextBoxStyle}" Grid.Column="1" />            
         </Grid>
-        <Border Margin="0,10,0,0" CornerRadius="5" Background="{DynamicResource Color.Secondary}">
+        <Border Margin="0,10,0,0" CornerRadius="5" Background="{DynamicResource Brush.Secondary}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40" />
@@ -147,8 +147,8 @@
                       ItemsSource="{Binding ChangesList}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Документ" Width="*" Binding="{Binding ShortName}"/>
-                        <DataGridTextColumn Header="Старая версия" Width="160" Binding="{Binding PreviousVersion.Version}"/>
-                        <DataGridTextColumn Header="Новая версия" Width="160" Binding="{Binding Version.Version}"/>
+                        <DataGridTextColumn Header="Старая версия" Width="200" Binding="{Binding PreviousVersion.Version}"/>
+                        <DataGridTextColumn Header="Новая версия" Width="200" Binding="{Binding Version.Version}"/>
                     </DataGrid.Columns>
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow" BasedOn="{StaticResource SCDataGridRowStyle}">
@@ -158,10 +158,24 @@
                 </DataGrid>
             </Grid>
         </Border>
-        <Button Style="{DynamicResource SCButtonStyle}"
-                HorizontalAlignment="Right"
+        <Grid Margin="0,10,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="150" />
+            </Grid.ColumnDefinitions>
+            
+            
+            <Button Style="{DynamicResource SCButtonStyle}"
                 Padding="8"
-                Content="Сформировать" Margin="0,10,0,10"
-                Command="{Binding CreateNoticeCommand}"/>
+                Content="Сформировать"
+                Grid.Column="1"
+                Command="{Binding CreateNoticeCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+            <ProgressBar x:Name="progressBar" 
+                         Style="{DynamicResource SCProgressBarStyle}" 
+                         Value="{Binding OperationProgress.Progress, Mode=OneWay}" 
+                         Margin="0,0,15,0"
+                         Visibility="Collapsed"/>
+        </Grid>
     </StackPanel>
 </Window>

@@ -1,4 +1,5 @@
 ﻿using OrganizerWpf.Models;
+using OrganizerWpf.StylizedControls;
 using OrganizerWpf.Utilities;
 using OrganizerWpf.Utilities.Extensions;
 using OrganizerWpf.ViewModels;
@@ -112,6 +113,20 @@ namespace OrganizerWpf.Windows.MainWindow
         private void OnWorkingDirectoryChanged(string newPath)
         {
             _workingDir = newPath;
+
+            if (!new DirectoryInfo(newPath).GetDirectories().Any(x => x.Name == "Извещения"))
+            {
+                var result = SCMessageBox.ShowMsgBox("Создать каталог \"Извещения\"? Это необходимо для корректной работы программы.",
+                    "Каталог \"Извещения\" не найден",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (result == SCMessageBoxResult.Yes)
+                {
+                    Directory.CreateDirectory(Path.Combine(newPath, "Извещения"));
+                }
+            }
+
             UpdateProductList();
         }
 
@@ -127,6 +142,7 @@ namespace OrganizerWpf.Windows.MainWindow
         {
             if (string.IsNullOrEmpty(_workingDir)) return;
             _products = FileSystemHelper.GetSerializedDirs<ProductModel>(_workingDir);
+            _products.Remove(_products.FirstOrDefault(x => x.Name == "Извещения")!);
             FilteredProducts.ReplaceItems(_products);
         }
 

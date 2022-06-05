@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:OrganizerWpf.Dialogs.ProductsChooseDialog"
         mc:Ignorable="d" SizeToContent="Height" Icon="../../Icons/MenuItems/addFile.png" ResizeMode="CanResizeWithGrip" MinHeight="435" MinWidth="350"
         Title="Выбор изделий" Width="350" Style="{DynamicResource WindowTemplateStyle}" DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <Grid Background="{DynamicResource Color.Secondary}">
+    <Grid Background="{DynamicResource Brush.Secondary}">
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
             <RowDefinition Height="*" />
@@ -21,7 +21,7 @@
                 <DataGridTextColumn Header="Изделие" Width="*" Binding="{Binding Name}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Border BorderBrush="{DynamicResource Color.DataGrid.GridLines}" BorderThickness="0,1,0,0" Grid.Row="2">
+        <Border BorderBrush="{DynamicResource Brush.DataGrid.GridLines}" BorderThickness="0,1,0,0" Grid.Row="2">
             <Button x:Name="ButtonApply" 
                     Style="{StaticResource SCButtonStyle}" 
                     Content="Готово" 

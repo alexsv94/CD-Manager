@@ -47,24 +47,33 @@ namespace OrganizerWpf.ViewModels
                 OnPropertyChanged(nameof(SelectedItem));
             }
         }
+
+        private DirectoryInfo? _rootDirectory = null;
+        public DirectoryInfo? RootDirectory
+        {
+            get => _rootDirectory;
+            set
+            {
+                _rootDirectory = value;
+                OnPropertyChanged(nameof(RootDirectory));
+            }
+        }
         #endregion
 
         public Label? UI_DropLabel;
         public StackPanel? UI_AdressPanel;
 
-        protected readonly string _targetDirectory = string.Empty;
-        protected DirectoryInfo _rootDirectory;
         protected DirectoryInfo _currentDirectory;
 
-        public ExplorerViewModel(string targetDir)
+        public ExplorerViewModel()
         {
-            _targetDirectory = targetDir;
             Settings.CurrentProductDirectoryChanged += OnRootDirectoryChanged;
         }
 
         public void GoToRootDirectoty()
         {
-            ChangeCurrentDirectory(_rootDirectory.FullName);
+            if (RootDirectory != null)
+                ChangeCurrentDirectory(RootDirectory.FullName);
 
             if (UI_AdressPanel != null)
             {
@@ -80,7 +89,7 @@ namespace OrganizerWpf.ViewModels
         
         protected virtual void UpdateFileList()
         {
-            if (_currentDirectory.FullName != _rootDirectory.FullName)
+            if (_currentDirectory.FullName != RootDirectory?.FullName)
             {
                 IFileSystemItem backDirItem = new DirectoryModel()
                 {
@@ -94,10 +103,10 @@ namespace OrganizerWpf.ViewModels
         }
 
         #region Handlers
-        private void OnRootDirectoryChanged(string newDir)
+        protected virtual void OnRootDirectoryChanged(string newDir)
         {
-            _currentDirectory = new(Path.Combine(newDir, _targetDirectory));
-            _rootDirectory = new(_currentDirectory.FullName);
+            _currentDirectory = new(newDir);
+            RootDirectory = new(_currentDirectory.FullName);
             GoToRootDirectoty();
         }
 

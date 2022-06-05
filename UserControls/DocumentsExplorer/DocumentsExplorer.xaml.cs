@@ -6,14 +6,6 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 {
     public partial class DocumentsExplorer : UserControl
     {
-        public string TargetDirectory
-        {
-            get { return (string)GetValue(TargetDirectoryProperty); }
-            set { SetValue(TargetDirectoryProperty, value); }
-        }
-        public static readonly DependencyProperty TargetDirectoryProperty =
-            DependencyProperty.Register("TargetDirectory", typeof(string), typeof(DocumentsExplorer), new PropertyMetadata(""));
-
         public DocumentsExplorerViewModel? ViewModel { get; private set; } = null;
 
         public DocumentsExplorer()
@@ -26,7 +18,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
         {
             if (ViewModel == null)
             {
-                ViewModel = new(TargetDirectory);
+                ViewModel = new();
                 ViewModel.UI_DropLabel = dropLabel;
                 ViewModel.UI_AdressPanel = adressPanel;
 

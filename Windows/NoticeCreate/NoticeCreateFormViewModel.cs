@@ -132,6 +132,17 @@ namespace OrganizerWpf.Windows.NoticeCreate
                 OnPropertyChanged(nameof(ChangesList));
             }
         }
+
+        private Operation? _operationProgress = null;
+        public Operation? OperationProgress
+        {
+            get => _operationProgress;
+            set
+            {
+                _operationProgress = value;
+                OnPropertyChanged(nameof(OperationProgress));
+            }
+        }
         #endregion
 
         #region Commands
@@ -153,11 +164,13 @@ namespace OrganizerWpf.Windows.NoticeCreate
 
         private RelayCommand? _createNoticeCommand = null;
         public RelayCommand? CreateNoticeCommand =>
-            _createNoticeCommand ??= new RelayCommand(obj => CreateNotice());
+            _createNoticeCommand ??= new RelayCommand(obj => CreateNotice((System.Windows.Controls.Button)obj!));
         #endregion
-        public NoticeCreateFormViewModel()
-        {
 
+        private readonly System.Windows.Controls.ProgressBar _ui_ProgressBar;
+        public NoticeCreateFormViewModel(System.Windows.Controls.ProgressBar progressBar)
+        {
+            _ui_ProgressBar = progressBar;
         }
 
         public void OnExtendToItemMouseDoubleClick(object sender)
@@ -244,15 +257,93 @@ namespace OrganizerWpf.Windows.NoticeCreate
             }
         }
 
-        private void CreateNotice()
+        private async void CreateNotice(System.Windows.Controls.Button btnApply)
+        {
+            string fileName = $"Извещение {DecNumber}.docx";
+
+            var saveDialogResult = OpenSaveDialog(fileName, out string chosenPath);
+
+            if (!saveDialogResult) return;
+
+            var items = new Dictionary<string, string>
+            {
+                { "<DEC_NUM>", DecNumber },
+                { "<CREATION_DATE>", CreationDate.ToShortDateString()},
+                { "<CHANGE_REASON>", ChangeReason},
+                { "<BASIS_FOR_RELEASE>", BasisForRelease},
+                { "<BACKLOG_NOTICE>", Backlog},
+                { "<CHANGES_SUMMARY>", ChangesSummary},                
+                { "<AUTHOR>", Author},
+                { "<FILES_COUNT>", ChangesList.Count.ToString()}
+            };
+
+            var combinedItems = new Dictionary<string, string[]>
+            {
+                { "<CHANGES>", CombineChanges()},
+                { "<EXTEND_TO>", CombineEtendTo()},
+            };
+
+            var helper = new WordHelper(Environment.CurrentDirectory + "\\Templates\\notice_template.docx");
+
+            btnApply.Content = "Формирование...";
+            btnApply.IsEnabled = false;
+
+            OperationProgress = new();
+            _ui_ProgressBar.Visibility = Visibility.Visible;
+
+            var result = await Task.Run(() => helper.Process(items, chosenPath, combinedItems, OperationProgress));
+
+            btnApply.Content = "Сформировать";
+            btnApply.IsEnabled = true;
+            _ui_ProgressBar.Visibility = Visibility.Collapsed;
+
+            NotifyResult(result, fileName);
+        }
+
+        private string[] CombineChanges()
+        {
+            var result = new List<string>();
+
+            foreach (var item in ChangesList)
+            {
+                result.Add($"Документ {item.ShortName} версии {item.PreviousVersion!.Version} заменить на версию {item.Version.Version}.\r");
+            }
+
+            return result.ToArray();
+        }
+
+        private string[] CombineEtendTo()
+        {
+            var result = new List<string>();
+
+            foreach (var item in ExtendToList)
+            {
+                result.Add(item.Name + " " + item.DecNumber + "\r");
+            }
+
+            return result.ToArray();
+        }
+
+        private void NotifyResult(bool result, string documentName)
+        {
+            string text = result 
+                ? $"Документ {documentName} сформирован успешно" 
+                : "Во время формирования документа произошла ошибка. Возможно указанный файл занят другим процессом.";
+            MessageBoxImage image = result ? MessageBoxImage.Information : MessageBoxImage.Error;
+
+            SCMessageBox.ShowMsgBox(text,
+                "Формирование документа",
+                MessageBoxButton.OK,
+                image);
+        }
+
+        private bool OpenSaveDialog(string fileName, out string chosenPath)
         {
             using var dialog = new SaveFileDialog();
             dialog.Filter = "Документы Word (*.doc, *.docx)|*.doc, *.docx|Все файлы (*.*)|*.*";
             dialog.DefaultExt = ".docx";
             dialog.SupportMultiDottedExtensions = true;
 
-            string fileName = $"Извещение {DecNumber}.docx";
-            
             if (!string.IsNullOrWhiteSpace(Settings.CurrentProductDirectoryPath))
             {
                 dialog.FileName = Path.Combine(Settings.CurrentProductDirectoryPath, fileName);
@@ -262,50 +353,10 @@ namespace OrganizerWpf.Windows.NoticeCreate
                 dialog.FileName = Path.Combine("C:", "Users", Environment.UserName, "Desktop", fileName);
             }
 
-            if (dialog.ShowDialog() != DialogResult.OK) return;
+            var result = dialog.ShowDialog();
+            chosenPath = dialog.FileName;
 
-            string path = dialog.FileName;
-
-            var items = new Dictionary<string, string>
-            {
-                { "<DEC_NUM>", DecNumber },
-                { "<CREATION_DATE>", CreationDate.ToShortDateString()},
-                { "<CHANGE_REASON>", ChangeReason},
-                { "<BASIS_FOR_RELEASE>", BasisForRelease},
-                { "<BACKLOG_NOTICE>", Backlog},
-                { "<CHANGES_SUMMARY>", ChangesSummary},
-                { "<CHANGES>", CombineChanges()},
-                { "<EXTEND_TO>", CombineEtendTo()},
-                { "<AUTHOR>", Author},
-                { "<FILES_COUNT>", ChangesList.Count.ToString()}
-            };
-
-            var helper = new WordHelper(Environment.CurrentDirectory + "\\Templates\\notice_template.docx");
-            helper.Process(items, path);
-        }
-
-        private string CombineChanges()
-        {
-            string result = string.Empty;
-
-            foreach (var item in ChangesList)
-            {
-                result += $"Документ {item.ShortName} версии {item.PreviousVersion!.Version} заменить на версию {item.Version.Version}.\r";
-            }
-
-            return result;
-        }
-
-        private string CombineEtendTo()
-        {
-            var result = string.Empty;
-
-            foreach (var item in ExtendToList)
-            {
-                result += item.Name + " " + item.DecNumber + "\r";
-            }
-
-            return result;
+            return result == DialogResult.OK;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 {
     public class DocumentsExplorerViewModel : ExplorerViewModel
     {
-        public DocumentsExplorerViewModel(string targetDir) : base(targetDir) { }
+        public DocumentsExplorerViewModel() : base() { }
 
         #region Commands
         private RelayCommand? _changeVersionCommand= null;

@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="Styles/SCMainMenu.xaml" />
                 <ResourceDictionary Source="Styles/SCTextBox.xaml" />
                 <ResourceDictionary Source="Styles/SCListBox.xaml" />
+                <ResourceDictionary Source="Styles/SCProgressBar.xaml" />
                 <ResourceDictionary Source="Styles/ExtensionIcons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -8,7 +8,7 @@
              d:DesignHeight="30" d:DesignWidth="200">
     <UserControl.Resources>
         <Style x:Key="dirNameText" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary1}" />
+            <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Secondary}" />
             <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
             <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content.Small}" />
             <Style.Triggers>
@@ -20,7 +20,15 @@
         </Style>
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
-        <Image Source="../../Icons/Controls/arrowRight.png" Width="{StaticResource Font.FontSize.Content.Small}" Height="{StaticResource Font.FontSize.Content.Small}" VerticalAlignment="Center" />
-        <TextBlock Text="{Binding Text}" Style="{StaticResource dirNameText}" Cursor="Hand" MouseUp="Label_MouseUp" VerticalAlignment="Center" Margin="5,0,0,0"/>
+        <Image Source="../../Icons/Controls/arrowRight.png" 
+               Width="{StaticResource Font.FontSize.Content.Small}" 
+               Height="{StaticResource Font.FontSize.Content.Small}" 
+               VerticalAlignment="Center" />
+        <TextBlock Text="{Binding Text}" 
+                   Style="{StaticResource dirNameText}" 
+                   Cursor="Hand" 
+                   MouseUp="Label_MouseUp" 
+                   VerticalAlignment="Center" 
+                   Margin="5,0,0,0"/>
     </StackPanel>
 </UserControl>

@@ -8,7 +8,7 @@
         xmlns:icons="clr-namespace:OrganizerWpf.Icons"
         Style="{DynamicResource WindowTemplateStyle}"
         ResizeMode="CanResizeWithGrip" SizeToContent="Manual"
-        Title="Менеджер КД" Height="800" Width="1400" MinWidth="1000" MinHeight="600"
+        Title="Менеджер КД" Height="800" Width="1500" MinWidth="1000" MinHeight="600"
         Icon="/Icons/Windows/main_32x32.png" WindowStyle="None" TextOptions.TextFormattingMode="Display">
     <Window.Resources>
         <icons:IconSelector x:Key="IconSelector"/>
@@ -31,7 +31,7 @@
         </Grid.RowDefinitions>
 
         <Menu Style="{DynamicResource SCMainMenuStyle}" Margin="19,0,0,0" VerticalAlignment="Center">
-            <MenuItem Style="{DynamicResource SCMenuItemStyle}" Header="Файл">
+            <MenuItem Style="{DynamicResource SCMenuItemStyle}" Header="Файл" Padding="5,3,5,3">
                 <MenuItem Header="Настройки" Command="{Binding OpenSettingsWindowCommand}" Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Settings}"/>
                 <MenuItem Header="Выход" Command="{Binding CloseWindowCommand}" Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Exit}"/>
             </MenuItem>
@@ -45,7 +45,7 @@
             </MenuItem>
         </Menu>
 
-        <Border Grid.Row="1" Grid.RowSpan="5" Margin="24,5,0,0" Background="{DynamicResource Color.Secondary}" CornerRadius="5">
+        <Border Grid.Row="1" Grid.RowSpan="5" Margin="24,5,0,0" Background="{DynamicResource Brush.Secondary}" CornerRadius="5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="110" />
@@ -61,39 +61,46 @@
                         </Grid.RowDefinitions>
                         <TextBlock Text="Список изделий" Style="{DynamicResource Text_Main}" VerticalAlignment="Center" Margin="10,0,0,0"/>
 
-                        <Border Grid.Row="1" Background="{DynamicResource Color.Secondary}">
+                        <Border Grid.Row="1" Background="{DynamicResource Brush.Secondary}">
                             <TextBox Style="{DynamicResource SCSearchTextBoxStyle}" VerticalContentAlignment="Center" Margin="5" TextChanged="TextBox_TextChanged"/>                            
                         </Border>
                         <TextBlock Grid.Row="2" Text="Название" Style="{DynamicResource Text_Sub}" VerticalAlignment="Center" Margin="10,0,0,0"/>
                     </Grid>                    
                 </Border>                
-                <ListBox ItemContainerStyle="{DynamicResource SCListBoxItemContainerStyle}" ItemTemplate="{DynamicResource SCListBoxItemTemplate}" Style="{DynamicResource SCListBoxStyle}"
+                <ListBox x:Name="ProductsListBox"
+                         ItemContainerStyle="{DynamicResource SCListBoxItemContainerStyle}" 
+                         ItemTemplate="{DynamicResource SCListBoxItemTemplate}" 
+                         Style="{DynamicResource SCListBoxStyle}"
                          Grid.Row="1" 
                          ScrollViewer.VerticalScrollBarVisibility="Visible"
                          SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
                          ItemsSource="{Binding FilteredProducts}"/>
             </Grid>
-        </Border>       
+        </Border>
 
-        <TabControl Style="{DynamicResource SCTabControlStyle}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="4" Margin="24,5,24,24">
-            <TabItem Style="{DynamicResource SCTabItemStyle}" Header="КД" Width="250">
-                <docs:DocumentsExplorer
-                    TargetDirectory="КД"/>
-            </TabItem>
-            <TabItem Style="{DynamicResource SCTabItemStyle}" Header="ЭМ" Width="250">
-                <docs:DocumentsExplorer
-                    TargetDirectory="ЭМ"/>
-            </TabItem>
-        </TabControl>
-        <Border Margin="24,0,24,0" Background="{DynamicResource Color.Secondary}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" CornerRadius="5">
+        <Border Background="{DynamicResource Brush.Secondary}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="4" Margin="24,5,24,24" CornerRadius="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Border Background="{DynamicResource Brush.DataGrid.Headers}" CornerRadius="5,5,0,0">
+                    <TextBlock Text="Файловый менеджер" Style="{DynamicResource Text_Main}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                </Border>                
+                <docs:DocumentsExplorer Grid.Row="1"/>
+            </Grid>
+        </Border>
+        
+        <Border Margin="24,0,24,0" Background="{DynamicResource Brush.Secondary}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" CornerRadius="5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="Извещения" FontWeight="Bold" Style="{DynamicResource Text_Sub}" Foreground="{DynamicResource Color.Text.Secondary}" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                <notices:NoticeExplorer Grid.Row="1" TargetDirectory="Извещения"/>
+                <TextBlock Text="Извещения" FontWeight="Bold" Style="{DynamicResource Text_Sub}" Foreground="{DynamicResource Brush.Text.Secondary}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <notices:NoticeExplorer Grid.Row="1"/>
             </Grid>
         </Border>        
     </Grid>

@@ -162,6 +162,9 @@ namespace OrganizerWpf.StylizedControls
 
             switch (icon)
             {
+                case MessageBoxImage.Information:
+                    window.MsgIcon = ResourceHelper.GetImageFromResource("Icons\\Windows\\MessageBox\\info.png");
+                    break;
                 case MessageBoxImage.Question:
                     window.MsgIcon = ResourceHelper.GetImageFromResource("Icons\\Windows\\MessageBox\\question.png");
                     break;
@@ -218,7 +221,7 @@ namespace OrganizerWpf.StylizedControls
             return window.Result;
         }
 
-        private static SCMessageBox CreateInstance(string text, string caption = "") => new SCMessageBox()
+        private static SCMessageBox CreateInstance(string text, string caption = "") => new()
         {
             Text = text,
             Caption = caption,

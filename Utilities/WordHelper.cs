@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using Word = Microsoft.Office.Interop.Word;
@@ -24,9 +25,14 @@ namespace OrganizerWpf.Utilities
             }
         }
 
-        public bool Process(Dictionary<string, string> items, string newFileName)
+        public bool Process(Dictionary<string, string> items, string newFileName, Dictionary<string, string[]>? combinedItems = null, Operation? operation = null)
         {
             Word.Application? app = null;
+
+            if (operation != null)
+            {
+                ConfigureOperation(items, operation, combinedItems);
+            }
 
             try
             {
@@ -35,11 +41,23 @@ namespace OrganizerWpf.Utilities
 
                 Word.Document document = app.Documents.Open(file);
 
-                foreach (var item in items)
+                for (int i = 0; i < items.Count; i++)
                 {
-                   FindAndReplaceText(app.ActiveDocument, item.Key, item.Value);
+                    FindAndReplaceText(app.ActiveDocument, items.ElementAt(i).Key, items.ElementAt(i).Value);
+                    if (operation != null) operation.CompletedStepsCount += 1;
                 }
-                FindAndReplaceText(app.ActiveDocument, "^p ", "^p");
+
+                if (combinedItems != null)
+                {
+                    foreach (var item in combinedItems)
+                    {
+                        for (int i = 0; i < item.Value.Length; i++)
+                        {
+                            FindAndReplaceText(app.ActiveDocument, item.Key, item.Value[i], i != item.Value.Length - 1);
+                            if (operation != null) operation.CompletedStepsCount += 1;
+                        }
+                    }
+                }
 
                 SaveDocument(document, newFileName);
                 app.ActiveDocument.Close();
@@ -48,19 +66,19 @@ namespace OrganizerWpf.Utilities
             }
             catch (Exception ex) 
             {
-                SCMessageBox.ShowMsgBox(ex.Message);
                 return false;
             }
             finally
             {
                 if (app != null)
                 {
-                    app.Quit();
+                    app.Quit(SaveChanges: false);
+                    if (operation != null) operation.CompletedStepsCount = operation.TotalStepsCount;
                 }
             }            
         }
 
-        private void FindAndReplaceText(Word.Document document, string text, string replaceWithText)
+        private void FindAndReplaceText(Word.Document document, string text, string replaceWithText, bool addKeyAfterReplacement = false)
         {
             object wrap = Word.WdFindWrap.wdFindContinue;
             object replace = Word.WdReplace.wdReplaceAll;
@@ -71,7 +89,10 @@ namespace OrganizerWpf.Utilities
             {
                 rng.Find.Text = text;
                 rng.Find.Replacement.Text = replaceWithText;
-               
+
+                if (addKeyAfterReplacement)
+                    rng.Find.Replacement.Text += text;
+
                 rng.Find.Execute(
                     FindText: missing,
                     MatchCase: false,
@@ -97,6 +118,19 @@ namespace OrganizerWpf.Utilities
             else
             {
                 document.SaveAs2(fileName);
+            }
+        }
+
+        private void ConfigureOperation(Dictionary<string, string> items, Operation operation, Dictionary<string, string[]>? combinedItems = null)
+        {
+            operation.TotalStepsCount += items.Count;
+
+            if (combinedItems != null)
+            {
+                foreach (var item in combinedItems)
+                {
+                    operation.TotalStepsCount += item.Value.Length;
+                }
             }
         }
     }

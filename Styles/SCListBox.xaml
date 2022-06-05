@@ -13,7 +13,10 @@
 
     <DataTemplate x:Key="SCListBoxItemTemplate">
         <Border Padding="3" BorderThickness="1">
-            <TextBlock Text="{Binding Name}" FontFamily="{StaticResource Roboto-Regular}" FontSize="{DynamicResource Font.FontSize.Content}" TextWrapping="WrapWithOverflow"/>
+            <TextBlock Text="{Binding Name}" 
+                       FontFamily="{StaticResource Roboto-Regular}" 
+                       FontSize="{DynamicResource Font.FontSize.Content}" 
+                       TextWrapping="WrapWithOverflow"/>
         </Border>
     </DataTemplate>
 
@@ -103,7 +106,7 @@
     <Style x:Key="SCListBoxStyle" TargetType="{x:Type ListBox}">
         <Setter Property="Background" Value="{StaticResource ListBox.Static.Background}"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary1}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Secondary}"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>

@@ -40,7 +40,7 @@ namespace OrganizerWpf.Windows.NoticeCreate
         {
             if (ViewModel == null)
             {
-                ViewModel = new();
+                ViewModel = new(progressBar);
                 DataContext = ViewModel;
             }
         }

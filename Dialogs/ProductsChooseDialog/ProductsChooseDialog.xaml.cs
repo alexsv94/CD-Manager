@@ -69,6 +69,9 @@ namespace OrganizerWpf.Dialogs.ProductsChooseDialog
             _allProducts = FileSystemHelper.GetSerializedDirs<ProductModel>(Settings.WorkingDirectoryPath);
             _allProducts = _allProducts.Where(x => !ExcludedProducts.Any(y => y.ShortName == x.ShortName)).ToList();
 
+            var noticeFolder = _allProducts.FirstOrDefault(x => x.Name == "Извещения");
+            if (noticeFolder != null) _allProducts.Remove(noticeFolder);
+
             FilteredProducts.ReplaceItems(_allProducts);
 
             ExcludedProducts.Clear();

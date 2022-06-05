@@ -2,25 +2,17 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:conv="clr-namespace:OrganizerWpf.Utilities.Converters">
 
-    <conv:TextOrFocusConverter x:Key="TextOrFocusConverter" />
-
-    <SolidColorBrush x:Key="TextBox.Background" Color="#2b343a" />
-    <SolidColorBrush x:Key="TextBox.Border" Color="#aaaeb0" Opacity="0.5"/>
-    <SolidColorBrush x:Key="TextBox.Border.MouseOver" Color="#dedfe1" Opacity="0.5"/>
-    <SolidColorBrush x:Key="TextBox.Border.Focus" Color="#dedfe1" Opacity="0.8"/>
-    <SolidColorBrush x:Key="TextBox.Text" Color="#aaaeb0" />
-    <SolidColorBrush x:Key="TextBox.Placeholder.Foreground" Color="#aaaeb0" Opacity="0.5"/>
-    
+    <conv:TextOrFocusConverter x:Key="TextOrFocusConverter" /> 
 
     <Style x:Key="SCSearchTextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource TextBox.Border}"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextBox.Text}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Brush.TextBox.Border}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Secondary}"/>
         <Setter Property="FontFamily" Value="{DynamicResource Roboto-Light}" />
         <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Padding" Value="3" />
-        <Setter Property="CaretBrush" Value="{DynamicResource Color.Text.Primary}" />
+        <Setter Property="CaretBrush" Value="{DynamicResource Brush.Text.Primary}" />
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
@@ -39,7 +31,7 @@
 
                             <TextBlock x:Name="placeholder" 
                                        Text="Поиск изделия..." 
-                                       Foreground="{DynamicResource TextBox.Placeholder.Foreground}" 
+                                       Foreground="{DynamicResource Brush.TextBox.Placeholder.Foreground}" 
                                        FontFamily="{StaticResource Roboto-LightItalic}" 
                                        VerticalAlignment="Center" Margin="3,0,0,0" Visibility="Collapsed"/>
                             <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
@@ -51,7 +43,7 @@
                             <Setter Property="Opacity" TargetName="border" Value="0.56"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource TextBox.Border.MouseOver}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Brush.TextBox.Border.MouseOver}"/>
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="true">
                             
@@ -79,9 +71,9 @@
 
     <Style x:Key="SCTextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource TextBox.Border}"/>
-        <Setter Property="CaretBrush" Value="{DynamicResource Color.Text.Primary}" />
-        <Setter Property="Foreground" Value="{DynamicResource TextBox.Text}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Brush.TextBox.Border}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource Brush.Text.Primary}" />
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Secondary}"/>
         <Setter Property="FontFamily" Value="{DynamicResource Roboto-Light}" />
         <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
         <Setter Property="BorderThickness" Value="1"/>
@@ -106,13 +98,13 @@
                             <Setter Property="Opacity" TargetName="border" Value="0.56"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource TextBox.Border.MouseOver}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Brush.TextBox.Border.MouseOver}"/>
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource TextBox.Border.Focus}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Brush.TextBox.Border.Focus}"/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource TextBox.Border.Focus}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Brush.TextBox.Border.Focus}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

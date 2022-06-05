@@ -8,7 +8,7 @@
              xmlns:icons="clr-namespace:OrganizerWpf.Icons"
              x:Name="rootExplorer"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="900">
 
     <UserControl.Resources>
         <conv:DateTimeToStringConverter x:Key="dateConverter" />
@@ -53,14 +53,14 @@
 
             <StackPanel Orientation="Horizontal" x:Name="adressPanel">
                 <TextBlock x:Name="rootDirectoryLink"
-                    Text="{Binding ElementName=rootExplorer, Path=TargetDirectory}" 
+                    Text="{Binding RootDirectory.Name}" 
                     FontFamily="{StaticResource Roboto-Light}"
                     FontSize="{DynamicResource Font.FontSize.Content.Small}"
                     Margin="10,0,5,0"
                     VerticalAlignment="Center" Cursor="Hand">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary1}" />
+                            <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Secondary}" />
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Foreground" Value="White" />
@@ -85,7 +85,7 @@
                                         Binding="{Binding Path=CreationTime, Converter={StaticResource dateConverter}}" />
                     <DataGridTextColumn Width="140" Header="Дата изменения" 
                                         Binding="{Binding Path=UpdateTime, Converter={StaticResource dateConverter}}"/>
-                    <DataGridTextColumn Width="140" Header="Версия" Binding="{Binding Version.Version}"/>
+                    <DataGridTextColumn Width="200" Header="Версия" Binding="{Binding Version.Version}"/>
                 </DataGrid.Columns>
             </DataGrid>
             <Label Content="Перетащите файлы, чтобы скопировать" 
@@ -93,7 +93,10 @@
                    Visibility="Hidden"
                    Grid.Row="1"
                    VerticalContentAlignment="Center" 
-                   HorizontalAlignment="Center" Height="50" IsHitTestVisible="False" Background="#FF5BAAAA" BorderBrush="#FF545454"/>            
+                   HorizontalAlignment="Center" Height="50" IsHitTestVisible="False" 
+                   Foreground="{DynamicResource Brush.Text.Secondary}"
+                   Background="{DynamicResource Brush.Accent}" 
+                   BorderBrush="{DynamicResource Brush.Text.Secondary}"/>            
         </Grid>
     </Border>
 </UserControl>

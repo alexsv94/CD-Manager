@@ -9,9 +9,9 @@
              d:DesignHeight="30" d:DesignWidth="600" DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <UserControl.Resources>
         <Style x:Key="BrowseButtonStyle" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="{DynamicResource Color.Text.Secondary1}"/>
+            <Setter Property="Background" Value="{DynamicResource Brush.Text.Secondary}"/>
             <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Foreground" Value="{DynamicResource Color.Accent}"/>
+            <Setter Property="Foreground" Value="{DynamicResource Brush.Accent}"/>
             <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
             <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -48,7 +48,7 @@
         </Style>        
         <Style x:Key="BrowseTextBoxStyle" TargetType="{x:Type TextBox}">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{DynamicResource Color.Text.Secondary1}"/>
+            <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Secondary}"/>
             <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
             <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
             <Setter Property="BorderThickness" Value="0"/>
@@ -78,7 +78,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Border BorderThickness="1" BorderBrush="{DynamicResource Color.Text.Secondary1}" CornerRadius="5">
+    <Border BorderThickness="1" BorderBrush="{DynamicResource Brush.Text.Secondary}" CornerRadius="5">
         <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:SCBrowseTextBox}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

@@ -20,7 +20,6 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
 {
     public partial class NoticeExplorer : UserControl
     {
-        public string TargetDirectory { get; set; } = string.Empty;
         public NoticeExplorerViewModel? ViewModel { get; private set; } = null;
 
         public NoticeExplorer()
@@ -33,7 +32,7 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
         {
             if (ViewModel == null)
             {
-                ViewModel = new(TargetDirectory);
+                ViewModel = new();
                 ViewModel.UI_DropLabel = dropLabel;
 
                 rootContainer.DragEnter += ViewModel.OnDragEnter;
