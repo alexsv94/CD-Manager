@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:docs="clr-namespace:OrganizerWpf.UserControls.DocumentsExplorer"
         xmlns:notices="clr-namespace:OrganizerWpf.UserControls.NoticeExplorer" 
-        xmlns:icons="clr-namespace:OrganizerWpf.Icons"
+        xmlns:icons="clr-namespace:OrganizerWpf.Icons" xmlns:controls="clr-namespace:OrganizerWpf.StylizedControls.Controls"
         Style="{DynamicResource WindowTemplateStyle}"
         ResizeMode="CanResizeWithGrip" SizeToContent="Manual"
         Title="Менеджер КД" Height="800" Width="1500" MinWidth="1000" MinHeight="600"
@@ -91,7 +91,7 @@
                 <docs:DocumentsExplorer Grid.Row="1"/>
             </Grid>
         </Border>
-        
+
         <Border Margin="24,0,24,0" Background="{DynamicResource Brush.Secondary}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" CornerRadius="5">
             <Grid>
                 <Grid.RowDefinitions>
@@ -99,9 +99,12 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="Извещения" FontWeight="Bold" Style="{DynamicResource Text_Sub}" Foreground="{DynamicResource Brush.Text.Secondary}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Извещения" FontWeight="Bold" Style="{DynamicResource Text_Sub}" Foreground="{DynamicResource Brush.Text.Secondary}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <controls:SCDateIntervalPicker Margin="10,0,0,0"/>
+                </StackPanel>
                 <notices:NoticeExplorer Grid.Row="1"/>
             </Grid>
-        </Border>        
+        </Border>
     </Grid>
 </Window>

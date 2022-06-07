@@ -25,6 +25,8 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
 
         private void OnCurrentProductDirectoryChanged(string newDir)
         {
+            if (string.IsNullOrWhiteSpace(newDir)) return;
+
             var currentProductDirInfo = new DirectoryInfo(newDir);
             _currentDirectory = new(Path.Combine(Settings.WorkingDirectoryPath, "Извещения", currentProductDirInfo.Name));
             RootDirectory = new(_currentDirectory.FullName);

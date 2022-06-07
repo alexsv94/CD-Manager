@@ -145,9 +145,8 @@ namespace OrganizerWpf.ViewModels
 
         public void OnMouseMove(object sender, MouseEventArgs e)
         {
-            if (e.MouseDevice.LeftButton == MouseButtonState.Pressed)
+            if (e.MouseDevice.LeftButton == MouseButtonState.Pressed && sender is DataGridRow row)
             {
-                DataGridRow row = (DataGridRow)sender;
                 string dragFilePath = (row.DataContext as IFileSystemItem)!.FullPath!;
                 IDataObject dragObject = new DataObject(DataFormats.FileDrop, new string[] { dragFilePath });
                 DragDrop.DoDragDrop(row, dragObject, DragDropEffects.Copy);

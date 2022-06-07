@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace OrganizerWpf.StylizedControls.Controls
 {
-    /// <summary>
-    /// Логика взаимодействия для SCDatePickerTextBox.xaml
-    /// </summary>
     public partial class SCDatePickerTextBox : UserControl
     {
         public DateTime Date
@@ -27,7 +24,6 @@ namespace OrganizerWpf.StylizedControls.Controls
         }
         public static readonly DependencyProperty DateProperty =
             DependencyProperty.Register("Date", typeof(DateTime), typeof(SCDatePickerTextBox), new PropertyMetadata(null));
-
 
 
         public SCDatePickerTextBox()
@@ -44,6 +40,7 @@ namespace OrganizerWpf.StylizedControls.Controls
         private void DateCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
             Date = DateCalendar.SelectedDates[0];
+            CalendarPopup.IsOpen = false;
         }
     }
 }

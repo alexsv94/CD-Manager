@@ -84,7 +84,7 @@
         <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:SCDatePickerTextBox}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="30" />
             </Grid.ColumnDefinitions>
 
             <TextBox Style="{DynamicResource BrowseTextBoxStyle}" 

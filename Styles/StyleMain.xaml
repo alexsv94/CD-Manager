@@ -99,62 +99,6 @@
         <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Secondary}" />
         <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
         <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
-    </Style>
-    
-    
-    <Style x:Key="FocusVisual">
-        <Setter Property="Control.Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Rectangle Margin="2" 
-                               StrokeDashArray="1 2" 
-                               Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" 
-                               SnapsToDevicePixels="true" StrokeThickness="1"/>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{DynamicResource Color.Button.MouseOver}"/>
-    <SolidColorBrush x:Key="Button.Pressed.Background" Color="{DynamicResource Color.Button.Pressed}"/>
-    <SolidColorBrush x:Key="Button.Disabled.Background" Color="{DynamicResource Color.Button.Disabled}" Opacity="0.5"/>
-    
-    <Style x:Key="SCButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-        <Setter Property="Background" Value="{DynamicResource Brush.Button.Default}"/>
-        <Setter Property="Foreground" Value="{DynamicResource Brush.Button.Foreground}"/>
-        <Setter Property="FontFamily" Value="{StaticResource Roboto-Light}" />
-        <Setter Property="FontSize" Value="{DynamicResource Font.FontSize.Content}" />
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Padding" Value="1"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="5" SnapsToDevicePixels="true">
-                        <ContentPresenter 
-                            x:Name="contentPresenter" 
-                            Focusable="False"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                            Margin="{TemplateBinding Padding}" 
-                            RecognizesAccessKey="True" 
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </Border>
-                    
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+    </Style> 
     
 </ResourceDictionary>

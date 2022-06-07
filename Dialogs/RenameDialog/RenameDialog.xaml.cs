@@ -42,6 +42,7 @@ namespace OrganizerWpf.Dialogs.RenameDialog
         {
             base.OnApplyTemplate();
             _eventsHelper = new(this, false, false);
+            nameTextBox.CaretIndex = nameTextBox.Text.Length;
         }
 
         private void buttonOK_Click(object sender, RoutedEventArgs e)
