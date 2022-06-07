@@ -29,7 +29,10 @@ namespace OrganizerWpf.Windows.MainWindow
         public void SetupViewModel(object sender, RoutedEventArgs e)
         {
             if (ViewModel == null)
+            {
                 ViewModel = new(this);
+                NoticeFilter.IntervalChanged = NoticeExplorer.ViewModel!.OnIntervalChanged;
+            }
 
             DataContext = ViewModel;
         }
@@ -37,11 +40,6 @@ namespace OrganizerWpf.Windows.MainWindow
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             ViewModel!.OnFilterValueChanged(sender);
-        }
-
-        private void NoticeIntervalChanged(DateInterval interval)
-        {
-
         }
     }
 }

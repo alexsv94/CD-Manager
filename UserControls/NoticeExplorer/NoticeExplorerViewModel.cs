@@ -15,7 +15,7 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
 
         protected override void UpdateFileList()
         {
-            Items.ReplaceItems(FileSystemHelper.GetItems<NoticeModel>(_currentDirectory.FullName));
+            FilteredItems.ReplaceItems(FileSystemHelper.GetItems<NoticeModel>(_currentDirectory.FullName));
         }
 
         protected override void OnRootDirectoryChanged(string newDir)

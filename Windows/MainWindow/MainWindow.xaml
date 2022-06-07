@@ -101,9 +101,9 @@
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Извещения" FontWeight="Bold" Style="{DynamicResource Text_Sub}" Foreground="{DynamicResource Brush.Text.Secondary}" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                    <controls:SCDateIntervalPicker Margin="10,0,0,0" IntervalChanged="NoticeIntervalChanged"/>
+                    <controls:SCDateIntervalPicker x:Name="NoticeFilter" Margin="10,0,0,0"/>
                 </StackPanel>
-                <notices:NoticeExplorer Grid.Row="1"/>
+                <notices:NoticeExplorer x:Name="NoticeExplorer" Grid.Row="1"/>
             </Grid>
         </Border>
     </Grid>

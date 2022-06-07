@@ -30,7 +30,7 @@
                   CellStyle="{DynamicResource SCDataGridCellStyle}" 
                   RowStyle="{DynamicResource NoticeExplorerRowStyle}" 
                   ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}"
-                  ItemsSource="{Binding Items}" 
+                  ItemsSource="{Binding FilteredItems}" 
                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                   AllowDrop="True">
 

@@ -3,7 +3,10 @@ using OrganizerWpf.Models;
 using OrganizerWpf.StylizedControls;
 using OrganizerWpf.UserControls.DirLink;
 using OrganizerWpf.Utilities;
+using OrganizerWpf.Utilities.Extensions;
+using OrganizerWpf.Utilities.Types;
 using OrganizerWpf.Windows.OperationProgress;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -28,14 +31,14 @@ namespace OrganizerWpf.ViewModels
         #endregion
 
         #region Binding Props
-        protected ObservableCollection<IFileSystemItem> _items = new();
-        public ObservableCollection<IFileSystemItem> Items
+        protected ObservableCollection<IFileSystemItem> _filteredItems = new();
+        public ObservableCollection<IFileSystemItem> FilteredItems
         {
-            get => _items;
+            get => _filteredItems;
             set
             {
-                _items = value;
-                OnPropertyChanged(nameof(Items));
+                _filteredItems = value;
+                OnPropertyChanged(nameof(FilteredItems));
             }
         }
 
@@ -66,10 +69,13 @@ namespace OrganizerWpf.ViewModels
         public StackPanel? UI_AdressPanel;
 
         protected DirectoryInfo _currentDirectory;
+        protected ObservableCollection<IFileSystemItem> _allItems = new();
+        protected DateInterval _dateInterval;
 
         public ExplorerViewModel()
         {
             Settings.CurrentProductDirectoryChanged += OnRootDirectoryChanged;
+            _dateInterval = new DateInterval();
         }
 
         public void GoToRootDirectoty()
@@ -100,8 +106,12 @@ namespace OrganizerWpf.ViewModels
                     Extension = "folder"
                 };
                 
-                Items.Insert(0, backDirItem);
+                FilteredItems.Insert(0, backDirItem);
             }
+
+            var items = _allItems.Where(x => _dateInterval.Contains((DateTime)x.CreationTime!) || 
+                                        x is DirectoryModel);
+            FilteredItems.ReplaceItems(items);
         }
 
         #region Handlers
@@ -110,6 +120,12 @@ namespace OrganizerWpf.ViewModels
             _currentDirectory = new(newDir);
             RootDirectory = new(_currentDirectory.FullName);
             GoToRootDirectoty();
+        }
+
+        public void OnIntervalChanged(DateInterval interval)
+        {
+            _dateInterval = interval;
+            UpdateFileList();
         }
 
         public void OnDragEnter(object sender, DragEventArgs e)

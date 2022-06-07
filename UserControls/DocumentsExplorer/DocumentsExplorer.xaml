@@ -75,7 +75,7 @@
                       RowStyle="{DynamicResource DocumentExplorerRowStyle}" 
                       ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}" x:Name="dataGrid"
                       Grid.Row="1"
-                      ItemsSource="{Binding Items}" 
+                      ItemsSource="{Binding FilteredItems}" 
                       SelectedItem="{Binding SelectedItem, Mode=TwoWay}" AllowDrop="True">               
                 
                 <DataGrid.Columns>
