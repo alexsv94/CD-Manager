@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OrganizerWpf.Utilities.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,23 +18,21 @@ namespace OrganizerWpf.StylizedControls.Controls
 {
     public partial class SCDateIntervalPicker : UserControl
     {
-        public DateTime StartDate
+        public DateInterval Interval
         {
-            get { return (DateTime)GetValue(StartDateProperty); }
-            set { SetValue(StartDateProperty, value); }
+            get { return (DateInterval)GetValue(IntervalProperty); }
+            set { SetValue(IntervalProperty, value); }
         }
-        public static readonly DependencyProperty StartDateProperty =
-            DependencyProperty.Register("StartDate", typeof(DateTime), typeof(SCDateIntervalPicker), new PropertyMetadata(DateTime.MinValue));
+        public static readonly DependencyProperty IntervalProperty =
+            DependencyProperty.Register("Interval", typeof(DateInterval), typeof(SCDateIntervalPicker), new PropertyMetadata(new DateInterval()));
 
-        public DateTime EndDate
+        public Action<DateInterval>? IntervalChanged
         {
-            get { return (DateTime)GetValue(EndDateProperty); }
-            set { SetValue(EndDateProperty, value); }
+            get { return (Action<DateInterval>?)GetValue(IntervalChangedProperty); }
+            set { SetValue(IntervalChangedProperty, value); }
         }
-        public static readonly DependencyProperty EndDateProperty =
-            DependencyProperty.Register("EndDate", typeof(DateTime), typeof(SCDateIntervalPicker), new PropertyMetadata(DateTime.Now));
-
-        public Action<DateTime, DateTime>? IntervalChanged;
+        public static readonly DependencyProperty IntervalChangedProperty =
+            DependencyProperty.Register("IntervalChanged", typeof(Action<DateInterval>), typeof(SCDateIntervalPicker), new PropertyMetadata(null));
 
 
         public SCDateIntervalPicker()
@@ -43,22 +42,21 @@ namespace OrganizerWpf.StylizedControls.Controls
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            CalendarPopup.IsOpen = true;
+            CalendarPopup.IsOpen = !CalendarPopup.IsOpen;
         }
 
         private void ResetButton_Click(object sender, RoutedEventArgs e)
         {
-            StartDate = DateTime.MinValue;
-            EndDate = DateTime.Now;
+            Interval.SetDefault();
 
             RootButton.Content = "Интервал";
-            IntervalChanged?.Invoke(StartDate, EndDate);
+            IntervalChanged?.Invoke(Interval);
             CalendarPopup.IsOpen = false;
         }
 
         private void SetButton_Click(object sender, RoutedEventArgs e)
         {
-            if (StartDate > EndDate)
+            if (Interval.StartDate > Interval.EndDate)
             {
                 SCMessageBox.ShowMsgBox("Начальная дата интервала не может быть позже конечной.",
                     "Ошибка выбора даты",
@@ -67,10 +65,10 @@ namespace OrganizerWpf.StylizedControls.Controls
                 return;
             }
             
-            RootButton.Content = $"<{StartDate.ToShortDateString()} - {EndDate.ToShortDateString()}>";
-            IntervalChanged?.Invoke(StartDate, EndDate);
+            RootButton.Content = $"<{Interval.StartDate.ToShortDateString()} - {Interval.EndDate.ToShortDateString()}>";
+            IntervalChanged?.Invoke(Interval);
 
             CalendarPopup.IsOpen = false;
         }
-    }
+    }    
 }

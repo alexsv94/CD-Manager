@@ -25,7 +25,7 @@ namespace OrganizerWpf.Utilities
             }
         }
 
-        public bool Process(Dictionary<string, string> items, string newFileName, Dictionary<string, string[]>? combinedItems = null, Operation? operation = null)
+        public bool Process(Dictionary<string, string> items, string newFileName, Dictionary<string, string[]>? combinedItems = null, AsyncOperation? operation = null)
         {
             Word.Application? app = null;
 
@@ -121,7 +121,7 @@ namespace OrganizerWpf.Utilities
             }
         }
 
-        private void ConfigureOperation(Dictionary<string, string> items, Operation operation, Dictionary<string, string[]>? combinedItems = null)
+        private void ConfigureOperation(Dictionary<string, string> items, AsyncOperation operation, Dictionary<string, string[]>? combinedItems = null)
         {
             operation.TotalStepsCount += items.Count;
 

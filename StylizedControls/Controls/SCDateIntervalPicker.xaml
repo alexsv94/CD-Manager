@@ -8,8 +8,11 @@
              d:DesignHeight="32" d:DesignWidth="300" DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Button x:Name="RootButton" Style="{DynamicResource SCIntervalButton}" VerticalAlignment="Center" Content="Интервал" Click="Button_Click"/>
-        <Popup x:Name="CalendarPopup" IsOpen="False" Placement="Top" StaysOpen="True" AllowsTransparency="True">
-            <Border CornerRadius="5" Background="{DynamicResource Brush.Accent}" BorderBrush="{DynamicResource Brush.Text.Secondary}" BorderThickness="1">
+        <Popup x:Name="CalendarPopup" Placement="Top" IsOpen="False" StaysOpen="True" AllowsTransparency="True">
+            <Border CornerRadius="5" Background="{DynamicResource Brush.Accent}" Margin="5">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="1"/>
+                </Border.Effect>
                 <StackPanel Margin="5">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -23,19 +26,18 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="От" Style="{DynamicResource Text_Sub}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" />
-                        <local:SCDatePickerTextBox DataContext="{Binding}" Date="{Binding StartDate, Mode=TwoWay}" Grid.Column="1"/>
+                        <local:SCDatePickerTextBox DataContext="{Binding}" Date="{Binding Interval.StartDate, Mode=TwoWay}" Grid.Column="1"/>
                         <TextBlock Text="До" Style="{DynamicResource Text_Sub}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Row="1"/>
-                        <local:SCDatePickerTextBox DataContext="{Binding}" Date="{Binding EndDate, Mode=TwoWay}" Margin="0,5,0,0" Grid.Row="1" Grid.Column="1"/>
+                        <local:SCDatePickerTextBox DataContext="{Binding}" Date="{Binding Interval.EndDate, Mode=TwoWay}" Margin="0,5,0,0" Grid.Row="1" Grid.Column="1"/>
                     </Grid>
-
                     <Grid Margin="0,5,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         
-                        <Button x:Name="SetButton" Style="{DynamicResource SCButtonStyle}" Content="ОК" Margin="0,0,5,0" Click="SetButton_Click"/>
-                        <Button x:Name="ResetButton" Style="{DynamicResource SCButtonStyle}" Content="Сброс" Margin="5,0,0,0" Click="ResetButton_Click" Grid.Column="1"/>
+                        <Button x:Name="SetButton" Style="{DynamicResource SCButtonStyle}" Content="ОК" Margin="0,0,5,0" Click="SetButton_Click" Padding="3,5,3,5"/>
+                        <Button x:Name="ResetButton" Style="{DynamicResource SCButtonStyle}" Content="Сброс" Margin="5,0,0,0" Click="ResetButton_Click" Padding="3,5,3,5" Grid.Column="1"/>
                     </Grid>
                 </StackPanel>
             </Border>

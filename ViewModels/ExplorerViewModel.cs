@@ -3,10 +3,12 @@ using OrganizerWpf.Models;
 using OrganizerWpf.StylizedControls;
 using OrganizerWpf.UserControls.DirLink;
 using OrganizerWpf.Utilities;
+using OrganizerWpf.Windows.OperationProgress;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -128,18 +130,20 @@ namespace OrganizerWpf.ViewModels
             UI_DropLabel!.Visibility = Visibility.Collapsed;
         }
 
-        public void OnDrop(object sender, DragEventArgs e)
+        public async void OnDrop(object sender, DragEventArgs e)
         {
             UI_DropLabel!.Visibility = Visibility.Collapsed;
 
             string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-            if (Items != null && Items.Any(x => droppedFiles[0] == x.FullPath))
-                return;
+            List<string> filePaths = FileSystemHelper.GetDroppedFilePaths(droppedFiles, true);
 
-            var filePaths = FileSystemHelper.GetDroppedFilePaths(droppedFiles, true);
-            FileSystemHelper.CopyItems(_currentDirectory.FullName, filePaths);
+            AsyncOperation op = new(true, "Копирование") 
+            { 
+                TotalStepsCount = FileSystemHelper.GetDroppedFilePaths(droppedFiles, false).Count 
+            };
 
+            await FileSystemHelper.CopyItemsAsync(_currentDirectory.FullName, filePaths, op);
             UpdateFileList();
         }
 

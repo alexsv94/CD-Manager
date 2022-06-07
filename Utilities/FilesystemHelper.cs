@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace OrganizerWpf.Utilities
@@ -223,56 +224,95 @@ namespace OrganizerWpf.Utilities
             return filePaths;
         }
 
-        public static void CopyItems(string workDirectory, List<string> itemsToCopy)
+        public async static Task<bool> CopyItemsAsync(string workDirectory, List<string> itemsToCopy, AsyncOperation? operation = null)
         {
-            if (string.IsNullOrEmpty(workDirectory)) return;
+            return await Task.Run(() =>
+            {
+                if (string.IsNullOrEmpty(workDirectory)) return false;
 
-            foreach (var item in itemsToCopy)
-            { 
-                FileInfo fileInfo = new(item);
-                DirectoryInfo directoryInfo = new(item);
-
-                if (directoryInfo.Exists)
+                foreach (var item in itemsToCopy)
                 {
-                    string destinationPath = Path.Combine(workDirectory, directoryInfo.Name);
-                    CopyDirectory(directoryInfo.FullName, destinationPath);
-                }
-                else if (fileInfo.Exists)
-                {
-                    FileInfo? fileToCheck = new DirectoryInfo(workDirectory)
-                                            .GetFiles()
-                                            .FirstOrDefault(x => x.Name == fileInfo.Name);
+                    FileInfo fileInfo = new(item);
+                    DirectoryInfo directoryInfo = new(item);
 
-                    CopyFile(fileToCheck, fileInfo, workDirectory);
+                    if (directoryInfo.Exists)
+                    {
+                        string destinationPath = Path.Combine(workDirectory, directoryInfo.Name);
+                        CopyDirectory(directoryInfo.FullName, destinationPath, true, operation);
+                    }
+                    else if (fileInfo.Exists)
+                    {
+                        FileInfo? fileToCheck = new DirectoryInfo(workDirectory)
+                                                .GetFiles()
+                                                .FirstOrDefault(x => x.Name == fileInfo.Name);
+
+                        CopyDroppedFile(fileToCheck, fileInfo, workDirectory);
+                        if (operation != null) operation.CompletedStepsCount++;
+                    }
                 }
+
+                if (operation != null) operation.CompletedStepsCount = operation.TotalStepsCount;
+                return true;
+            });            
+        }
+
+        private static void CopyDroppedFile(FileInfo? checkedFile, FileInfo fileToCopy, string workDir, bool safeCopy = true)
+        {
+            if (!CheckCopyPosibility(checkedFile)) return;
+
+            string targetPath = (Path.Combine(workDir, fileToCopy.Name));
+            CopyFile(fileToCopy, targetPath, safeCopy);
+        }
+
+        private static void CopyFile(FileInfo fileToCopy, string targetPath, bool safeCopy = true)
+        {
+            if (!CheckCopyPosibility(new FileInfo(targetPath))) return;
+
+            DateTime createdAt = fileToCopy.CreationTime;
+            DateTime modifiedAt = fileToCopy.LastWriteTime;
+
+            fileToCopy.CopyTo(targetPath);
+
+            if (safeCopy)
+            {
+                FileInfo fileCopy = new(targetPath);
+                fileCopy.CreationTime = createdAt;
+                fileCopy.LastWriteTime = modifiedAt;
             }
         }
 
-        private static void CopyFile(FileInfo? checkedFile, FileInfo fileToCopy, string workDir)
-        {
-            if (CheckCopyPosibility(checkedFile))                
-                fileToCopy.CopyTo(Path.Combine(workDir, fileToCopy.Name));
-        }
-
-        private static void CopyDirectory(string sourceDir, string destinationDir)
+        private static void CopyDirectory(string sourceDir, string destinationDir, bool safeCopy = true, AsyncOperation? operation = null)
         {
             if (!CheckCopyPosibility(new DirectoryInfo(destinationDir))) return;
 
             DirectoryInfo dir = new(sourceDir);
 
+            DateTime createdAt = dir.CreationTime;
+            DateTime modifiedAt = dir.LastWriteTime;
+
             DirectoryInfo[] dirs = dir.GetDirectories();
             Directory.CreateDirectory(destinationDir);
+            if (operation != null) operation.CompletedStepsCount++;
+
+            if (safeCopy)
+            {
+                DirectoryInfo dirCopy = new(destinationDir);
+                dirCopy.CreationTime = createdAt;
+                dirCopy.LastWriteTime = modifiedAt;
+            }
 
             foreach (FileInfo file in dir.GetFiles())
             {
                 string targetFilePath = Path.Combine(destinationDir, file.Name);
-                file.CopyTo(targetFilePath);
+                CopyFile(file, targetFilePath);
+                if (operation != null) operation.CompletedStepsCount++; 
             }
 
             foreach (DirectoryInfo subDir in dirs)
             {
                 string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
                 CopyDirectory(subDir.FullName, newDestinationDir);
+                if (operation != null) operation.CompletedStepsCount++;
             }
         }
 

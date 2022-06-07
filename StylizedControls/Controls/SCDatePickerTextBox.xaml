@@ -80,7 +80,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Border BorderThickness="1" BorderBrush="{DynamicResource Brush.TextBox.Border}" CornerRadius="5">
+    <Border BorderThickness="1" BorderBrush="{DynamicResource Brush.TextBox.Border}" CornerRadius="5" MinHeight="25">
         <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:SCDatePickerTextBox}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -100,8 +100,8 @@
                     <Image Source="../../Icons/Controls/calendar.png" 
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
-                           Width="18"
-                           Height="18"/>
+                           Width="14"
+                           Height="14"/>
                 </Button.Content>
             </Button>
             <Popup x:Name="CalendarPopup" Placement="Bottom" IsOpen="false" AllowsTransparency="True" DataContext="{Binding}" StaysOpen="False">

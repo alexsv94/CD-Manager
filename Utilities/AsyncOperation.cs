@@ -1,4 +1,5 @@
 ﻿using OrganizerWpf.ViewModels;
+using OrganizerWpf.Windows.OperationProgress;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OrganizerWpf.Utilities
 {
-    public class Operation : ViewModelBase
+    public class AsyncOperation : ViewModelBase
     {
         private int _totalStepsCount;
         public int TotalStepsCount {
@@ -32,5 +33,11 @@ namespace OrganizerWpf.Utilities
         }
 
         public int Progress => (int)((double)CompletedStepsCount / (double)TotalStepsCount * 100);
+
+        public AsyncOperation(bool showProgressWindow, string name = "")
+        {
+            if (showProgressWindow)
+                OperationProgressWindow.ShowProgressWindow(this, name);
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using OrganizerWpf.StylizedControls;
 using OrganizerWpf.Utilities;
+using OrganizerWpf.Utilities.Types;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -35,6 +37,11 @@ namespace OrganizerWpf.Windows.MainWindow
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             ViewModel!.OnFilterValueChanged(sender);
+        }
+
+        private void NoticeIntervalChanged(DateInterval interval)
+        {
+
         }
     }
 }

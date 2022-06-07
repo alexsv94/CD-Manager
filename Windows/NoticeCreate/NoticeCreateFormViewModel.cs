@@ -133,8 +133,8 @@ namespace OrganizerWpf.Windows.NoticeCreate
             }
         }
 
-        private Operation? _operationProgress = null;
-        public Operation? OperationProgress
+        private AsyncOperation? _operationProgress = null;
+        public AsyncOperation? OperationProgress
         {
             get => _operationProgress;
             set
@@ -288,7 +288,7 @@ namespace OrganizerWpf.Windows.NoticeCreate
             btnApply.Content = "Формирование...";
             btnApply.IsEnabled = false;
 
-            OperationProgress = new();
+            OperationProgress = new(false);
             _ui_ProgressBar.Visibility = Visibility.Visible;
 
             var result = await Task.Run(() => helper.Process(items, chosenPath, combinedItems, OperationProgress));
