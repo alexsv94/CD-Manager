@@ -28,7 +28,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 
         protected override void UpdateFileList()
         {
-            FilteredItems.ReplaceItems(FileSystemHelper.GetItems<DocumentModel>(_currentDirectory.FullName));
+            _allItems.ReplaceItems(FileSystemHelper.GetItems<DocumentModel>(_currentDirectory.FullName));
             base.UpdateFileList();
         }        
 

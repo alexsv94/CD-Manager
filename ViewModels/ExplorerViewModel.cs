@@ -106,10 +106,10 @@ namespace OrganizerWpf.ViewModels
                     Extension = "folder"
                 };
                 
-                FilteredItems.Insert(0, backDirItem);
+                _allItems.Insert(0, backDirItem);
             }
 
-            var items = _allItems.Where(x => _dateInterval.Contains((DateTime)x.CreationTime!) || 
+            var items = _allItems.Where(x => _dateInterval.Contains(x.CreationTime) || 
                                         x is DirectoryModel);
             FilteredItems.ReplaceItems(items);
         }

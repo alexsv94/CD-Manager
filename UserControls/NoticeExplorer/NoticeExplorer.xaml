@@ -10,9 +10,15 @@
     <UserControl.Resources>
         <conv:DateTimeToStringConverter x:Key="dateConverter" />
 
-        <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}">
-            <MenuItem Header="Удалить" Command="{Binding DeleteCommand}" />
-            <MenuItem Header="Переименовать" Command="{Binding RenameCommand}" />
+        <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}" Style="{DynamicResource SCContextMenuStyle}">
+            <MenuItem Header="Удалить"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Delete}"
+                                  Command="{Binding DeleteCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
+            <MenuItem Header="Переименовать"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Rename}"
+                                  Command="{Binding RenameCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
         </ContextMenu>
 
         <Style x:Key="NoticeExplorerRowStyle" TargetType="DataGridRow" BasedOn="{StaticResource SCDataGridRowStyle}">

@@ -44,8 +44,10 @@ namespace OrganizerWpf.Utilities.Types
             EndDate = DateTime.Now;
         }
 
-        public bool Contains(DateTime date)
+        public bool Contains(DateTime? date)
         {
+            if (date == null) return false;
+
             DateTime clampedStart = DateTime.Parse(StartDate.ToShortDateString());
             DateTime clampedEnd = DateTime.Parse(EndDate.ToShortDateString()).AddDays(1);
 

@@ -2,7 +2,9 @@
 using OrganizerWpf.Utilities;
 using OrganizerWpf.Utilities.Extensions;
 using OrganizerWpf.ViewModels;
+using System;
 using System.IO;
+using System.Linq;
 
 namespace OrganizerWpf.UserControls.NoticeExplorer
 {
@@ -15,7 +17,13 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
 
         protected override void UpdateFileList()
         {
-            FilteredItems.ReplaceItems(FileSystemHelper.GetItems<NoticeModel>(_currentDirectory.FullName));
+            if (_currentDirectory == null) return;
+            
+            _allItems.ReplaceItems(FileSystemHelper.GetItems<NoticeModel>(_currentDirectory.FullName));
+
+            var items = _allItems.Where(x => _dateInterval.Contains((DateTime)x.CreationTime!) ||
+                                       x is DirectoryModel);
+            FilteredItems.ReplaceItems(items);
         }
 
         protected override void OnRootDirectoryChanged(string newDir)

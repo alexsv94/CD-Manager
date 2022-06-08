@@ -25,7 +25,20 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
         public NoticeExplorer()
         {
             InitializeComponent();
-            Loaded += SetupViewModel;
+            //Loaded += SetupViewModel;
+            if (ViewModel == null)
+            {
+                ViewModel = new();
+                ViewModel.UI_DropLabel = dropLabel;
+
+                rootContainer.DragEnter += ViewModel.OnDragEnter;
+                rootContainer.DragLeave += ViewModel.OnDragLeave;
+                rootContainer.Drop += ViewModel.OnDrop;
+
+                dataGrid.MouseMove += ViewModel.OnMouseMove;
+            }
+
+            DataContext = ViewModel;
         }
 
         private void SetupViewModel(object sender, RoutedEventArgs e)

@@ -321,10 +321,13 @@ namespace OrganizerWpf.Utilities
             if (item != null && item.Exists)
             {
                 string typeOfElement = item is FileInfo ? "Файл" : "Папка";
-                
-                var result = SCMessageBox.ShowMsgBox($"{typeOfElement} {item.Name} уже существует. Заменить?",
-                "Копирование",
-                MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                var result = Application.Current.Dispatcher.Invoke(() =>
+                {
+                    return SCMessageBox.ShowMsgBox($"{typeOfElement} {item.Name} уже существует. Заменить?",
+                                            "Копирование",
+                                            MessageBoxButton.YesNo, MessageBoxImage.Question);
+                });                    
 
                 if (result == SCMessageBoxResult.Yes)
                 {
