@@ -208,7 +208,7 @@ namespace OrganizerWpf.Utilities
 
         public static List<string> GetDroppedFilePaths(string[] paths, bool includeFolders)
         {
-            List<string> filePaths = new List<string>();
+            List<string> filePaths = new();
 
             foreach (string obj in paths)
             {
@@ -218,17 +218,17 @@ namespace OrganizerWpf.Utilities
                     filePaths.Add(obj);
                 }
 
-                if (includeFolders) filePaths.Add(obj);
+                if (File.Exists(obj) || Directory.Exists(obj)) filePaths.Add(obj);
             }
 
             return filePaths;
         }
 
-        public async static Task<bool> CopyItemsAsync(string workDirectory, List<string> itemsToCopy, AsyncOperation? operation = null)
+        public async static Task<bool> CopyItemsAsync(string targetDirectory, List<string> itemsToCopy, AsyncOperation? operation = null)
         {
             return await Task.Run(() =>
             {
-                if (string.IsNullOrEmpty(workDirectory)) return false;
+                if (string.IsNullOrEmpty(targetDirectory)) return false;
 
                 foreach (var item in itemsToCopy)
                 {
@@ -237,16 +237,16 @@ namespace OrganizerWpf.Utilities
 
                     if (directoryInfo.Exists)
                     {
-                        string destinationPath = Path.Combine(workDirectory, directoryInfo.Name);
+                        string destinationPath = Path.Combine(targetDirectory, directoryInfo.Name);
                         CopyDirectory(directoryInfo.FullName, destinationPath, true, operation);
                     }
                     else if (fileInfo.Exists)
                     {
-                        FileInfo? fileToCheck = new DirectoryInfo(workDirectory)
+                        FileInfo? fileToCheck = new DirectoryInfo(targetDirectory)
                                                 .GetFiles()
                                                 .FirstOrDefault(x => x.Name == fileInfo.Name);
 
-                        CopyDroppedFile(fileToCheck, fileInfo, workDirectory);
+                        CopyDroppedFile(fileToCheck, fileInfo, targetDirectory);
                         if (operation != null) operation.CompletedStepsCount++;
                     }
                 }

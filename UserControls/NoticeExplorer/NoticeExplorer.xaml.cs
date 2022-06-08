@@ -31,11 +31,11 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
                 ViewModel = new();
                 ViewModel.UI_DropLabel = dropLabel;
 
-                rootContainer.DragEnter += ViewModel.OnDragEnter;
-                rootContainer.DragLeave += ViewModel.OnDragLeave;
-                rootContainer.Drop += ViewModel.OnDrop;
+                rootContainer.DragEnter += ViewModel.OnContainerDragEnter;
+                rootContainer.DragLeave += ViewModel.OnContainerDragLeave;
+                rootContainer.Drop += ViewModel.OnContainerDrop;
 
-                dataGrid.MouseMove += ViewModel.OnMouseMove;
+                dataGrid.MouseMove += ViewModel.OnDataGridRowMouseMove;
             }
 
             DataContext = ViewModel;
@@ -48,11 +48,11 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
                 ViewModel = new();
                 ViewModel.UI_DropLabel = dropLabel;
 
-                rootContainer.DragEnter += ViewModel.OnDragEnter;
-                rootContainer.DragLeave += ViewModel.OnDragLeave;
-                rootContainer.Drop += ViewModel.OnDrop;
+                rootContainer.DragEnter += ViewModel.OnContainerDragEnter;
+                rootContainer.DragLeave += ViewModel.OnContainerDragLeave;
+                rootContainer.Drop += ViewModel.OnContainerDrop;
 
-                dataGrid.MouseMove += ViewModel.OnMouseMove;
+                dataGrid.MouseMove += ViewModel.OnDataGridRowMouseMove;
             }
 
             DataContext = ViewModel;
@@ -60,7 +60,7 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            ViewModel!.OnMouseDoubleClick(e);
+            ViewModel!.OnDataGridRowDoubleClick(e);
         }
     }
 }

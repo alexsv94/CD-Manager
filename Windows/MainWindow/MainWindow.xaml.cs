@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace OrganizerWpf.Windows.MainWindow
 {
-    public partial class MainWindow : Window, IView<MainWindowViewModel>
+    public partial class MainWindow : Window
     {
         public MainWindowViewModel? ViewModel { get; set; } = null;
         private WindowEventsHelper? _eventsHelper;

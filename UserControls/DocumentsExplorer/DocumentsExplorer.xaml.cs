@@ -18,13 +18,15 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
         {
             if (ViewModel == null)
             {
-                ViewModel = new();
-                ViewModel.UI_DropLabel = dropLabel;
-                ViewModel.UI_AdressPanel = adressPanel;
+                ViewModel = new()
+                {
+                    UI_DropLabel = dropLabel,
+                    UI_AdressPanel = adressPanel
+                };
 
-                rootContainer.DragEnter += ViewModel.OnDragEnter;
-                rootContainer.DragLeave += ViewModel.OnDragLeave;
-                rootContainer.Drop += ViewModel.OnDrop;
+                rootContainer.DragEnter += ViewModel.OnContainerDragEnter;
+                rootContainer.DragLeave += ViewModel.OnContainerDragLeave;
+                rootContainer.Drop += ViewModel.OnContainerDrop;
 
                 rootDirectoryLink.MouseUp += (object sender, MouseButtonEventArgs e) => ViewModel.GoToRootDirectoty();
             }
@@ -34,7 +36,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
         
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            ViewModel!.OnMouseDoubleClick(e);
+            ViewModel!.OnDataGridRowDoubleClick(e);
         }
 
         private void MenuItem_СhangeVersion_Loaded(object sender, RoutedEventArgs e)
@@ -44,12 +46,17 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 
         private void DataGridRow_MouseMove(object sender, MouseEventArgs e)
         {
-            ViewModel!.OnMouseMove(sender, e);
+            ViewModel!.OnDataGridRowMouseMove(sender, e);
         }
 
         private void DataGridRow_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             ViewModel!.SetContextMenuVisibility(sender);
+        }
+
+        private void DataGridRow_Drop(object sender, DragEventArgs e)
+        {
+            ViewModel!.OnDatagridRowDrop(sender, e);
         }
     }
 }

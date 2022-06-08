@@ -72,6 +72,8 @@ namespace OrganizerWpf.ViewModels
         protected ObservableCollection<IFileSystemItem> _allItems = new();
         protected DateInterval _dateInterval;
 
+        private DataObject? _dragData = null;
+
         public ExplorerViewModel()
         {
             Settings.CurrentProductDirectoryChanged += OnRootDirectoryChanged;
@@ -128,9 +130,9 @@ namespace OrganizerWpf.ViewModels
             UpdateFileList();
         }
 
-        public void OnDragEnter(object sender, DragEventArgs e)
+        public void OnContainerDragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (e.Data.GetDataPresent(DataFormats.FileDrop) && e.Data != _dragData)
             {
                 e.Effects = DragDropEffects.Copy;
                 UI_DropLabel!.Visibility = Visibility.Visible;
@@ -141,39 +143,64 @@ namespace OrganizerWpf.ViewModels
             }
         }
 
-        public void OnDragLeave(object sender, DragEventArgs e)
+        public void OnContainerDragLeave(object sender, DragEventArgs e)
         {
             UI_DropLabel!.Visibility = Visibility.Collapsed;
         }
 
-        public async void OnDrop(object sender, DragEventArgs e)
+        public void OnContainerDrop(object sender, DragEventArgs e)
         {
             UI_DropLabel!.Visibility = Visibility.Collapsed;
 
+            if (e.Data == _dragData) return;
+
+            ProcessFileDrop(_currentDirectory.FullName, e);
+        }
+
+        public void OnDatagridRowDrop(object sender, DragEventArgs e)
+        {
+            UI_DropLabel!.Visibility = Visibility.Collapsed;
+
+            if (sender is not DataGridRow row) return;
+            if (row.DataContext is not DirectoryModel dir) return;
+            if ((e.Data.GetData(DataFormats.FileDrop) as string[])!.Contains(dir.FullPath)) return;
+
+            ProcessFileDrop(dir.FullPath!, e);
+            e.Handled = true;
+        }
+
+        private async void ProcessFileDrop(string targetDir, DragEventArgs e)
+        {
             string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
 
             List<string> filePaths = FileSystemHelper.GetDroppedFilePaths(droppedFiles, true);
 
-            AsyncOperation op = new(true, "Копирование") 
-            { 
-                TotalStepsCount = FileSystemHelper.GetDroppedFilePaths(droppedFiles, false).Count 
+            AsyncOperation op = new(true, "Копирование")
+            {
+                TotalStepsCount = FileSystemHelper.GetDroppedFilePaths(droppedFiles, false).Count
             };
 
-            await FileSystemHelper.CopyItemsAsync(_currentDirectory.FullName, filePaths, op);
+            await FileSystemHelper.CopyItemsAsync(targetDir, filePaths, op);
             UpdateFileList();
+
+            _dragData = null;
         }
 
-        public void OnMouseMove(object sender, MouseEventArgs e)
+        public void OnDataGridRowMouseMove(object sender, MouseEventArgs e)
         {
-            if (e.MouseDevice.LeftButton == MouseButtonState.Pressed && sender is DataGridRow row)
-            {
-                string dragFilePath = (row.DataContext as IFileSystemItem)!.FullPath!;
-                IDataObject dragObject = new DataObject(DataFormats.FileDrop, new string[] { dragFilePath });
-                DragDrop.DoDragDrop(row, dragObject, DragDropEffects.Copy);
+            if (sender is not DataGridRow row) return;
+            if (row.DataContext is not IFileSystemItem item) return;
+            row.IsSelected = true;
+
+            if (e.MouseDevice.LeftButton == MouseButtonState.Pressed)
+            {               
+                string dragFilePath = item.FullPath!;
+                _dragData = new DataObject(DataFormats.FileDrop, new string[] { dragFilePath });
+                DragDrop.DoDragDrop(row, _dragData, DragDropEffects.Copy);
             }
         }
 
-        public void OnMouseDoubleClick(MouseButtonEventArgs e)
+        public void OnDataGridRowDoubleClick(MouseButtonEventArgs e)
         {
             if (e.RightButton == MouseButtonState.Pressed) return;
             
@@ -185,7 +212,7 @@ namespace OrganizerWpf.ViewModels
                 {
                     if (dir.Name != "<...>")
                     {
-                        DirLink dirLink = new DirLink()
+                        DirLink dirLink = new()
                         {
                             Text = dir.Name!,
                             DirPath = dir.FullPath!,

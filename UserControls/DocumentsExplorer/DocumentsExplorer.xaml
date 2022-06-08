@@ -39,6 +39,7 @@
             <Setter Property="ContextMenu" Value="{DynamicResource RowContextMenu}" />
             <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick" />
             <EventSetter Event="MouseMove" Handler="DataGridRow_MouseMove" />
+            <EventSetter Event="Drop" Handler="DataGridRow_Drop" />
             <EventSetter Event="ContextMenuOpening" Handler="DataGridRow_ContextMenuOpening" />
         </Style>        
     </UserControl.Resources>
