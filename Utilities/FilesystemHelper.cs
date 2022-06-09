@@ -224,7 +224,7 @@ namespace OrganizerWpf.Utilities
             return filePaths;
         }
 
-        public async static Task<bool> CopyItemsAsync(string targetDirectory, List<string> itemsToCopy, AsyncOperation? operation = null)
+        public async static Task<bool> CopyItemsAsync(string targetDirectory, List<string> itemsToCopy, FileOperation opType, AsyncOperation? operation = null)
         {
             return await Task.Run(() =>
             {
@@ -238,7 +238,7 @@ namespace OrganizerWpf.Utilities
                     if (directoryInfo.Exists)
                     {
                         string destinationPath = Path.Combine(targetDirectory, directoryInfo.Name);
-                        CopyDirectory(directoryInfo.FullName, destinationPath, true, operation);
+                        CopyDirectory(directoryInfo.FullName, destinationPath, opType, true, operation);
                     }
                     else if (fileInfo.Exists)
                     {
@@ -246,7 +246,7 @@ namespace OrganizerWpf.Utilities
                                                 .GetFiles()
                                                 .FirstOrDefault(x => x.Name == fileInfo.Name);
 
-                        CopyDroppedFile(fileToCheck, fileInfo, targetDirectory);
+                        CopyDroppedFile(fileToCheck, fileInfo, targetDirectory, opType);
                         if (operation != null) operation.CompletedStepsCount++;
                     }
                 }
@@ -256,22 +256,25 @@ namespace OrganizerWpf.Utilities
             });            
         }
 
-        private static void CopyDroppedFile(FileInfo? checkedFile, FileInfo fileToCopy, string workDir, bool safeCopy = true)
+        private static void CopyDroppedFile(FileInfo? checkedFile, FileInfo fileToCopy, string targetDir, FileOperation opType, bool safeCopy = true)
         {
             if (!CheckCopyPosibility(checkedFile)) return;
 
-            string targetPath = (Path.Combine(workDir, fileToCopy.Name));
-            CopyFile(fileToCopy, targetPath, safeCopy);
+            string targetPath = (Path.Combine(targetDir, fileToCopy.Name));
+            CopyFile(fileToCopy, targetPath, opType, safeCopy);
         }
 
-        private static void CopyFile(FileInfo fileToCopy, string targetPath, bool safeCopy = true)
+        private static void CopyFile(FileInfo fileToCopy, string targetPath, FileOperation opType, bool safeCopy = true)
         {
             if (!CheckCopyPosibility(new FileInfo(targetPath))) return;
 
             DateTime createdAt = fileToCopy.CreationTime;
             DateTime modifiedAt = fileToCopy.LastWriteTime;
 
-            fileToCopy.CopyTo(targetPath);
+            if (opType == FileOperation.Copy)
+                fileToCopy.CopyTo(targetPath);
+            else
+                fileToCopy.MoveTo(targetPath);
 
             if (safeCopy)
             {
@@ -281,7 +284,7 @@ namespace OrganizerWpf.Utilities
             }
         }
 
-        private static void CopyDirectory(string sourceDir, string destinationDir, bool safeCopy = true, AsyncOperation? operation = null)
+        private static void CopyDirectory(string sourceDir, string destinationDir, FileOperation opType, bool safeCopy = true, AsyncOperation? operation = null)
         {
             if (!CheckCopyPosibility(new DirectoryInfo(destinationDir))) return;
 
@@ -291,27 +294,37 @@ namespace OrganizerWpf.Utilities
             DateTime modifiedAt = dir.LastWriteTime;
 
             DirectoryInfo[] dirs = dir.GetDirectories();
-            Directory.CreateDirectory(destinationDir);
+            
+            if (opType == FileOperation.Copy)
+                Directory.CreateDirectory(destinationDir);
+            else
+            {
+                Directory.Move(sourceDir, destinationDir);
+                return;
+            }
+
             if (operation != null) operation.CompletedStepsCount++;
 
             if (safeCopy)
             {
-                DirectoryInfo dirCopy = new(destinationDir);
-                dirCopy.CreationTime = createdAt;
-                dirCopy.LastWriteTime = modifiedAt;
+                DirectoryInfo dirCopy = new(destinationDir)
+                {
+                    CreationTime = createdAt,
+                    LastWriteTime = modifiedAt
+                };
             }
 
             foreach (FileInfo file in dir.GetFiles())
             {
                 string targetFilePath = Path.Combine(destinationDir, file.Name);
-                CopyFile(file, targetFilePath);
+                CopyFile(file, targetFilePath, opType);
                 if (operation != null) operation.CompletedStepsCount++; 
             }
 
             foreach (DirectoryInfo subDir in dirs)
             {
                 string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
-                CopyDirectory(subDir.FullName, newDestinationDir);
+                CopyDirectory(subDir.FullName, newDestinationDir, opType);
                 if (operation != null) operation.CompletedStepsCount++;
             }
         }
@@ -384,7 +397,7 @@ namespace OrganizerWpf.Utilities
                 {
                     Directory.Move(oldPath, newPath);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     SCMessageBox.ShowMsgBox("Папка занята другим процессом",
                         "Ошибка переименования", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -413,5 +426,11 @@ namespace OrganizerWpf.Utilities
         {
             File.Copy(sourceFile, destinationFile, true);
         }
+    }
+
+    public enum FileOperation
+    {
+        Copy,
+        Move
     }
 }

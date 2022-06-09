@@ -15,14 +15,6 @@
         <icons:IconSelector x:Key="IconSelector"/>
 
         <ContextMenu x:Key="RowContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}" Style="{DynamicResource SCContextMenuStyle}">
-            <MenuItem Header="Удалить"
-                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Delete}"
-                                  Command="{Binding DeleteCommand}"
-                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
-            <MenuItem Header="Переименовать"
-                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Rename}"
-                                  Command="{Binding RenameCommand}"
-                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
             <MenuItem Header="Изменить версию"
                                   Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.ChangeVersion}"
                                   Command="{Binding ChangeVersionCommand}"
@@ -33,6 +25,28 @@
                                   Command="{Binding ShowVersionHistoryCommand}"
                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"
                                   Loaded="MenuItem_СhangeVersion_Loaded" />
+            <MenuItem Header="Удалить"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Delete}"
+                                  Command="{Binding DeleteCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
+            <MenuItem Header="Переименовать"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Rename}"
+                                  Command="{Binding RenameCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
+            <MenuItem Header="Копировать"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Copy}"
+                                  Command="{Binding CopyToClipBoardCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
+        </ContextMenu>
+
+        <ContextMenu x:Key="ContainerContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}" Style="{DynamicResource SCContextMenuStyle}">
+            <MenuItem Header="Обновить"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Refresh}"
+                                  Command="{Binding RefreshCommand}"/>
+            <MenuItem Header="Вставить"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Paste}"
+                                  Command="{Binding PasteToContainerCommand}"
+                                  Loaded="MenuItemPasteDataGrid_Loaded"/>
         </ContextMenu>
 
         <Style x:Key="DocumentExplorerRowStyle" TargetType="DataGridRow" BasedOn="{StaticResource SCDataGridRowStyle}">
@@ -74,9 +88,10 @@
             </StackPanel>
             <DataGrid CellStyle="{DynamicResource SCDataGridCellStyle}" 
                       RowStyle="{DynamicResource DocumentExplorerRowStyle}" 
-                      ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}" x:Name="dataGrid"
+                      ColumnHeaderStyle="{DynamicResource SCDataGridColumnHeaderStyle}" x:Name="DataGrid"
                       Grid.Row="1"
-                      ItemsSource="{Binding FilteredItems}" 
+                      ItemsSource="{Binding FilteredItems}"
+                      ContextMenu="{DynamicResource ContainerContextMenu}"
                       SelectedItem="{Binding SelectedItem, Mode=TwoWay}" AllowDrop="True">               
                 
                 <DataGrid.Columns>

@@ -26,10 +26,10 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
             _showVersionHistoryCommand ??= new RelayCommand(obj => ShowVersionHistory(obj as DocumentModel));
         #endregion
 
-        protected override void UpdateFileList()
+        protected override void RefreshItems()
         {
             _allItems.ReplaceItems(FileSystemHelper.GetItems<DocumentModel>(_currentDirectory.FullName));
-            base.UpdateFileList();
+            base.RefreshItems();
         }        
 
         private void ChangeDocumentVersion(DocumentModel? document)
@@ -46,7 +46,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 
             if (!(bool)result!) return;
 
-            UpdateFileList();
+            RefreshItems();
         }
 
         private void ShowVersionHistory(DocumentModel? document)
@@ -58,7 +58,7 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
 
             historyWindow.ShowDialog();
 
-            UpdateFileList();
+            RefreshItems();
         }
 
         #region Handlers

@@ -9,6 +9,7 @@ using OrganizerWpf.Windows.OperationProgress;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,6 +29,19 @@ namespace OrganizerWpf.ViewModels
         private RelayCommand? _renameCommand = null;
         public RelayCommand RenameCommand =>
             _renameCommand ??= new RelayCommand(obj => RenameItem(obj as IFileSystemItem));
+
+        private RelayCommand? _copyToClipBoardCommand = null;
+        public RelayCommand CopyToClipBoardCommand =>
+            _copyToClipBoardCommand ??= new RelayCommand(obj => CopyItemToClipBoard(obj as IFileSystemItem));
+
+        private RelayCommand? _refreshCommand = null;
+        public RelayCommand RefreshCommand =>
+            _refreshCommand ??= new RelayCommand(obj => RefreshItems());
+
+        private RelayCommand? _pasteToContainerCommand = null;
+        public RelayCommand PasteToContainerCommand =>
+            _pasteToContainerCommand ??= new RelayCommand(obj => PasteToContainerFromClipBoard());
+
         #endregion
 
         #region Binding Props
@@ -94,10 +108,10 @@ namespace OrganizerWpf.ViewModels
         public void ChangeCurrentDirectory(string newDir)
         {
             _currentDirectory = new(newDir);
-            UpdateFileList();
+            RefreshItems();
         }
         
-        protected virtual void UpdateFileList()
+        protected virtual void RefreshItems()
         {
             if (_currentDirectory.FullName != RootDirectory?.FullName)
             {
@@ -127,7 +141,7 @@ namespace OrganizerWpf.ViewModels
         public void OnIntervalChanged(DateInterval interval)
         {
             _dateInterval = interval;
-            UpdateFileList();
+            RefreshItems();
         }
 
         public void OnContainerDragEnter(object sender, DragEventArgs e)
@@ -154,7 +168,7 @@ namespace OrganizerWpf.ViewModels
 
             if (e.Data == _dragData) return;
 
-            ProcessFileDrop(_currentDirectory.FullName, e);
+            ProcessFileDrop(_currentDirectory.FullName, e, FileOperation.Copy);
         }
 
         public void OnDatagridRowDrop(object sender, DragEventArgs e)
@@ -165,11 +179,13 @@ namespace OrganizerWpf.ViewModels
             if (row.DataContext is not DirectoryModel dir) return;
             if ((e.Data.GetData(DataFormats.FileDrop) as string[])!.Contains(dir.FullPath)) return;
 
-            ProcessFileDrop(dir.FullPath!, e);
+            FileOperation opType = _dragData == null ? FileOperation.Copy : FileOperation.Move; 
+
+            ProcessFileDrop(dir.FullPath!, e, opType);
             e.Handled = true;
         }
 
-        private async void ProcessFileDrop(string targetDir, DragEventArgs e)
+        private async void ProcessFileDrop(string targetDir, DragEventArgs e, FileOperation operationType)
         {
             string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
 
@@ -180,8 +196,8 @@ namespace OrganizerWpf.ViewModels
                 TotalStepsCount = FileSystemHelper.GetDroppedFilePaths(droppedFiles, false).Count
             };
 
-            await FileSystemHelper.CopyItemsAsync(targetDir, filePaths, op);
-            UpdateFileList();
+            await FileSystemHelper.CopyItemsAsync(targetDir, filePaths, operationType, op);
+            RefreshItems();
 
             _dragData = null;
         }
@@ -192,7 +208,7 @@ namespace OrganizerWpf.ViewModels
             if (row.DataContext is not IFileSystemItem item) return;
             row.IsSelected = true;
 
-            if (e.MouseDevice.LeftButton == MouseButtonState.Pressed)
+            if (e.MouseDevice.LeftButton == MouseButtonState.Pressed && item.Name != "<...>")
             {               
                 string dragFilePath = item.FullPath!;
                 _dragData = new DataObject(DataFormats.FileDrop, new string[] { dragFilePath });
@@ -226,7 +242,7 @@ namespace OrganizerWpf.ViewModels
                     }                    
                 }                
 
-                UpdateFileList();
+                RefreshItems();
             }
             else
             {
@@ -252,7 +268,7 @@ namespace OrganizerWpf.ViewModels
                 else
                     File.Delete(item.FullPath!);
 
-                UpdateFileList();
+                RefreshItems();
             }           
         }
 
@@ -278,8 +294,46 @@ namespace OrganizerWpf.ViewModels
                     RecentDocumentsStorage.ChangeDocumentParameters(model);
                 }
 
-                UpdateFileList();
+                RefreshItems();
             }
         }
-    }
+        protected void CopyItemToClipBoard(IFileSystemItem? item)
+        {
+            if (item == null) return;
+
+            StringCollection files = new();
+            files.Add(item.FullPath!);
+
+            Clipboard.SetFileDropList(files);
+        }
+
+        public void CheckClipboardData(object sender)
+        {
+            StringCollection items = Clipboard.GetFileDropList();
+
+            if (items.Count == 0)
+                (sender as FrameworkElement)!.IsEnabled = false;
+        }
+
+        private async void PasteToContainerFromClipBoard()
+        {
+            StringCollection items = Clipboard.GetFileDropList();
+            string[] paths = new string[items.Count];
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                paths[i] = items[i]!;
+            }
+
+            List<string> filePaths = FileSystemHelper.GetDroppedFilePaths(paths, true);
+
+            AsyncOperation op = new(true, "Копирование")
+            {
+                TotalStepsCount = FileSystemHelper.GetDroppedFilePaths(paths, false).Count
+            };
+
+            await FileSystemHelper.CopyItemsAsync(_currentDirectory.FullName, filePaths, FileOperation.Copy, op);
+            RefreshItems();
+        }
+    }    
 }

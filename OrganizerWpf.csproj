@@ -49,11 +49,14 @@
     <None Remove="Icons\MenuItems\act.png" />
     <None Remove="Icons\MenuItems\addFile.png" />
     <None Remove="Icons\MenuItems\changeVersion.png" />
+    <None Remove="Icons\MenuItems\copy.png" />
     <None Remove="Icons\MenuItems\delete.png" />
     <None Remove="Icons\MenuItems\edit.png" />
     <None Remove="Icons\MenuItems\exit.png" />
     <None Remove="Icons\MenuItems\list.png" />
     <None Remove="Icons\MenuItems\notice.png" />
+    <None Remove="Icons\MenuItems\paste.png" />
+    <None Remove="Icons\MenuItems\refresh.png" />
     <None Remove="Icons\MenuItems\rename.png" />
     <None Remove="Icons\MenuItems\settings.png" />
     <None Remove="Icons\MenuItems\versionHistory.png" />
@@ -187,6 +190,9 @@
     <Resource Include="Icons\MenuItems\changeVersion.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Icons\MenuItems\copy.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Icons\MenuItems\delete.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -200,6 +206,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Icons\MenuItems\notice.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\MenuItems\paste.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\MenuItems\refresh.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Icons\MenuItems\rename.png">

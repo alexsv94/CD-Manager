@@ -58,5 +58,10 @@ namespace OrganizerWpf.UserControls.DocumentsExplorer
         {
             ViewModel!.OnDatagridRowDrop(sender, e);
         }
+
+        private void MenuItemPasteDataGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            ViewModel!.CheckClipboardData(sender);
+        }
     }
 }

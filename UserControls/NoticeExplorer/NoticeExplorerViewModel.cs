@@ -15,7 +15,7 @@ namespace OrganizerWpf.UserControls.NoticeExplorer
             Settings.WorkingDirectoryChanged += OnRootDirectoryChanged;
         }
 
-        protected override void UpdateFileList()
+        protected override void RefreshItems()
         {
             if (_currentDirectory == null) return;
             
