@@ -253,23 +253,8 @@ namespace OrganizerWpf.ViewModels
 
         protected void DeleteItem(IFileSystemItem? item)
         {
-            if (item == null) return;
-
-            string typeOfItem = item is DirectoryModel ? "папку" : "файл";
-
-            var result = SCMessageBox.ShowMsgBox($"Удалить {typeOfItem} {item.Name} без возможности восстановления?",
-                                                "Удаление",
-                                                MessageBoxButton.YesNo, MessageBoxImage.Question);
-            
-            if (result == SCMessageBoxResult.Yes)
-            {
-                if (item is DirectoryModel)
-                    Directory.Delete(item.FullPath!, true);
-                else
-                    File.Delete(item.FullPath!);
-
+            if (FileSystemHelper.DeleteItem(item))
                 RefreshItems();
-            }           
         }
 
         protected void RenameItem(IFileSystemItem? item)

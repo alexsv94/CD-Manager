@@ -189,7 +189,7 @@ namespace OrganizerWpf.Utilities
         public static void SaveFileMetadata<T>(T modelInfo) 
             where T : SerializableModel<T>
         {            
-            FileInfo file = new FileInfo(((IFileSystemItem)modelInfo).FullPath!);
+            FileInfo file = new(modelInfo.FullPath!);
             DirectoryInfo directoryInfo = file.Directory!;
 
             string metaFileName = file.Name + ".meta.json";
@@ -407,6 +407,37 @@ namespace OrganizerWpf.Utilities
             }
 
             return newPath;
+        }
+
+        public static bool DeleteItem(IFileSystemItem? item)
+        {
+            if (item == null) return false;
+
+            string typeOfItem = item is DirectoryModel ? "папку" : "файл";
+
+            var result = SCMessageBox.ShowMsgBox($"Удалить {typeOfItem} {item.Name} без возможности восстановления?",
+                                                "Удаление",
+                                                MessageBoxButton.YesNo, MessageBoxImage.Question);            
+
+            if (result == SCMessageBoxResult.Yes)
+            {
+                if (item is DirectoryModel)
+                    Directory.Delete(item.FullPath!, true);
+                else
+                    File.Delete(item.FullPath!);
+            }
+            else 
+                return false;
+
+            FileInfo fileInfo = new(item.FullPath!);
+            
+            string metaFileName = item.Name + ".meta.json";
+            string metaFilePath = Path.Combine(fileInfo.Directory!.FullName, metaFileName);
+
+            if (File.Exists(metaFilePath))
+                File.Delete(metaFilePath);
+
+            return true;
         }
 
         public static void OpenFile(string path)
