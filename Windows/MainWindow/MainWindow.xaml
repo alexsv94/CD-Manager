@@ -12,6 +12,21 @@
         Icon="/Icons/Windows/main_32x32.png" WindowStyle="None" TextOptions.TextFormattingMode="Display">
     <Window.Resources>
         <icons:IconSelector x:Key="IconSelector"/>
+
+        <ContextMenu x:Key="ProductItemContextMenu" DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ViewModel}" Style="{DynamicResource SCContextMenuStyle}">
+            <MenuItem Header="Свойства"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Settings}"
+                                  Command="{Binding ChangeVersionCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
+            <MenuItem Header="Удалить"
+                                  Icon="{Binding Source={StaticResource IconSelector}, Path=MenuItems.Delete}"
+                                  Command="{Binding DeleteCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"/>
+        </ContextMenu>
+        
+        <Style x:Key="ProductItemContainer" TargetType="ListBoxItem" BasedOn="{StaticResource SCListBoxItemContainerStyle}">
+            <Setter Property="ContextMenu" Value="{StaticResource ProductItemContextMenu}" />
+        </Style>
     </Window.Resources>
     
     <Grid Margin="0,0,0,15">
@@ -68,7 +83,7 @@
                     </Grid>                    
                 </Border>                
                 <ListBox x:Name="ProductsListBox"
-                         ItemContainerStyle="{DynamicResource SCListBoxItemContainerStyle}" 
+                         ItemContainerStyle="{DynamicResource ProductItemContainer}" 
                          ItemTemplate="{DynamicResource SCListBoxItemTemplate}" 
                          Style="{DynamicResource SCListBoxStyle}"
                          Grid.Row="1" 
